@@ -1,0 +1,91 @@
+package mas.maintenance.plan;
+
+import jade.core.AID;
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
+import jade.lang.acl.UnreadableException;
+import mas.maintenance.machineDefinition.IMachine;
+import mas.util.ID;
+import mas.util.MessageIds;
+import org.apache.logging.log4j.Logger;
+import bdi4jade.core.BeliefBase;
+import bdi4jade.plan.PlanBody;
+import bdi4jade.plan.PlanInstance;
+import bdi4jade.plan.PlanInstance.EndState;
+
+/**
+ * 
+ * @author Anand Prajapati
+ *
+ */
+public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
+
+	/**
+	 * 
+	 */
+	
+	private static final long serialVersionUID = 1L;
+	private Logger log;
+	private BeliefBase bfBase;
+	private MessageTemplate msgTemplate;
+	private int step = 0;
+	private ACLMessage msg;
+	private ACLMessage reply;
+	private IMachine machine;
+	private RepairKit solver;
+	private AID bba;
+
+	@Override
+	public EndState getEndState() {
+		return null;
+	}
+
+	@Override
+	public void init(PlanInstance pInstance) {
+		bfBase = pInstance.getBeliefBase();
+		msgTemplate = MessageTemplate.MatchConversationId(
+				MessageIds.machineMaintenanceStart);
+		solver = new RepairKit();
+		
+		this.bba = (AID) bfBase.
+				getBelief(ID.Maintenance.BeliefBase.blackAgent).
+				getValue();
+	}
+
+	@Override
+	public void action() {
+		switch(step){
+		case 0:
+			msg = myAgent.receive(msgTemplate);
+			if(msg != null) {
+				try {
+					machine = (IMachine) msg.getContentObject();
+					solver.setMachine(machine);
+					step++;
+				} catch (UnreadableException e) {
+					e.printStackTrace();
+				}
+			}
+			else{
+				block();
+			}
+			break;
+		case 1:
+			
+			reply = new ACLMessage(ACLMessage.INFORM);
+			String maintenanceData = solver.getPreventiveMaintenanceData();
+			reply.setContent(maintenanceData);
+			reply.setConversationId(MessageIds.maintenanceJobStartData);
+			reply.addReceiver(this.bba);
+			myAgent.send(reply);
+			log.info("sending maintenance job data");
+			break;
+		}
+	}
+
+	@Override
+	public boolean done() {
+		return step >= 2;
+	}
+}
