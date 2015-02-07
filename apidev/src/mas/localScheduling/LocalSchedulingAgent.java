@@ -40,11 +40,11 @@ public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 		AgentUtil.makeZoneBB(this,zones);
 		
 		// subscribe for parameters of other agents
-		AID target = new AID(ID.GlobalScheuler.LocalName, AID.ISLOCALNAME);
+		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
 
-		String[] params = {ID.GlobalScheuler.ZoneData.jobForMachine,
-				ID.GlobalScheuler.ZoneData.askforBid,
-				ID.GlobalScheuler.ZoneData.waitingTime};
+		String[] params = {ID.GlobalScheduler.ZoneData.jobForMachine,
+				ID.GlobalScheduler.ZoneData.askforBid,
+				ID.GlobalScheduler.ZoneData.waitingTime};
 
 		SubscriptionForm subform = new SubscriptionForm();
 		subform.AddSubscriptionReq(target, params);
