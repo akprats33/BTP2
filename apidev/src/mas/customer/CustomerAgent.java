@@ -33,11 +33,11 @@ public class CustomerAgent extends AbstractCustomerAgent {
 		AgentUtil.makeZoneBB(this,zones);
 		log.info(bba);
 		
-		AID target = new AID(ID.GlobalScheuler.LocalName, AID.ISLOCALNAME);
+		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
 		
-		String[] params = {ID.GlobalScheuler.ZoneData.ConfirmedOrder,
-							ID.GlobalScheuler.ZoneData.NegotiationJob,
-							ID.GlobalScheuler.ZoneData.WorkOrder};
+		String[] params = {ID.GlobalScheduler.ZoneData.ConfirmedOrder,
+							ID.GlobalScheduler.ZoneData.NegotiationJob,
+							ID.GlobalScheduler.ZoneData.WorkOrder};
 		
 		SubscriptionForm subform = new SubscriptionForm();
 		subform.AddSubscriptionReq(target, params);
