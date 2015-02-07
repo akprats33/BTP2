@@ -1,16 +1,12 @@
 package mas.machine;
 
 import java.util.ArrayList;
-
 import mas.machine.component.IComponent;
-
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.random.GaussianRandomGenerator;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
-
-import simulator.machine.Component;
 
 public class Methods {
 	
@@ -84,9 +80,9 @@ public class Methods {
 	public static int findMin(ArrayList<IComponent> components) { 
 		int IndMin = 0;
 		for(int index = 0;index < components.size(); index++) {
-			if(components.get(IndMin).TTF > components.get(index).TTF){
-				IndMin = index;
-			}
+//			if(components.get(IndMin).TTF > components.get(index).TTF){
+//				IndMin = index;
+//			}
 		}
 		
 		return IndMin;

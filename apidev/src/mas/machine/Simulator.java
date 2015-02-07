@@ -101,7 +101,7 @@ public class Simulator extends IMachine {
 	public static double w_alpha;//=10.0;
 	public static double w_beta;//=10.0;
 //	public static long abs_next_failure_time;
-	public static failedComp failed_c;
+//	public static failedComp failed_c;
 
 	public static JTextField[][] txt_meanParams2=null;
 	public static JTextField[][] txt_sdParams2=null;
