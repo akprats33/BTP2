@@ -66,12 +66,12 @@ public class Methods {
 		return samples;
 	}
 	
-	public double getLoadingTime(double mean,double sd)	{
+	public static double getLoadingTime(double mean,double sd)	{
 		double[] r_arr = normalRandom(0, sd, 1);
 		return (mean + r_arr[0]);
 	}
 
-	public double getunloadingTime(double mean,double sd) {
+	public static double getunloadingTime(double mean,double sd) {
 		double[] r_arr = normalRandom(0, sd, 1);
 		return (mean + r_arr[0]);
 	}
@@ -84,7 +84,18 @@ public class Methods {
 //				IndMin = index;
 //			}
 		}
-		
 		return IndMin;
+	}
+	
+	public static int findMinElemet(double[] arr) {
+		double m = 0;
+		int ind = 0;
+		for (int i=0; i < arr.length ; i++) {
+			if( m < arr[i]) {
+				m = arr[i];
+				ind=i;
+			}
+		}
+		return ind;
 	}
 }

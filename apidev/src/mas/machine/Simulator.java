@@ -18,6 +18,7 @@ import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
+import mas.machine.behaviors.Register2DF;
 import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
@@ -32,7 +33,7 @@ public class Simulator extends IMachine {
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<IComponent> myComponents;
 	private long epochTime;
-	private MachineStatus status;
+	public static MachineStatus status;
 	private AID blackboardAgent;
 	
 	public  String IpAddress,JadePort ,ComPort;
@@ -92,10 +93,6 @@ public class Simulator extends IMachine {
 	public static ArrayList<Integer> inspectionParamsIndex = new ArrayList<Integer>();
 	public static ArrayList<Integer> inspectionParamFrequency = new ArrayList<Integer>();
 	
-	public static double eta_components2[];
-	public static double beta_components2[];
-	public static double rf_components2[];
-	
 	public static double rootCause[];
 	
 	//public node[] rootcauseAffectedParams;
@@ -131,8 +128,10 @@ public class Simulator extends IMachine {
 		loadData.addSubBehaviour(new LoadComponentBehavior());
 		loadData.addSubBehaviour(new LoadMachineParameterBehavior());
 		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
+		loadData.addSubBehaviour(new Register2DF());
 		
 		addBehaviour(loadData);
+		
 		
 	}
 	@Override
