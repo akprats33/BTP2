@@ -41,7 +41,7 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 
 			workBook = new XSSFWorkbook(fStream); 
 
-			machineParameterSheet = workBook.getSheetAt(2);
+			machineParameterSheet = workBook.getSheetAt(1);
 		} catch(IOException e){
 			log.debug("Error in opening excel File!");
 			e.printStackTrace();

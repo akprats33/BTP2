@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
@@ -103,10 +104,6 @@ public class Simulator extends IMachine {
 //	public static long abs_next_failure_time;
 //	public static failedComp failed_c;
 
-	public static JTextField[][] txt_meanParams2=null;
-	public static JTextField[][] txt_sdParams2=null;
-	public static JCheckBox[][] paramsAffected=null;
-	public static int n = 0;
 	public static double[] rootcause_timeto_occur;
 	
 	public static  DefaultTableModel AttrDTM, DimDTM;
@@ -129,12 +126,13 @@ public class Simulator extends IMachine {
 		super.setup();
 		init();
 		
-		SequentialBehaviour loadFiles = new SequentialBehaviour(this);
-		loadFiles.addSubBehaviour(new LoadSimulatorParamsBehavior());
-		loadFiles.addSubBehaviour(new LoadComponentBehavior());
-		loadFiles.addSubBehaviour(new LoadMachineParameterBehavior());
+		SequentialBehaviour loadData = new SequentialBehaviour(this);
+		loadData.addSubBehaviour(new LoadSimulatorParamsBehavior());
+		loadData.addSubBehaviour(new LoadComponentBehavior());
+		loadData.addSubBehaviour(new LoadMachineParameterBehavior());
+		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
 		
-		addBehaviour(loadFiles);
+		addBehaviour(loadData);
 		
 	}
 	@Override

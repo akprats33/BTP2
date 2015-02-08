@@ -15,6 +15,7 @@ import java.util.Map;
 import mas.blackboard.Blackboard;
 import mas.customer.CustomerAgent;
 import mas.localScheduling.LocalSchedulingAgent;
+import mas.machine.Simulator;
 import mas.util.ID;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,9 +30,10 @@ public class AgentStarter {
 	
 	static {
 		 agents = new HashMap<String, Agent>();
-		 agents.put(ID.Blackboard.LocalName, new Blackboard());
-		 agents.put(ID.Customer.LocalName, new CustomerAgent());
-		 agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
+//		 agents.put(ID.Blackboard.LocalName, new Blackboard());
+//		 agents.put(ID.Customer.LocalName, new CustomerAgent());
+//		 agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
+		 agents.put(ID.Machine.LocalName, new Simulator());
 	};
 
 	public static void main(String[] args) {
