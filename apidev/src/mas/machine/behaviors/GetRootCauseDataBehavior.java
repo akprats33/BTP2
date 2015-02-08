@@ -48,6 +48,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 
 		win.setSize(600,500);
 		win.setLayout(new MigLayout());
+		win.setLocationRelativeTo(null);
 		win.setVisible(true);
 
 		firstPanel.add(lbl_numRootCauses);
@@ -76,6 +77,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 					chk_paramsAffected = new ArrayList<ArrayList<JCheckBox>>();
 
 					Font headingFont = new Font("CalibriLight",Font.BOLD,20);
+					
 					for(int causeIndex = 0 ; causeIndex < numRootCauses ; causeIndex++ ) {
 
 						lbl_rootCause.add(new JLabel("Root Cause "+ (causeIndex + 1)) );
@@ -100,6 +102,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 							tempSdShift.add(new JTextField(
 									"1",10));
 						}
+						
 						chk_paramsAffected.add(tempChecklist);
 						txt_meanShiftParameters.add(tempMeanShift);
 						txt_sdShiftParameters.add(tempSdShift);

@@ -54,6 +54,8 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 		boolean isInspection = false;
 		int updateFrequency = 0;
 
+		Simulator.params.clear();
+		
 		while( rows.hasNext() )  {
 			row = (XSSFRow) rows.next();
 			Iterator<Cell> cells = row.cellIterator();
@@ -81,11 +83,12 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 					break;
 				}
 				count++;
-				Simulator.params.add(new Parameter(paramName,
-							value, isInspection, updateFrequency));
 			}
+			Simulator.params.add(new Parameter(paramName,
+					value, isInspection, updateFrequency));
 		}
 		try {
+//			log.info(Simulator.params.size());
 			workBook.close();
 		} catch (IOException e) {
 			log.debug("Error in closing excel file");
