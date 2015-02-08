@@ -6,14 +6,11 @@ import jade.tools.logging.LogManager;
 import mas.job.job;
 import mas.machine.Methods;
 import mas.machine.Simulator;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.xmlbeans.impl.xb.xsdschema.impl.SchemaDocumentImpl.SchemaImpl;
 
 public class AddJobBehavior extends OneShotBehaviour {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private job comingJob;
 	boolean IsJobComplete;
