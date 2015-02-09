@@ -1,11 +1,13 @@
 package mas.machine.component;
 
 import java.util.Random;
+
 import org.apache.commons.math3.distribution.WeibullDistribution;
 
 public class Component extends IComponent {
 
-	private double intitalAge;
+	private double startingAge;
+	private double timeSinceLastFailure;
 	private double beta;
 	private double eta;
 	private double timeToFailure;
@@ -36,8 +38,8 @@ public class Component extends IComponent {
 		this.replacementCost = builder.replacementCost;
 		this.preventiveMaintenanceCost = builder.prevMaintCost;
 
-		this.intitalAge = 0;
-//		this.TTF = age_init;
+		this.startingAge = 0;
+		//		this.TTF = age_init;
 		this.status = MachineComponent.WORKING;
 		this.currentAge = 0;
 		this.lifeToFailure = 0;
@@ -105,7 +107,69 @@ public class Component extends IComponent {
 						(1/beta) ));  
 		this.lifeToFailure = life;
 	}
-	
+
+	/**
+	 * generate new initial age for the component after being repaired based on
+	 * restoration factor type 1
+	 * For theory of restoration factor, please refer to 
+	 * http://www.reliawiki.org/index.php/Imperfect_Repairs
+	 * 
+	 * repairs will only fix the wear-out and damage incurred during
+	 * the last period of operation
+	 */
+
+	public void generateLifeRFtype1() {
+
+		WeibullDistribution wb = new WeibullDistribution(this.beta,this.eta);
+		Random unifEnd = new Random();
+		double uniformRandom =unifEnd.nextDouble();
+
+		this.startingAge = this.startingAge + 
+				this.timeSinceLastFailure * (1 - this.RestorationFactor);
+
+		double futureReliability = uniformRandom*
+				(1.0 - wb.cumulativeProbability(this.startingAge));
+
+		this.lifeToFailure = wb.inverseCumulativeProbability(1.0 - futureReliability) -
+				this.startingAge;
+
+		if(	this.lifeToFailure < 0) {
+			this.lifeToFailure = 0;
+			//			System.out.println("this is the fault");
+		}
+		//		this.age_init = this.age_init + this.TTF;
+	}
+
+	/**
+	 * generate new initial age for the component after being repaired based on
+	 * restoration factor type 2
+	 * For theory of restoration factor, please refer to 
+	 * http://www.reliawiki.org/index.php/Imperfect_Repairs
+	 * 
+	 * repairs fix all of the wear-out and damage accumulated up to the current time
+	 */
+
+	public void generateLifeRFtype2() {
+
+		WeibullDistribution wb = new WeibullDistribution(this.beta,this.eta);
+		Random unifEnd = new Random();
+		double uniformRandom =unifEnd.nextDouble();
+
+		this.startingAge = this.currentAge * (1 - this.RestorationFactor);
+
+		double futureReliability = uniformRandom*
+				(1.0 - wb.cumulativeProbability(this.startingAge));
+
+		this.lifeToFailure = wb.inverseCumulativeProbability(1.0 - futureReliability) -
+				this.startingAge;
+
+		if(	this.lifeToFailure < 0) {
+			this.lifeToFailure = 0;
+			//			System.out.println("this is the fault");
+		}
+		//		this.age_init = this.age_init + this.TTF;
+	}
+
 	/**
 	 * 
 	 * @param a is shape parameter

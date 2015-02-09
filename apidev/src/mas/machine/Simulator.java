@@ -34,7 +34,7 @@ public class Simulator extends IMachine {
 	private static ArrayList<IComponent> myComponents;
 	private long epochTime;
 	public static MachineStatus status;
-	private AID blackboardAgent;
+	public static AID blackboardAgent;
 	
 	public  String IpAddress,JadePort ,ComPort;
 	public int portNumber;
@@ -128,6 +128,7 @@ public class Simulator extends IMachine {
 		loadData.addSubBehaviour(new LoadComponentBehavior());
 		loadData.addSubBehaviour(new LoadMachineParameterBehavior());
 		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
+		
 		loadData.addSubBehaviour(new Register2DF());
 		
 		addBehaviour(loadData);
@@ -153,6 +154,10 @@ public class Simulator extends IMachine {
 	
 	public static void addComponent(Component c) {
 		myComponents.add(c);
+	}
+	
+	public long getNextFailureTime() {
+		return epochTime;
 	}
 	
 }

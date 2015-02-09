@@ -54,7 +54,8 @@ public class MessageIds {
 
 	public static String correctiveData = "Corrective-Repair-Data";
 	public static String maintMachineFailureInfo = "Fail-Start";
-	public static String machineMaintenanceStart = "machineMaintenanceStart";
+	public static String machinePrevMaintenanceData = "machineMaintenanceData";
+	public static String machinePrevMaintenanceStart = "machineMaintenanceStart";
 	public static String failEnd = "Fail-End";
 	public static String MaintMachineHealth = "Machine-State";
 	public static String MaintMachineRepaired = "Machine-failure-End";
