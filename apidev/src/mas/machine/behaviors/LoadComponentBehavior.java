@@ -27,6 +27,11 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 	private String filePath;
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
+	private Simulator mySim;
+	
+	public LoadComponentBehavior(Simulator s) {
+		mySim = s;
+	}
 
 	@Override
 	public void action() {
@@ -117,7 +122,7 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 						prevMaintCost(preventiveMaintenanceCost).
 						meanDelay(meanDelay).
 						sdDelay(sdDelay).
-						build();
+						build(mySim);
 		
 		Simulator.addComponent(tempComponent);
 		}

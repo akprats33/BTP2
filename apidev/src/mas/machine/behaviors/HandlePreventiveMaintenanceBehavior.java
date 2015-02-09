@@ -23,7 +23,6 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 
 	private static final long serialVersionUID = 1L;
 	private job comingJob;
-	boolean IsJobComplete;
 	private Logger log;
 	private int step = 0;
 	private MessageTemplate pmDataMsgTemplate;
@@ -33,7 +32,6 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 
 	public HandlePreventiveMaintenanceBehavior(job comingJob) {
 		this.comingJob = comingJob;
-		this.IsJobComplete = false;
 		log = LogManager.getLogger();
 		pmDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.machinePrevMaintenanceData);
@@ -60,9 +58,11 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 			maintenanceDataMsg = myAgent.receive(pmDataMsgTemplate);
 			if(maintenanceDataMsg != null){
 				// parse the received data and perform maintenance of the machine
+				log.info("Maintenenace data arrived");
 				token = new StringTokenizer(maintenanceDataMsg.getContent());
 				
 				step = 2;
+				
 			}
 			else {
 				block();

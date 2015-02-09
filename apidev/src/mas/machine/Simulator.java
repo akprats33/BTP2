@@ -4,6 +4,8 @@ import jade.core.AID;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 
@@ -36,9 +38,11 @@ public class Simulator extends IMachine {
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<IComponent> myComponents;
 	private long epochTime;
-	public static MachineStatus status;
+	private MachineStatus status;
+	protected PropertyChangeSupport statusChangeSupport;
 	public static AID blackboardAgent;
-	
+	public static String mySimulator = "Simulator";
+
 	public  String IpAddress,JadePort ,ComPort;
 	public int portNumber;
 
@@ -71,7 +75,7 @@ public class Simulator extends IMachine {
 	// parameters of normal distribution causing shift in process paramters
 	public static double mean_shiftInMeanParam = 0;				
 	public static double sd_shiftInMeanParam = 1;
-	
+
 	// parameters of normal distribution causing shift in process standard deviation
 	public static double mean_shiftInSdParam = 0;				
 	public static double sd_shiftSdparam = 1;
@@ -89,88 +93,120 @@ public class Simulator extends IMachine {
 	public static long systemStopwatch;
 
 	public static int numOfRootCauseParams = 1;
-	
+
 	public static ArrayList<String> nameParams  = new ArrayList<String>();
 	public static ArrayList<Double> valueParams = new ArrayList<Double>();
 	public static int[] frequencyParams;
 	public static ArrayList<Integer> inspectionParamsIndex = new ArrayList<Integer>();
 	public static ArrayList<Integer> inspectionParamFrequency = new ArrayList<Integer>();
-	
+
 	public static double rootCause[];
-	
+
 	//public node[] rootcauseAffectedParams;
 	public static double w_alpha;//=10.0;
 	public static double w_beta;//=10.0;
-//	public static long abs_next_failure_time;
-//	public static failedComp failed_c;
+	//	public static long abs_next_failure_time;
+	//	public static failedComp failed_c;
 
 	public static double[] rootcause_timeto_occur;
-	
+
 	public static  DefaultTableModel AttrDTM, DimDTM;
 	public static JPanel jobAttrPanel=new JPanel(new MigLayout());
 	public static JTable AttrTable, DimTable;
 	public static JScrollPane AttrScrollPane, DimScrollPane;
 	public static JFrame win_Dimtable,win_attrTable;
-	
+
 	public static ArrayList<Parameter> params ;
 	public static ArrayList<ArrayList<RootCause>> rootcauses; 
 
 	public void init(){
+		statusChangeSupport = new PropertyChangeSupport(this);
+		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
 		params = new ArrayList<Parameter>();
 		rootcauses = new ArrayList<ArrayList<RootCause>>();
 	}
-	
+
 	@Override
 	protected void setup() {
 		super.setup();
 		init();
-		
+
 		SequentialBehaviour loadData = new SequentialBehaviour(this);
 		loadData.addSubBehaviour(new LoadSimulatorParamsBehavior());
-		loadData.addSubBehaviour(new LoadComponentBehavior());
+		loadData.addSubBehaviour(new LoadComponentBehavior(this));
 		loadData.addSubBehaviour(new LoadMachineParameterBehavior());
 		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
-		
+
 		loadData.addSubBehaviour(new Register2DF());
 		loadData.addSubBehaviour(new Connect2BlackBoardBehvaior());
-		
+
 		addBehaviour(loadData);
-		
+
 		ParallelBehaviour functionality = new ParallelBehaviour(this,
-							ParallelBehaviour.WHEN_ALL);
-		
+				ParallelBehaviour.WHEN_ALL);
+
+		functionality.getDataStore().put(mySimulator, this);
 		functionality.addSubBehaviour(new AcceptJobBehavior());
-		
+
 		addBehaviour(functionality);
-		
+
+
 	}
-	
+
 	@Override
 	protected void takeDown() {
 		super.takeDown();
 	}
-	
+
 	@Override
 	public ArrayList<IComponent> getComponents() {
 		return myComponents;
 	}
-	
+
 	@Override
 	public long getStartTime() {
 		return this.epochTime;
 	}
-	
+
 	@Override
 	public MachineStatus getStatus() {
 		return status;
 	}
-	
+
+	public void setStatus(MachineStatus newStatus) {
+		MachineStatus oldStatus = this.status;
+		status = newStatus;
+		if(newStatus == MachineStatus.FAILED){
+			 statusChangeSupport.
+			 firePropertyChange(
+					 "Machine status",oldStatus, newStatus);
+		}
+	}
+
 	public static void addComponent(Component c) {
 		myComponents.add(c);
 	}
-	
+
 	public long getNextFailureTime() {
 		return epochTime;
 	}
+
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		statusChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		statusChangeSupport.addPropertyChangeListener(listener);
+	}
+	
+	public void repair(ArrayList<Integer> arr) {
+		
+		for (int index = 0; index < arr.size(); index++) { 
+			myComponents.get(arr.get(index)).repair();
+		}
+		
+		this.status = MachineStatus.IDLE;
+	}
+
 }

@@ -175,6 +175,7 @@ public class RepairKit {
 		//				data=data+" "+brokencomp[k];
 		//			}
 		//		}
+		
 		return data.toString();
 	}
 

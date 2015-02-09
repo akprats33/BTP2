@@ -61,5 +61,9 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 			jAttributes.get(dIndex).setConforming(conforming);
 		}
 		comingJob.setAttributes(jAttributes);
+		
+		log.info("Dimensions and attributes assigned");
+		// send completed job to blackboard in handleCompletedJobBehavior
+		myAgent.addBehaviour(new HandleCompletedJobBehavior(comingJob));
 	}
 }

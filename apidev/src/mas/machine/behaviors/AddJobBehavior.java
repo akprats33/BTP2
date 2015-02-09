@@ -19,6 +19,7 @@ public class AddJobBehavior extends Behaviour {
 	// time step in milliseconds
 	private long TIME_STEP = 10;
 	private double processingTime;
+	private Simulator sim;
 
 	public AddJobBehavior(job comingJob) {
 		this.comingJob = comingJob;
@@ -41,7 +42,9 @@ public class AddJobBehavior extends Behaviour {
 						Methods.getunloadingTime(Simulator.meanUnloadingTime, Simulator.sdUnloadingTime)));
 
 				processingTime = comingJob.getProcessingTime();
-				Simulator.status = MachineStatus.PROCESSING;
+				
+				sim = (Simulator) getDataStore().get(Simulator.mySimulator);
+				sim.setStatus(MachineStatus.PROCESSING);
 
 				//				while(!IsJobComplete) {
 
@@ -65,7 +68,7 @@ public class AddJobBehavior extends Behaviour {
 			
 		case 1:
 			if( processingTime > 0 &&
-					Simulator.status != MachineStatus.FAILED ) {
+					sim.getStatus() != MachineStatus.FAILED ) {
 				
 				processingTime = processingTime - TIME_STEP; 
 				block(TIME_STEP); 
@@ -83,7 +86,7 @@ public class AddJobBehavior extends Behaviour {
 				IsJobComplete = true;
 				log.info("Job No:" + comingJob.getJobNo() + " completed");
 				myAgent.addBehaviour(new ProcessJobBehavior(comingJob));
-				Simulator.status = MachineStatus.IDLE;
+				sim.setStatus(MachineStatus.IDLE);
 			}
 			break;
 		}

@@ -8,6 +8,7 @@ import mas.machine.MachineStatus;
 import mas.machine.Simulator;
 import mas.util.ID;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.DataStore;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -18,8 +19,9 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 	private MessageTemplate jobMsgTemplate;
 	private Logger log;
 	private job jobToProcess;
+	private Simulator sim;
 
-	public AcceptJobBehavior(){
+	public AcceptJobBehavior() {
 		log = LogManager.getLogger();
 		jobMsgTemplate = MessageTemplate.
 				MatchConversationId(ID.Machine.Service);
@@ -27,8 +29,8 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 
 	@Override
 	public void action() {
-
-		if(Simulator.status != MachineStatus.FAILED) {
+		sim = (Simulator) getDataStore().get(Simulator.mySimulator);
+		if(sim.getStatus() != MachineStatus.FAILED) {
 			try {
 				ACLMessage msg = myAgent.receive(jobMsgTemplate);
 				if (msg != null) {

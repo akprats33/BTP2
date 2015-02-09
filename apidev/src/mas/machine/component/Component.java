@@ -2,11 +2,32 @@ package mas.machine.component;
 
 import java.util.Random;
 
+import mas.machine.MachineStatus;
+import mas.machine.Simulator;
+
 import org.apache.commons.math3.distribution.WeibullDistribution;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/**
+ * @author Anand Prajapati
+ * The weibull distribution being used here follows a constructor
+ * weibull ( shape parameter, scale parameter)
+ * weibull ( alpha , beta)
+ * weibull ( beta  , eta )
+ * 
+ * The variable keep track of age is currentAge. Initial age is used to model
+ * imperfect repairs of component. LifeToFailure is used as the life of component
+ * i.e. when the component will fail i.e.
+ * 'currentAge - initialAge' becomes equal to 'lifeToFailure' 
+ *
+ */
 
 public class Component extends IComponent {
 
-	private double startingAge;
+	private String ComponentID;
+	private double initialAge;
+	private double currentAge;
 	private double timeSinceLastFailure;
 	private double beta;
 	private double eta;
@@ -18,14 +39,17 @@ public class Component extends IComponent {
 	private double MeanDelay;
 	private double VarianceDelay;
 	private MachineComponent status;
-	private double currentAge;
 	private double failureCost;
 	private double replacementCost;
 	private double preventiveMaintenanceCost;
 	private long lastMaintTime;
 	private double lifeToFailure;
+	private Simulator mySimulator;
+	private static Logger log;
 
-	public Component(Builder builder){
+	public Component(Builder builder, Simulator s) {
+		
+		log = LogManager.getLogger();
 		this.beta = builder.beta;
 		this.eta = builder.eta;
 		this.RestorationFactor = builder.RestorationFactor;
@@ -38,11 +62,14 @@ public class Component extends IComponent {
 		this.replacementCost = builder.replacementCost;
 		this.preventiveMaintenanceCost = builder.prevMaintCost;
 
-		this.startingAge = 0;
-		//		this.TTF = age_init;
 		this.status = MachineComponent.WORKING;
+		// assign ages to this component
+		this.initialAge = 0;
 		this.currentAge = 0;
-		this.lifeToFailure = 0;
+		this.timeSinceLastFailure = 0;
+		this.lifeToFailure = this.generateConditionalLife();
+		this.mySimulator = s;
+		
 	}
 
 	public static class Builder {
@@ -91,21 +118,24 @@ public class Component extends IComponent {
 		public Builder replacementCost(double val)
 		{ this.replacementCost = val; return this; }
 
-		public Component build() {
-			return new Component(this);
+		public Component build(Simulator s) {
+			return new Component(this,s);
 		}
 	}
 
 	/**
-	 * generate and assign life to this component using weibull distribution
+	 * Generates a life to failure for component based on
+	 * accumulated time so far using conditional reliability equation
 	 */
-	public void generateLife() {
+
+	public double generateConditionalLife() {
 		Random unifEnd = new Random();
-		double uniformRandom =unifEnd.nextDouble();
+		double conditionalUnreliability = unifEnd.nextDouble();
 		double life = this.eta * (Math.pow 
-				( Math.pow( this.currentAge/eta,beta) - Math.log(1-uniformRandom),
-						(1/beta) ));  
-		this.lifeToFailure = life;
+				( Math.pow( this.currentAge/eta,beta) - Math.log(1-conditionalUnreliability),
+						(1/beta) )); 
+
+		return life;
 	}
 
 	/**
@@ -124,20 +154,22 @@ public class Component extends IComponent {
 		Random unifEnd = new Random();
 		double uniformRandom =unifEnd.nextDouble();
 
-		this.startingAge = this.startingAge + 
+		this.timeSinceLastFailure = this.currentAge - this.initialAge;
+		
+		this.initialAge = this.initialAge + 
 				this.timeSinceLastFailure * (1 - this.RestorationFactor);
 
 		double futureReliability = uniformRandom*
-				(1.0 - wb.cumulativeProbability(this.startingAge));
+				(1.0 - wb.cumulativeProbability(this.initialAge));
 
 		this.lifeToFailure = wb.inverseCumulativeProbability(1.0 - futureReliability) -
-				this.startingAge;
+				this.initialAge;
 
 		if(	this.lifeToFailure < 0) {
 			this.lifeToFailure = 0;
-			//			System.out.println("this is the fault");
+			log.debug("Zero Life generated!");
 		}
-		//		this.age_init = this.age_init + this.TTF;
+		this.currentAge = this.initialAge;
 	}
 
 	/**
@@ -155,36 +187,56 @@ public class Component extends IComponent {
 		Random unifEnd = new Random();
 		double uniformRandom =unifEnd.nextDouble();
 
-		this.startingAge = this.currentAge * (1 - this.RestorationFactor);
+		this.initialAge = this.currentAge * (1 - this.RestorationFactor);
 
 		double futureReliability = uniformRandom*
-				(1.0 - wb.cumulativeProbability(this.startingAge));
+				(1.0 - wb.cumulativeProbability(this.initialAge));
 
 		this.lifeToFailure = wb.inverseCumulativeProbability(1.0 - futureReliability) -
-				this.startingAge;
+				this.initialAge;
 
 		if(	this.lifeToFailure < 0) {
 			this.lifeToFailure = 0;
-			//			System.out.println("this is the fault");
+			log.debug("Zero Life generated!");
 		}
-		//		this.age_init = this.age_init + this.TTF;
+		this.currentAge = this.initialAge;
 	}
 
 	/**
-	 * 
-	 * @param a is shape parameter
-	 * @param b is scale parameter
+	 * @param shape
+	 * @param scale
 	 * @return weibull distributed random number
 	 */
-	public double WeibullRnd(double a, double b)
-	{
-		WeibullDistribution wb = new WeibullDistribution(a,b);
+	public double WeibullRnd(double shape, double scale) {
+		WeibullDistribution wb = new WeibullDistribution(shape,scale);
 		Random unifEnd = new Random();
-		double uniformRandom = unifEnd.nextDouble();
-		double wbrnd = wb.inverseCumulativeProbability(1.0 - uniformRandom);
+		double reliability = unifEnd.nextDouble();
+		double wbrnd = wb.inverseCumulativeProbability( 1.0 - reliability);
 		return wbrnd;
 	}
+	/**
+	 * 
+	 * @param millis
+	 *  Ages this component by millis amount
+	 */
+	
+	public void addAge(long millis) { 
+		this.currentAge += millis;
+		
+		if(this.currentAge - this.initialAge >= this.lifeToFailure) {
+			this.status = MachineComponent.FAILED;
+			this.mySimulator.setStatus(MachineStatus.FAILED);
+		}
+	}
 
+	public String getComponentID() {
+		return ComponentID;
+	}
+
+	public void setComponentID(String componentID) {
+		this.ComponentID = componentID;
+	}
+	
 	@Override
 	public double getEta() {
 		return this.eta;
@@ -235,4 +287,8 @@ public class Component extends IComponent {
 		return this.VarianceDelay;
 	}
 
+	@Override
+	public void repair() {
+		this.generateLifeRFtype2();
+	}
 }

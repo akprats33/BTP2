@@ -12,4 +12,5 @@ public abstract class IComponent {
 	public abstract double getMTTR();
 	public abstract double getDelayMean();
 	public abstract double getDelayVariation();
+	public abstract void repair();
 }
