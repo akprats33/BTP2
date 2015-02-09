@@ -1,6 +1,7 @@
 package mas.machine;
 
 import jade.core.AID;
+import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 
 import java.io.BufferedWriter;
@@ -14,6 +15,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import mas.machine.behaviors.AcceptJobBehavior;
+import mas.machine.behaviors.Connect2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
@@ -130,26 +133,37 @@ public class Simulator extends IMachine {
 		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
 		
 		loadData.addSubBehaviour(new Register2DF());
+		loadData.addSubBehaviour(new Connect2BlackBoardBehvaior());
 		
 		addBehaviour(loadData);
 		
+		ParallelBehaviour functionality = new ParallelBehaviour(this,
+							ParallelBehaviour.WHEN_ALL);
+		
+		functionality.addSubBehaviour(new AcceptJobBehavior());
+		
+		addBehaviour(functionality);
 		
 	}
+	
 	@Override
 	protected void takeDown() {
 		super.takeDown();
 	}
+	
 	@Override
 	public ArrayList<IComponent> getComponents() {
 		return myComponents;
 	}
+	
 	@Override
 	public long getStartTime() {
 		return this.epochTime;
 	}
+	
 	@Override
 	public MachineStatus getStatus() {
-		return this.status;
+		return status;
 	}
 	
 	public static void addComponent(Component c) {
@@ -159,5 +173,4 @@ public class Simulator extends IMachine {
 	public long getNextFailureTime() {
 		return epochTime;
 	}
-	
 }

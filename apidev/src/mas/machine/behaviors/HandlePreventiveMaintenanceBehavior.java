@@ -1,10 +1,14 @@
 package mas.machine.behaviors;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
+
 import mas.job.job;
 import mas.util.MessageIds;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -25,6 +29,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 	private MessageTemplate pmDataMsgTemplate;
 	private ACLMessage maintenanceStartMsg;
 	private ACLMessage maintenanceDataMsg;
+	private StringTokenizer token;
 
 	public HandlePreventiveMaintenanceBehavior(job comingJob) {
 		this.comingJob = comingJob;
@@ -32,7 +37,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 		log = LogManager.getLogger();
 		pmDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.machinePrevMaintenanceData);
-
+		
 	}
 
 	@Override
@@ -55,7 +60,8 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 			maintenanceDataMsg = myAgent.receive(pmDataMsgTemplate);
 			if(maintenanceDataMsg != null){
 				// parse the received data and perform maintenance of the machine
-
+				token = new StringTokenizer(maintenanceDataMsg.getContent());
+				
 				step = 2;
 			}
 			else {

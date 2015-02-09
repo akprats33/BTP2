@@ -56,6 +56,9 @@ public class MessageIds {
 	public static String maintMachineFailureInfo = "Fail-Start";
 	public static String machinePrevMaintenanceData = "machineMaintenanceData";
 	public static String machinePrevMaintenanceStart = "machineMaintenanceStart";
+	public static String machineInspectionStart = "machineInspectionStart";
+	public static String machineInspectionData = "machineInspectionStart";
+	
 	public static String failEnd = "Fail-End";
 	public static String MaintMachineHealth = "Machine-State";
 	public static String MaintMachineRepaired = "Machine-failure-End";
