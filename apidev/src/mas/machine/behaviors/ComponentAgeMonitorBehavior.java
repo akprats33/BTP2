@@ -11,10 +11,10 @@ import jade.core.behaviours.Behaviour;
 public class ComponentAgeMonitorBehavior extends Behaviour{
 
 	private static final long serialVersionUID = 1L;
-	private Logger log;
-	private int step = 0;
-	private int WAIT_STEP = 100;
-	private Simulator mySim;
+	private transient Logger log;
+	private transient int step = 0;
+	private transient int WAIT_STEP = 100;
+	private transient Simulator mySim;
 
 	public ComponentAgeMonitorBehavior() {
 		log = LogManager.getLogger();

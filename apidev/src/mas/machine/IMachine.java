@@ -1,12 +1,10 @@
 package mas.machine;
 
 import jade.core.Agent;
-
 import java.util.ArrayList;
-
 import mas.machine.component.IComponent;
 
-public abstract class IMachine extends Agent{
+public abstract class IMachine extends Agent {
 
 	/**
 	 * 

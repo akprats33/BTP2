@@ -3,13 +3,10 @@ package mas.machine.behaviors;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import mas.machine.Simulator;
 import mas.util.MessageIds;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -27,9 +24,9 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 	private ArrayList<Integer> componentsToRepair;
 	private Simulator sim;
 
-	public HandleSimulatorFailedBehavior(Simulator s) {
+	public HandleSimulatorFailedBehavior() {
 		log = LogManager.getLogger();
-		this.sim = s;
+		this.sim = (Simulator) myAgent;
 		correctiveDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.machinePrevMaintenanceData);
 	}
@@ -40,7 +37,7 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 		case 0:
 			correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
 			try {
-				correctiveStartMsg.setContentObject(myAgent);
+				correctiveStartMsg.setContentObject(sim);
 				correctiveStartMsg.setConversationId(MessageIds.Failed);
 				correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
 				myAgent.send(correctiveStartMsg);
@@ -58,11 +55,10 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 				repairTime = Long.parseLong(token.nextToken());
 				block(repairTime);
 				componentsToRepair = new ArrayList<Integer>();
-				
+
 				while(token.hasMoreTokens()) {
 					componentsToRepair.add(Integer.parseInt(token.nextToken()));
 				}
-				
 				step = 2;
 			}
 			else{

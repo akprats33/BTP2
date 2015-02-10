@@ -4,8 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+
 import mas.machine.Simulator;
 import mas.machine.component.Component;
+
+import org.apache.commons.lang3.Conversion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import jade.core.behaviours.OneShotBehaviour;
 
 public class LoadComponentBehavior extends OneShotBehaviour{
@@ -28,6 +32,9 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
 	private Simulator mySim;
+	// data being read is in hours/minutes/seconds
+	// convert that into milliseconds
+	private int unitConversion = 3600000;
 	
 	public LoadComponentBehavior(Simulator s) {
 		mySim = s;
@@ -77,7 +84,7 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 				switch(cellCount)
 				{
 				case 0:
-					eta=cell.getNumericCellValue();
+					eta = cell.getNumericCellValue()*unitConversion;
 					break;
 				case 1:
 					beta = cell.getNumericCellValue();
@@ -89,10 +96,10 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 					rfType = (int) cell.getNumericCellValue();
 					break;
 				case 4:
-					MTTR = cell.getNumericCellValue();
+					MTTR = cell.getNumericCellValue()*unitConversion;
 					break;
 				case 5:
-					TTR_sd= cell.getNumericCellValue();
+					TTR_sd= cell.getNumericCellValue()*unitConversion;
 					break;
 				case 6:
 					replacementCost = cell.getNumericCellValue();
@@ -104,10 +111,10 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 					preventiveMaintenanceCost = cell.getNumericCellValue();
 					break;
 				case 9:
-					meanDelay = cell.getNumericCellValue();
+					meanDelay = cell.getNumericCellValue()*unitConversion;
 					break;
 				case 10:
-					sdDelay = cell.getNumericCellValue();
+					sdDelay = cell.getNumericCellValue()*unitConversion;
 					break;
 				}
 				cellCount++;

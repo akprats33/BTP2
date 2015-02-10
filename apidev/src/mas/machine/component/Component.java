@@ -1,5 +1,7 @@
 package mas.machine.component;
 
+import jade.util.leap.Serializable;
+
 import java.util.Random;
 
 import mas.machine.MachineStatus;
@@ -23,8 +25,12 @@ import org.apache.logging.log4j.Logger;
  *
  */
 
-public class Component extends IComponent {
+public class Component extends IComponent implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String ComponentID;
 	private double initialAge;
 	private double currentAge;
@@ -44,8 +50,8 @@ public class Component extends IComponent {
 	private double preventiveMaintenanceCost;
 	private long lastMaintTime;
 	private double lifeToFailure;
-	private Simulator mySimulator;
-	private static Logger log;
+	private transient Simulator mySimulator;
+	private transient static Logger log;
 
 	public Component(Builder builder, Simulator s) {
 		
@@ -227,6 +233,8 @@ public class Component extends IComponent {
 			this.status = MachineComponent.FAILED;
 			this.mySimulator.setStatus(MachineStatus.FAILED);
 		}
+		
+//		log.info("Current age " + this.currentAge + "life " + this.lifeToFailure);
 	}
 
 	public String getComponentID() {

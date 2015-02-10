@@ -2,14 +2,11 @@ package mas.machine.behaviors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
-import mas.util.ID;
 import mas.util.MessageIds;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.DataStore;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -17,10 +14,10 @@ import jade.lang.acl.UnreadableException;
 public class AcceptJobBehavior extends CyclicBehaviour {
 
 	private static final long serialVersionUID = 1L;
-	private MessageTemplate jobMsgTemplate;
-	private Logger log;
-	private job jobToProcess;
-	private Simulator sim;
+	private transient MessageTemplate jobMsgTemplate;
+	private transient Logger log;
+	private transient job jobToProcess;
+	private transient Simulator sim;
 
 	public AcceptJobBehavior() {
 		log = LogManager.getLogger();

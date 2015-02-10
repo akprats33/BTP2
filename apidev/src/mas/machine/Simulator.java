@@ -1,20 +1,24 @@
 package mas.machine;
 
 import jade.core.AID;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.util.leap.Serializable;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import mas.machine.behaviors.AcceptJobBehavior;
@@ -30,22 +34,22 @@ import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
+import mas.util.MessageIds;
 import net.miginfocom.swing.MigLayout;
 
-public class Simulator extends IMachine {
+import org.apache.commons.lang3.SerializationUtils;
 
-	/**
-	 * 
-	 */
+public class Simulator extends IMachine implements Serializable{
+
 	private static final long serialVersionUID = 1L;
 	private static ArrayList<IComponent> myComponents;
 	private long epochTime;
 	private MachineStatus status;
-	protected PropertyChangeSupport statusChangeSupport;
+	protected transient PropertyChangeSupport statusChangeSupport;
 	public static AID blackboardAgent;
 	public static String mySimulator = "Simulator";
 
-	public  String IpAddress,JadePort ,ComPort;
+	public String IpAddress,JadePort ,ComPort;
 	public int portNumber;
 
 	//percentage variation in processing time
@@ -96,13 +100,13 @@ public class Simulator extends IMachine {
 
 	public static int numOfRootCauseParams = 1;
 
-	public static ArrayList<String> nameParams  = new ArrayList<String>();
-	public static ArrayList<Double> valueParams = new ArrayList<Double>();
-	public static int[] frequencyParams;
-	public static ArrayList<Integer> inspectionParamsIndex = new ArrayList<Integer>();
-	public static ArrayList<Integer> inspectionParamFrequency = new ArrayList<Integer>();
+	public transient static ArrayList<String> nameParams  = new ArrayList<String>();
+	public transient static ArrayList<Double> valueParams = new ArrayList<Double>();
+	public transient static int[] frequencyParams;
+	public transient static ArrayList<Integer> inspectionParamsIndex = new ArrayList<Integer>();
+	public transient static ArrayList<Integer> inspectionParamFrequency = new ArrayList<Integer>();
 
-	public static double rootCause[];
+	public transient static double rootCause[];
 
 	//public node[] rootcauseAffectedParams;
 	public static double w_alpha;//=10.0;
@@ -110,7 +114,7 @@ public class Simulator extends IMachine {
 	//	public static long abs_next_failure_time;
 	//	public static failedComp failed_c;
 
-	public static double[] rootcause_timeto_occur;
+	public transient static double[] rootcause_timeto_occur;
 
 	public static  DefaultTableModel AttrDTM, DimDTM;
 	public static JPanel jobAttrPanel=new JPanel(new MigLayout());
@@ -121,48 +125,81 @@ public class Simulator extends IMachine {
 	public static ArrayList<Parameter> params ;
 	public static ArrayList<ArrayList<RootCause>> rootcauses; 
 
-	public void init(){
+	public void init() {
 		statusChangeSupport = new PropertyChangeSupport(this);
 		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
 		params = new ArrayList<Parameter>();
-		rootcauses = new ArrayList<ArrayList<RootCause>>();
+		rootcauses = new ArrayList<ArrayList<RootCause> >();
 	}
+
+	private transient SequentialBehaviour loadData;
+	private transient Behaviour loadSimulatorParams;
+	private transient Behaviour loadComponentData;
+	private transient Behaviour loadMachineParams;
+	private transient Behaviour loadRootCause;
+	private transient Behaviour registerthis;
+	private transient Behaviour connect2Blackboard;
+	private transient Behaviour acceptIncomingJobs;
+	private transient Behaviour componentAgeMonitor;
+
+	private transient ParallelBehaviour functionality ;
 
 	@Override
 	protected void setup() {
 		super.setup();
 		init();
 
-		SequentialBehaviour loadData = new SequentialBehaviour(this);
-		loadData.addSubBehaviour(new LoadSimulatorParamsBehavior());
-		loadData.addSubBehaviour(new LoadComponentBehavior(this));
-		loadData.addSubBehaviour(new LoadMachineParameterBehavior());
-		loadData.addSubBehaviour(new GetRootCauseDataBehavior());
+		loadData = new SequentialBehaviour(this);
 
-		loadData.addSubBehaviour(new Register2DF());
-		loadData.addSubBehaviour(new Connect2BlackBoardBehvaior());
+		loadSimulatorParams = new LoadSimulatorParamsBehavior();
+		loadComponentData = new LoadComponentBehavior(this);
+		loadMachineParams = new LoadMachineParameterBehavior();
+		loadRootCause = new GetRootCauseDataBehavior();
+		registerthis = new Register2DF();
+		connect2Blackboard = new Connect2BlackBoardBehvaior();
+
+		loadData.addSubBehaviour(loadSimulatorParams);
+		loadData.addSubBehaviour(loadComponentData);
+		loadData.addSubBehaviour(loadMachineParams);
+		loadData.addSubBehaviour(loadRootCause);
+		loadData.addSubBehaviour(registerthis);
+		loadData.addSubBehaviour(connect2Blackboard);
 
 		addBehaviour(loadData);
 
-		ParallelBehaviour functionality = new ParallelBehaviour(this,
+		functionality = new ParallelBehaviour(this,
 				ParallelBehaviour.WHEN_ALL);
-		functionality.getDataStore().put(mySimulator, this);
+		functionality.getDataStore().put(mySimulator, Simulator.this);
 
-		AcceptJobBehavior acceptJobs = new AcceptJobBehavior();
-		acceptJobs.setDataStore(functionality.getDataStore());
+		acceptIncomingJobs = new AcceptJobBehavior();
+		acceptIncomingJobs.setDataStore(functionality.getDataStore());
 
-		ComponentAgeMonitorBehavior ageMonitor = new ComponentAgeMonitorBehavior();
-		ageMonitor.setDataStore(functionality.getDataStore());
+		componentAgeMonitor = new ComponentAgeMonitorBehavior();
+		componentAgeMonitor.setDataStore(functionality.getDataStore());
 
-		functionality.addSubBehaviour(acceptJobs);
-		//		functionality.addSubBehaviour(ageMonitor);
+		functionality.addSubBehaviour(acceptIncomingJobs);
+		functionality.addSubBehaviour(componentAgeMonitor);
 
 		addBehaviour(functionality);
 
 		// Adding a listener to the change in value of the status of simulator 
 		statusChangeSupport.addPropertyChangeListener(
-				new SimulatorStatusListener(this));
+				new SimulatorStatusListener(Simulator.this));
+		
+//		ACLMessage correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
+//		try {
+//			correctiveStartMsg.setContentObject(Simulator.this);
+//			correctiveStartMsg.setConversationId(MessageIds.Failed);
+//			correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
+//			send(correctiveStartMsg);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
+//		System.out.println("serialization is "+ SerializationUtils.serialize(Simulator.this));
+
+
 
 	}
 
@@ -237,4 +274,36 @@ public class Simulator extends IMachine {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ComPort == null) ? 0 : ComPort.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Simulator other = (Simulator) obj;
+		if (ComPort == null) {
+			if (other.ComPort != null)
+				return false;
+		} else if (!ComPort.equals(other.ComPort))
+			return false;
+		return true;
+	}
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		out.writeObject(status);
+	}
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+	}
 }
