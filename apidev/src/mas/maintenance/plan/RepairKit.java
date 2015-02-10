@@ -1,9 +1,10 @@
 package mas.maintenance.plan;
 
 import java.util.Random;
+
 import mas.MAS;
-import mas.maintenance.machineDefinition.IComponent;
-import mas.maintenance.machineDefinition.IMachine;
+import mas.machine.IMachine;
+import mas.machine.component.IComponent;
 
 public class RepairKit {
 

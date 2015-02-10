@@ -3,12 +3,14 @@ package mas.maintenance.plan;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.MessageTemplate;
+
 import java.util.ArrayList;
+
 import mas.job.job;
+import mas.machine.IMachine;
+import mas.machine.MachineStatus;
+import mas.machine.component.IComponent;
 import mas.maintenance.behavior.SendMaintenanceJobBehavior;
-import mas.maintenance.machineDefinition.IComponent;
-import mas.maintenance.machineDefinition.IMachine;
-import mas.maintenance.machineDefinition.MachineStatus;
 import mas.util.ID;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.plan.PlanBody;
