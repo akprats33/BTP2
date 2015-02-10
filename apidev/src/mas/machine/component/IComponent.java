@@ -13,4 +13,5 @@ public abstract class IComponent {
 	public abstract double getDelayMean();
 	public abstract double getDelayVariation();
 	public abstract void repair();
+	public abstract void addAge(long millis) ;
 }

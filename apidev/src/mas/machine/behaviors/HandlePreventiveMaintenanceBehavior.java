@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import mas.job.job;
+import mas.machine.MachineStatus;
+import mas.machine.Simulator;
 import mas.util.MessageIds;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,6 +31,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 	private ACLMessage maintenanceStartMsg;
 	private ACLMessage maintenanceDataMsg;
 	private StringTokenizer token;
+	private Simulator mySim;
 
 	public HandlePreventiveMaintenanceBehavior(job comingJob) {
 		this.comingJob = comingJob;
@@ -42,6 +45,8 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 	public void action() {
 		switch(step) {
 		case 0 :
+			mySim = (Simulator) getDataStore().get(Simulator.mySimulator);
+			mySim.setStatus(MachineStatus.UNDER_MAINTENANCE);
 			maintenanceStartMsg = new ACLMessage(ACLMessage.REQUEST);
 			maintenanceStartMsg.setConversationId(MessageIds.machinePrevMaintenanceStart);
 			try {

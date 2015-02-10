@@ -1,11 +1,15 @@
 package mas.machine.behaviors;
 
 import java.util.StringTokenizer;
+
 import mas.job.job;
+import mas.machine.MachineStatus;
 import mas.machine.Simulator;
 import mas.util.MessageIds;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -22,6 +26,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 	private ACLMessage inspectioneDataMsg;
 	private String inspectionData;
 	private StringTokenizer token;
+	private Simulator mySim;
 	
 	public HandleInspectionJobBehavior(job comingJob) {
 		
@@ -37,6 +42,8 @@ public class HandleInspectionJobBehavior extends Behaviour{
 	public void action() {
 		switch(step){
 		case 0:
+			mySim = (Simulator) getDataStore().get(Simulator.mySimulator);
+			mySim.setStatus(MachineStatus.UNDER_MAINTENANCE);
 			inspectionStartMsg =  new ACLMessage(ACLMessage.REQUEST);
 			inspectionStartMsg.setContent("Inspection about to start.");
 			inspectionStartMsg.addReceiver(Simulator.blackboardAgent);

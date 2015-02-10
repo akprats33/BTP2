@@ -18,12 +18,14 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import mas.machine.behaviors.AcceptJobBehavior;
+import mas.machine.behaviors.ComponentAgeMonitorBehavior;
 import mas.machine.behaviors.Connect2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
 import mas.machine.behaviors.Register2DF;
+import mas.machine.behaviors.SimulatorStatusListener;
 import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
@@ -145,13 +147,22 @@ public class Simulator extends IMachine {
 
 		ParallelBehaviour functionality = new ParallelBehaviour(this,
 				ParallelBehaviour.WHEN_ALL);
-		
 		functionality.getDataStore().put(mySimulator, this);
+
 		AcceptJobBehavior acceptJobs = new AcceptJobBehavior();
 		acceptJobs.setDataStore(functionality.getDataStore());
+
+		ComponentAgeMonitorBehavior ageMonitor = new ComponentAgeMonitorBehavior();
+		ageMonitor.setDataStore(functionality.getDataStore());
+
 		functionality.addSubBehaviour(acceptJobs);
+		//		functionality.addSubBehaviour(ageMonitor);
 
 		addBehaviour(functionality);
+
+		// Adding a listener to the change in value of the status of simulator 
+		statusChangeSupport.addPropertyChangeListener(
+				new SimulatorStatusListener(this));
 
 	}
 
@@ -179,9 +190,9 @@ public class Simulator extends IMachine {
 		MachineStatus oldStatus = this.status;
 		status = newStatus;
 		if(newStatus == MachineStatus.FAILED){
-			 statusChangeSupport.
-			 firePropertyChange(
-					 "Machine status",oldStatus, newStatus);
+			statusChangeSupport.
+			firePropertyChange(
+					"Machine status",oldStatus, newStatus);
 		}
 	}
 
@@ -200,14 +211,30 @@ public class Simulator extends IMachine {
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		statusChangeSupport.addPropertyChangeListener(listener);
 	}
-	
+
+	/**
+	 * @param arr is index of all components to get repaired
+	 * 
+	 * this function calls repair method on the passed components 
+	 */
+
 	public void repair(ArrayList<Integer> arr) {
-		
+
 		for (int index = 0; index < arr.size(); index++) { 
 			myComponents.get(arr.get(index)).repair();
 		}
-		
 		this.status = MachineStatus.IDLE;
+	}
+
+	/**
+	 * @param millis
+	 * Age all the components of this simulator by an amount millis
+	 * 
+	 */
+	public synchronized void AgeComponents(long millis) {
+		for(int index = 0; index < myComponents.size(); index++) {
+			myComponents.get(index).addAge(millis);
+		}
 	}
 
 }

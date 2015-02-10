@@ -20,7 +20,8 @@ public class AddJobBehavior extends Behaviour {
 	private Logger log;
 	private int step = 0;
 	// time step in milliseconds
-	private long TIME_STEP = 40;
+	private long TIME_STEP = 30;
+	
 	private double processingTime;
 	private Simulator sim;
 
@@ -68,14 +69,18 @@ public class AddJobBehavior extends Behaviour {
 			else if (comingJob.getJobID().equals(maintJobID)) {
 				log.info("Maintenance Job loading");
 				IsJobComplete = true;
-				myAgent.addBehaviour(
-						new HandlePreventiveMaintenanceBehavior(comingJob));
+				HandlePreventiveMaintenanceBehavior pm = 
+						new HandlePreventiveMaintenanceBehavior(comingJob);
+				pm.setDataStore(this.getDataStore());
+				myAgent.addBehaviour(pm);
 			}
 			else if(comingJob.getJobID().equals(maintJobID)) { 
 				log.info("Inspection Job loading");
 				IsJobComplete = true;
-				myAgent.addBehaviour(
-						new HandleInspectionJobBehavior(comingJob));
+				HandleInspectionJobBehavior inspector = 
+						new HandleInspectionJobBehavior(comingJob);
+				inspector.setDataStore(this.getDataStore());
+				myAgent.addBehaviour(inspector);
 			}
 			break;
 
@@ -84,6 +89,7 @@ public class AddJobBehavior extends Behaviour {
 					sim.getStatus() != MachineStatus.FAILED ) {
 
 				processingTime = processingTime - TIME_STEP; 
+				sim.AgeComponents(TIME_STEP);
 				block(TIME_STEP); 
 
 			} else if( processingTime <= 0) {
