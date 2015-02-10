@@ -107,8 +107,8 @@ public class ID {
 	}
 
 	public class Machine{
-		public static final String Service="machine-simulator-machine";
-		public static final String LocalName ="machine-simulator-machine";
+		public static final String Service="machine";
+		public static final String LocalName ="machine-simulator";
 
 		/*public class Parameters{
 

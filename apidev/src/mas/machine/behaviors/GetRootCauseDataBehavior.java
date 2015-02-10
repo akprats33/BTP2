@@ -30,7 +30,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 	private  ArrayList<ArrayList<JCheckBox> > chk_paramsAffected = null;
 	private  int numRootCauses = 0;
 	private Logger log;
-	public boolean autoInput = false;
+	public boolean autoInput = true;
 
 	@Override
 	public void action() {
@@ -169,6 +169,6 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 		if(autoInput)
 			btn_submit.doClick();
 
-		log.info("Root cause input completed");
+//		log.info("Root cause input completed");
 	}
 }

@@ -65,7 +65,7 @@ public class StatsTracker {
 				busyTime = busyTime + lastOne.getProcessingTime();
 			}
 			
-			makeSpan = lastOne.getCompletionTime() - 
+			makeSpan = lastOne.getCompletionTime().getTime() - 
 					doneJobs.peek().getStartTime().getTime();
 		}
 		else if (doneJobs.size() > SIZE_LIMIT)

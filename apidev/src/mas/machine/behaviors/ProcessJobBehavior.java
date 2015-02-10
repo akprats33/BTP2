@@ -48,21 +48,23 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 
 		// Assign attributes to the job
 		ArrayList<jobAttribute> jAttributes = comingJob.getAttributes();
-		int numAttributes = jDimensions.size();
+		int numAttributes = jAttributes.size();
 		int AttIndex;
 
 		BinomialDistribution bernoulli =
 				new BinomialDistribution(1, Simulator.fractionDefective);
 
 		boolean conforming;
+		
 		for(AttIndex = 0; AttIndex < numAttributes; AttIndex++) {
 
 			conforming = (bernoulli.sample()==1)? Boolean.TRUE :Boolean.FALSE;
-			jAttributes.get(dIndex).setConforming(conforming);
+			jAttributes.get(AttIndex).setConforming(conforming);
 		}
 		comingJob.setAttributes(jAttributes);
+//		log.info("Dimensions and attributes assigned");
+		comingJob.setCompletionTime(System.currentTimeMillis());
 		
-		log.info("Dimensions and attributes assigned");
 		// send completed job to blackboard in handleCompletedJobBehavior
 		myAgent.addBehaviour(new HandleCompletedJobBehavior(comingJob));
 	}

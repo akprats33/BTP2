@@ -47,14 +47,14 @@ public class Simulator extends IMachine {
 	public int portNumber;
 
 	//percentage variation in processing time
-	public static double percent = 10.0;		
+	public static double percent = 0.10;		
 
-	// parameters of loading time normal distribution ( in Minutes)
-	public static double meanLoadingTime = 0.0;					
+	// parameters of loading time normal distribution ( in Milliseconds)
+	public static double meanLoadingTime = 1000.0;					
 	public static double sdLoadingTime = 1.0;
 
-	// parameters of loading time normal distribution ( in Minutes)
-	public static double meanUnloadingTime = 0.0;				
+	// parameters of loading time normal distribution ( in Milliseconds)
+	public static double meanUnloadingTime = 1000.0;				
 	public static double sdUnloadingTime=1.0;
 
 	// parameters of normal distribution causing shift in process mean
@@ -84,7 +84,7 @@ public class Simulator extends IMachine {
 	public static double mean_shiftParam = 0;					
 	public static double sd_shiftparam = 1;
 
-	public static double fractionDefective = 0.1;
+	public static double fractionDefective = 0.10;
 
 	// for writing data to file
 	public static BufferedWriter fout;					
@@ -145,12 +145,13 @@ public class Simulator extends IMachine {
 
 		ParallelBehaviour functionality = new ParallelBehaviour(this,
 				ParallelBehaviour.WHEN_ALL);
-
+		
 		functionality.getDataStore().put(mySimulator, this);
-		functionality.addSubBehaviour(new AcceptJobBehavior());
+		AcceptJobBehavior acceptJobs = new AcceptJobBehavior();
+		acceptJobs.setDataStore(functionality.getDataStore());
+		functionality.addSubBehaviour(acceptJobs);
 
 		addBehaviour(functionality);
-
 
 	}
 

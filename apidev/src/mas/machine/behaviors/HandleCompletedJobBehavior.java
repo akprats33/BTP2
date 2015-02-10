@@ -33,10 +33,17 @@ public class HandleCompletedJobBehavior extends Behaviour{
 				msg.setConversationId(MessageIds.completedJobFromMachine);
 				msg.addReceiver(Simulator.blackboardAgent);
 				myAgent.send(msg);
+				
+				log.info("Job no: '"+comingJob.getJobNo() + 
+						"' --> completion : " + comingJob.getCompletionTime() + 
+						"Starting time : " + comingJob.getStartTime());
 				log.info("sending completed job to blackboard");
+				
+				step = 1;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
 			break;
 			
 		case 1:

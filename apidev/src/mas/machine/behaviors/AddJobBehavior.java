@@ -1,10 +1,13 @@
 package mas.machine.behaviors;
 
+import java.util.Date;
+
 import jade.core.behaviours.Behaviour;
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Methods;
 import mas.machine.Simulator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +20,7 @@ public class AddJobBehavior extends Behaviour {
 	private Logger log;
 	private int step = 0;
 	// time step in milliseconds
-	private long TIME_STEP = 10;
+	private long TIME_STEP = 40;
 	private double processingTime;
 	private Simulator sim;
 
@@ -34,22 +37,32 @@ public class AddJobBehavior extends Behaviour {
 		case 0:
 			if(! comingJob.getJobID().equals(maintJobID)) {
 
-				log.info("Job No : " + comingJob.getJobNo() + " loading");
+				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
+				//						"processing time : " + comingJob.getProcessingTime());
 
-				comingJob.setProcessingTime((long) (
-						Methods.normalRandom(comingJob.getProcessingTime(),Simulator.percent )+
-						Methods.getLoadingTime(Simulator.meanLoadingTime, Simulator.sdLoadingTime) +
-						Methods.getunloadingTime(Simulator.meanUnloadingTime, Simulator.sdUnloadingTime)));
+				double newProcessingTime =
+						Methods.normalRandom(comingJob.getProcessingTime(),
+								comingJob.getProcessingTime()*Simulator.percent )+
+								Methods.getLoadingTime(Simulator.meanLoadingTime,
+										Simulator.sdLoadingTime) +
+										Methods.getunloadingTime(Simulator.meanUnloadingTime,
+												Simulator.sdUnloadingTime);
+
+				comingJob.setProcessingTime((long)newProcessingTime) ;
 
 				processingTime = comingJob.getProcessingTime();
-				
+
+				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
+						"processing time : "+comingJob.getProcessingTime());
+
 				sim = (Simulator) getDataStore().get(Simulator.mySimulator);
+				//				log.info("Simulator is " + sim);
 				sim.setStatus(MachineStatus.PROCESSING);
 
-				//				while(!IsJobComplete) {
+				comingJob.setStartTime(new Date(System.currentTimeMillis()));
 
 				if( processingTime > 0 ) {
-						step = 1;
+					step = 1;
 				}
 			}
 			else if (comingJob.getJobID().equals(maintJobID)) {
@@ -65,22 +78,22 @@ public class AddJobBehavior extends Behaviour {
 						new HandleInspectionJobBehavior(comingJob));
 			}
 			break;
-			
+
 		case 1:
 			if( processingTime > 0 &&
 					sim.getStatus() != MachineStatus.FAILED ) {
-				
+
 				processingTime = processingTime - TIME_STEP; 
 				block(TIME_STEP); 
-				
+
 			} else if( processingTime <= 0) {
 				step = 2;
-			} else {
+			} else if(sim.getStatus() != MachineStatus.FAILED) {
 				block(TIME_STEP); 
 			}
-			
+
 			break;
-			
+
 		case 2:
 			if( processingTime <= 0) {
 				IsJobComplete = true;
@@ -88,6 +101,7 @@ public class AddJobBehavior extends Behaviour {
 				myAgent.addBehaviour(new ProcessJobBehavior(comingJob));
 				sim.setStatus(MachineStatus.IDLE);
 			}
+			
 			break;
 		}
 	}

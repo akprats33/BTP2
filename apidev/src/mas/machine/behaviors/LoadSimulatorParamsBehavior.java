@@ -26,6 +26,7 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 	private String filePath;
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
+	private long minute2Millis = 60000;
 
 	@Override
 	public void action() {
@@ -50,16 +51,19 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 			row = (XSSFRow) rows.next();
 			Iterator<Cell> cells = row.cellIterator();
 			int cellNumber = 0;
+			
 			while(cells.hasNext()) {
 
 				XSSFCell cell = (XSSFCell) cells.next();
 
 				switch(cellNumber) {
 				case 0:
-					//rate_Jobarrival = (double)cell.getNumericCellValue();
+//					Simulator.r = (double)cell.getNumericCellValue();
 					break;
 				case 1:
 					Simulator.percent = (double)cell.getNumericCellValue();
+					Simulator.percent /= 100;
+//					log.info("percent is " + Simulator.percent);
 					break;
 				case 2:
 					Simulator.meanLoadingTime = (double)cell.getNumericCellValue();
@@ -92,6 +96,7 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 					Simulator.fractionDefective = (double)cell.getNumericCellValue();
 					break;
 				}
+				cellNumber++;
 			}
 		}
 		try {

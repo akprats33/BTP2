@@ -30,7 +30,8 @@ public class AgentStarter {
 	
 	static {
 		 agents = new HashMap<String, Agent>();
-//		 agents.put(ID.Blackboard.LocalName, new Blackboard());
+		 agents.put(ID.Blackboard.LocalName, new Blackboard());
+		 agents.put(ID.Customer.LocalName , new jobsender());
 //		 agents.put(ID.Customer.LocalName, new CustomerAgent());
 //		 agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
 		 agents.put(ID.Machine.LocalName, new Simulator());
@@ -44,13 +45,10 @@ public class AgentStarter {
 	}
 
 	public AgentStarter() {
-		String className=AgentStarter.class.getName();
+		String className = AgentStarter.class.getName();
 		
-		log=LogManager.getLogger(this.getClass());
-		System.out.println(log);
-		log.info(log.isInfoEnabled());
-	
-		
+		log = LogManager.getLogger(this.getClass());
+//		log.info(log.isInfoEnabled());
 		
 		List<String> params = new ArrayList<String>();
 		params.add("-gui");
@@ -60,7 +58,6 @@ public class AgentStarter {
 		
 		log.info("parameters for console :" +params);
 
-		
 		this.bootProfile = new BootProfileImpl(params.toArray(new String[0]));
 		
 		this.runtime = jade.core.Runtime.instance();
@@ -75,7 +72,7 @@ public class AgentStarter {
 						.acceptNewAgent(agentName, agents.get(agentName));
 				ac.start();
 				
-				log.info(ac);
+//				log.info(ac);
 			} catch (Exception e) {
 				log.error(e);
 				System.out.println(e);

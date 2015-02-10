@@ -19,32 +19,16 @@ public class job implements Serializable{
 	private Date startTime;
 	private Date duedate;
 	private long processingTime;
-	public double getCost() {
-		return Cost;
-	}
-
-	public void setCost(double cost) {
-		Cost = cost;
-	}
-
 	private Date generationTime;
+	private Date completionTime;
 
 	//Optional parameters initialized to default values
-	public double completionTime;
 	public int operationNo = 1;
 	public int acceptance = 0;
 	public double slack;
 	private double regret;
 	private int position;
 	private double BidByLSA ;
-
-	public double getBidByLSA() {
-		return BidByLSA;
-	}
-
-	public void setBidByLSA(double bidByLSA) {
-		BidByLSA = bidByLSA;
-	}
 
 	private static final double lowRegretMultiplier = 1,
 			MediumRegretMultiplier = 2,
@@ -100,7 +84,6 @@ public class job implements Serializable{
 		private double CPN;
 		private double Cost;
 		private double Penalty;
-		private Date startTime;
 		private Date dDate;
 		private long procTime;
 		private Date genTime;
@@ -128,9 +111,6 @@ public class job implements Serializable{
 		
 		public Builder jobDueDateTime(long val)
 		{ dDate = new Date(val); return this; }
-
-		public Builder jobStartTime(Date val)
-		{ startTime = val; return this; }
 
 		public Builder jobProcTime(long val)
 		{ procTime = val; return this; }
@@ -234,7 +214,7 @@ public class job implements Serializable{
 	public void setProcessingTime(long processingTime) {
 		this.processingTime = processingTime;
 	}
-
+	
 	public Date getGenerationTime() {
 		return generationTime;
 	}
@@ -247,12 +227,16 @@ public class job implements Serializable{
 		this.generationTime = new Date(generationTime);
 	}
 
-	public double getCompletionTime() {
+	public Date getCompletionTime() {
 		return completionTime;
 	}
 
-	public void setCompletionTime(double completionTime) {
+	public void setCompletionTime(Date completionTime) {
 		this.completionTime = completionTime;
+	}
+	
+	public void setCompletionTime(long completionTime) {
+		this.completionTime = new Date(completionTime);
 	}
 
 	public int getAcceptance() {
@@ -309,6 +293,21 @@ public class job implements Serializable{
 
 	public void setDimensions(ArrayList<jobDimension> dimensions) {
 		this.dimensions = dimensions;
+	}
+	
+	public double getCost() {
+		return Cost;
+	}
+
+	public void setCost(double cost) {
+		Cost = cost;
+	}
+	public double getBidByLSA() {
+		return BidByLSA;
+	}
+
+	public void setBidByLSA(double bidByLSA) {
+		BidByLSA = bidByLSA;
 	}
 
 }

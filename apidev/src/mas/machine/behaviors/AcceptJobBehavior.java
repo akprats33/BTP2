@@ -7,6 +7,7 @@ import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
 import mas.util.ID;
+import mas.util.MessageIds;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.DataStore;
 import jade.lang.acl.ACLMessage;
@@ -24,7 +25,7 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 	public AcceptJobBehavior() {
 		log = LogManager.getLogger();
 		jobMsgTemplate = MessageTemplate.
-				MatchConversationId(ID.Machine.Service);
+				MatchConversationId(MessageIds.SendJob);
 	}
 
 	@Override
@@ -32,13 +33,16 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 		sim = (Simulator) getDataStore().get(Simulator.mySimulator);
 		if(sim.getStatus() != MachineStatus.FAILED) {
 			try {
+//				log.info("Job accepter running");
 				ACLMessage msg = myAgent.receive(jobMsgTemplate);
 				if (msg != null) {
 					this.jobToProcess = (job) msg.getContentObject();
-					log.info(" Job accepted with Processing time= " +
-							jobToProcess.getProcessingTime());
 					
-					myAgent.addBehaviour(new AddJobBehavior(jobToProcess));
+					log.info(" Job No : '" + jobToProcess.getJobNo()+ "'accepted" );
+					
+					AddJobBehavior addjob = new AddJobBehavior(this.jobToProcess);
+					addjob.setDataStore(this.getDataStore());
+					myAgent.addBehaviour(addjob);
 				} 
 				else {
 					block();
