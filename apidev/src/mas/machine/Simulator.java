@@ -1,9 +1,11 @@
 package mas.machine;
 
 import jade.core.AID;
+import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.Serializable;
 
@@ -21,6 +23,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import jdk.nashorn.internal.codegen.types.Range.Functionality;
+
+import com.sun.org.apache.xpath.internal.functions.FuncId;
+
+import mas.blackboard.namezone.NamedZone;
 import mas.machine.behaviors.AcceptJobBehavior;
 import mas.machine.behaviors.ComponentAgeMonitorBehavior;
 import mas.machine.behaviors.Connect2BlackBoardBehvaior;
@@ -37,7 +47,6 @@ import mas.machine.parametrer.RootCause;
 import mas.util.MessageIds;
 import net.miginfocom.swing.MigLayout;
 
-import org.apache.commons.lang3.SerializationUtils;
 
 public class Simulator extends IMachine implements Serializable{
 
@@ -142,6 +151,7 @@ public class Simulator extends IMachine implements Serializable{
 	private transient Behaviour connect2Blackboard;
 	private transient Behaviour acceptIncomingJobs;
 	private transient Behaviour componentAgeMonitor;
+	private transient Behaviour reportHealth;
 
 	private transient ParallelBehaviour functionality ;
 
@@ -178,26 +188,29 @@ public class Simulator extends IMachine implements Serializable{
 		componentAgeMonitor = new ComponentAgeMonitorBehavior();
 		componentAgeMonitor.setDataStore(functionality.getDataStore());
 
+		reportHealth = new reportHealthBehavior(this, 500);
+
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(componentAgeMonitor);
+		functionality.addSubBehaviour(reportHealth);
 
 		addBehaviour(functionality);
 
 		// Adding a listener to the change in value of the status of simulator 
 		statusChangeSupport.addPropertyChangeListener(
 				new SimulatorStatusListener(Simulator.this));
-		
-//		ACLMessage correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
-//		try {
-//			correctiveStartMsg.setContentObject(Simulator.this);
-//			correctiveStartMsg.setConversationId(MessageIds.Failed);
-//			correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
-//			send(correctiveStartMsg);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 
-//		System.out.println("serialization is "+ SerializationUtils.serialize(Simulator.this));
+		//		ACLMessage correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
+		//		try {
+		//			correctiveStartMsg.setContentObject(Simulator.this);
+		//			correctiveStartMsg.setConversationId(MessageIds.Failed);
+		//			correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
+		//			send(correctiveStartMsg);
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
+
+		//		System.out.println("serialization is "+ SerializationUtils.serialize(Simulator.this));
 
 
 
@@ -274,30 +287,30 @@ public class Simulator extends IMachine implements Serializable{
 		}
 	}
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((ComPort == null) ? 0 : ComPort.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Simulator other = (Simulator) obj;
-//		if (ComPort == null) {
-//			if (other.ComPort != null)
-//				return false;
-//		} else if (!ComPort.equals(other.ComPort))
-//			return false;
-//		return true;
-//	}
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().
+				append(myComponents).
+				hashCode();
+	}
+
+	/**
+	 *  to check for equality
+	 *  required for serializability
+	 *  correct the logic inside
+	 */
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Simulator){
+			final Simulator other = (Simulator) obj;
+			return new EqualsBuilder()
+			.append(myComponents, other.myComponents)
+			.isEquals();
+		} else {
+			return false;
+		}
+	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
@@ -305,5 +318,27 @@ public class Simulator extends IMachine implements Serializable{
 	}
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
+	}
+
+	public class reportHealthBehavior extends TickerBehaviour {
+
+		private static final long serialVersionUID = 1L;
+		private ACLMessage health;
+		public reportHealthBehavior(Agent a, long period) {
+			super(a, period);
+			health = new ACLMessage(ACLMessage.INFORM);
+			health.setConversationId(MessageIds.MaintMachineHealth);
+			health.addReceiver(Simulator.blackboardAgent);
+		}
+
+		@Override
+		protected void onTick() {
+			try {
+				health.setContentObject(this);
+				myAgent.send(health);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
