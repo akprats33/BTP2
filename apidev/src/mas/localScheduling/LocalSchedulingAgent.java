@@ -22,23 +22,23 @@ public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 	protected void init() {
 		super.init();
 		log = LogManager.getLogger();
-		/**
-		 * Add capability to agent 
-		 */
+
+		// Add capability to agent 
 		Capability bCap = new LocalSchedulingBasicCapability();
 		addCapability(bCap);
 
 		AID bba = AgentUtil.findBlackboardAgent(this);
+		// store AID of blackboard agent into belief base
 		bCap.getBeliefBase().updateBelief(
 				ID.LocalScheduler.BeliefBase.blackAgent, bba);
 
-		//create zones in blackboard for thi agent
+		//create zones in blackboard for this agent
 		String[] zones = {ID.LocalScheduler.ZoneData.bidForJob,
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				ID.LocalScheduler.ZoneData.jobQueue};
 
 		AgentUtil.makeZoneBB(this,zones);
-		
+
 		// subscribe for parameters of other agents
 		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
 

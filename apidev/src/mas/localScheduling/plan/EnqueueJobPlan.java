@@ -38,6 +38,7 @@ public class EnqueueJobPlan extends OneShotBehaviour implements PlanBody {
 		
 		/**--perform scheduling here for the list of the jobs
 		 */
+		
 		log.info("Performing scheduling of jobs");
 		ScheduleSequence bnb = new ScheduleSequence(jobQueue);
 		ArrayList<job> solution = bnb.getSolution();

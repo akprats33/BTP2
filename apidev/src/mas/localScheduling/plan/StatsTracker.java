@@ -9,15 +9,18 @@ import java.util.Queue;
 
 import mas.job.job;
 
+/**
+ * @author Anand Prajapati
+ * 
+ *  To calculate utilization and average processing times, it stores a queue of 
+ *  completed jobs with a maximum size limit of 200;
+ *  
+ *  list 'sizeQueue' contains snapshots of size of queue of jobs
+ *  Hence average size will simply be
+ */
+
 public class StatsTracker {
-	/**
-	 *  To calculate utilization and average processing times, it stores a queue of 
-	 *  completed jobs with a maximum size limit of 200;
-	 *  
-	 *  list 'sizeQueue' contains snapshots of size of queue of jobs
-	 *  Hence average size will simply be
-	 */
-	
+
 	private int PERIOD = 15;
 	private final int SIZE_LIMIT = 200;
 	private Queue<job> doneJobs;
@@ -28,14 +31,14 @@ public class StatsTracker {
 		this.doneJobs = new LinkedList<job>();
 		this.cumulatedQueueSize = BigDecimal.ZERO;
 	}
-	
+
 	public void storeJob(job complete) {
 		if( this.doneJobs.size() >= SIZE_LIMIT){
 			this.doneJobs.remove();
 		}
 		this.doneJobs.add(complete);
 	}
-	
+
 	public void addSize(double num) {
 		BigDecimal bNum = new BigDecimal(num);
 		cumulatedQueueSize = cumulatedQueueSize.add(bNum);
@@ -46,9 +49,9 @@ public class StatsTracker {
 	}
 
 	public BigDecimal getAverageQueueSize() {
-		
+
 		if (sizeQueue.isEmpty()) return BigDecimal.ZERO; 
-	
+
 		BigDecimal divisor = BigDecimal.valueOf(sizeQueue.size());
 		return cumulatedQueueSize.divide(divisor, 2, RoundingMode.HALF_UP);
 	}
@@ -64,7 +67,7 @@ public class StatsTracker {
 				lastOne = it.next();
 				busyTime = busyTime + lastOne.getProcessingTime();
 			}
-			
+
 			makeSpan = lastOne.getCompletionTime().getTime() - 
 					doneJobs.peek().getStartTime().getTime();
 		}

@@ -3,13 +3,9 @@ package mas.localScheduling.plan;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-
 import mas.job.job;
-import mas.localScheduling.capability.AbstractbasicCapability;
 import mas.util.ID;
 import mas.util.MessageIds;
 import bdi4jade.core.BeliefBase;
@@ -18,11 +14,15 @@ import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
-public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
+/**
+ * @author Anand Prajapati
+ *	Sends average waiting time for the new job to global scheduling agent
+ *  Based on this waiting time global scheduling accepts/negotiates the job 
+ *  from customer
+ *
+ */
 
-	/**
-	 * 
-	 */
+public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	private static final long serialVersionUID = 1L;
 	private ACLMessage msg;
@@ -62,6 +62,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	public void action() {		
 		sTracker.addSize( jobQueue.size() );
 		
+		// get average queue size and waiting time in the queue
 		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
 		averageProcessingTime = sTracker.getAvgProcessingTime();
 

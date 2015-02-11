@@ -4,17 +4,10 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import sun.util.logging.resources.logging;
 import mas.job.job;
-import mas.localScheduling.algorithm.BranchNboundRegretRigid;
-import mas.localScheduling.algorithm.ScheduleSequence;
-import mas.localScheduling.capability.AbstractbasicCapability;
 import mas.util.ID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.UnreadableException;
-import bdi4jade.belief.BeliefSet;
-import bdi4jade.belief.TransientBeliefSet;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
@@ -24,7 +17,7 @@ import bdi4jade.plan.PlanInstance.EndState;
 public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBody {
 
 	/**
-	 * Takes the complete job 
+	 * Takes the complete job from the simulator
 	 * 
 	 */
 	
@@ -41,7 +34,7 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 		sTracker.addSize(jobQueue.size());
 		sTracker.storeJob(j);
 				
-		log.info("updating belief" + sTracker);
+		log.info("updating belief for stats tracker :" + sTracker);
 		bfBase.updateBelief(ID.LocalScheduler.BeliefBase.dataTracker, sTracker);
 	}
 

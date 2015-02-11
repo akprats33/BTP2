@@ -19,11 +19,15 @@ import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
+/**
+ * @author Anand Prajapati
+ * 
+ * receives job from global scheduling agent for bid and then sends a bid 
+ * for the received job 
+ */
+
 public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private ACLMessage msg;
 	private job jobToBidFor;
