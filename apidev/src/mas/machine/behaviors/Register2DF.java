@@ -9,10 +9,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 public class Register2DF extends OneShotBehaviour{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 100L;
 
 	@Override
 	public void action() {
@@ -21,7 +18,6 @@ public class Register2DF extends OneShotBehaviour{
 		sd.setType(ID.Machine.Service);
 		sd.setName(myAgent.getLocalName());
 		mc.addServices(sd);
-
 		try {
 			DFService.register(myAgent, mc);
 		}

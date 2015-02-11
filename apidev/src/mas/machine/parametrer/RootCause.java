@@ -1,7 +1,10 @@
 package mas.machine.parametrer;
 
-public class RootCause {
+import jade.util.leap.Serializable;
 
+public class RootCause implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int indexParams;
 	private double mean,sd;
 	public RootCause(int i,double a,double b)

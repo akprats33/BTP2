@@ -24,16 +24,16 @@ public class Connect2BlackBoardBehvaior extends OneShotBehaviour{
 		DFAgentDescription[] result;
 		try {
 			result = DFService.search(myAgent, dfd);
+			
 			while(result.length == 0) {
 				result = DFService.search(myAgent, dfd);
-				Thread.sleep(1000);
-			} 
+				block(1000);
+			}
+			
 			if (result.length > 0) {
 				Simulator.blackboardAgent = result[0].getName();
 			}
 		}catch (FIPAException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		

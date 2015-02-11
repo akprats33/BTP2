@@ -1,6 +1,10 @@
 package mas.util;
 
-public class ID {
+import jade.util.leap.Serializable;
+
+public class ID implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	//It is recommonded to keep each String in ID.java to be kept unique in order to avoid confusion and debugging purpose
 	public class MAS {
@@ -107,7 +111,7 @@ public class ID {
 	}
 
 	public class Machine{
-		public static final String Service="machine";
+		public static final String Service="machine-service";
 		public static final String LocalName ="machine-simulator";
 
 		/*public class Parameters{

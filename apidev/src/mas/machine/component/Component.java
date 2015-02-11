@@ -27,9 +27,6 @@ import org.apache.logging.log4j.Logger;
 
 public class Component extends IComponent implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String ComponentID;
 	private double initialAge;

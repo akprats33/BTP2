@@ -1,15 +1,21 @@
 package mas.machine;
 
+import jade.util.leap.Serializable;
+
 import java.util.ArrayList;
+
 import mas.machine.component.IComponent;
+
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.commons.math3.random.GaussianRandomGenerator;
 import org.apache.commons.math3.random.JDKRandomGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 
-public class Methods {
+public class Methods implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	//generating random number array following a normal distribution with mean and sd
 	public static double[] normalRandom(double mean, double sd, int arraySize) {
 		RandomGenerator rg = new JDKRandomGenerator();

@@ -6,6 +6,10 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.Serializable;
 
@@ -44,6 +48,7 @@ import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
+import mas.util.ID;
 import mas.util.MessageIds;
 import net.miginfocom.swing.MigLayout;
 
@@ -51,7 +56,7 @@ import net.miginfocom.swing.MigLayout;
 public class Simulator extends IMachine implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private static ArrayList<IComponent> myComponents;
+	private transient static ArrayList<IComponent> myComponents;
 	private long epochTime;
 	private MachineStatus status;
 	protected transient PropertyChangeSupport statusChangeSupport;
@@ -77,37 +82,33 @@ public class Simulator extends IMachine implements Serializable{
 	public static double sd_shiftInMean = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
-	public static double mean_shiftInSd = 0;				
-	public static double sd_shiftInSd = 1;
+	public transient static double mean_shiftInSd = 0;				
+	public transient static double sd_shiftInSd = 1;
 
 	// parameters of process mean
-	public static double mean_shift = 0;					
-	public static double sd_shift = 1;
+	public transient static double mean_shift = 0;					
+	public transient static double sd_shift = 1;
 
 	//rate of process mean shifting (per hour)
-	public static double rateShift = 0.01;				
+	public transient static double rateShift = 0.01;				
 
 	// parameters of normal distribution causing shift in process paramters
-	public static double mean_shiftInMeanParam = 0;				
-	public static double sd_shiftInMeanParam = 1;
+	public transient static double mean_shiftInMeanParam = 0;				
+	public transient static double sd_shiftInMeanParam = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
-	public static double mean_shiftInSdParam = 0;				
-	public static double sd_shiftSdparam = 1;
+	public transient static double mean_shiftInSdParam = 0;				
+	public transient static double sd_shiftSdparam = 1;
 
 	// parameters of process parameters
-	public static double mean_shiftParam = 0;					
-	public static double sd_shiftparam = 1;
+	public transient  static double mean_shiftParam = 0;					
+	public transient static double sd_shiftparam = 1;
 
-	public static double fractionDefective = 0.10;
+	public transient static double fractionDefective = 0.10;
 
 	// for writing data to file
-	public static BufferedWriter fout;					
-	public static String filename;
-
-	public static long systemStopwatch;
-
-	public static int numOfRootCauseParams = 1;
+	public transient static BufferedWriter fout;					
+	public transient static String filename;
 
 	public transient static ArrayList<String> nameParams  = new ArrayList<String>();
 	public transient static ArrayList<Double> valueParams = new ArrayList<Double>();
@@ -118,21 +119,18 @@ public class Simulator extends IMachine implements Serializable{
 	public transient static double rootCause[];
 
 	//public node[] rootcauseAffectedParams;
-	public static double w_alpha;//=10.0;
-	public static double w_beta;//=10.0;
-	//	public static long abs_next_failure_time;
-	//	public static failedComp failed_c;
 
 	public transient static double[] rootcause_timeto_occur;
 
-	public static  DefaultTableModel AttrDTM, DimDTM;
-	public static JPanel jobAttrPanel=new JPanel(new MigLayout());
-	public static JTable AttrTable, DimTable;
-	public static JScrollPane AttrScrollPane, DimScrollPane;
-	public static JFrame win_Dimtable,win_attrTable;
+	//	public static  DefaultTableModel AttrDTM, DimDTM;
+	//	public static JPanel jobAttrPanel=new JPanel(new MigLayout());
+	//	public static JTable AttrTable, DimTable;
+	//	public static JScrollPane AttrScrollPane, DimScrollPane;
+	//	public static JFrame win_Dimtable,win_attrTable;
 
-	public static ArrayList<Parameter> params ;
-	public static ArrayList<ArrayList<RootCause>> rootcauses; 
+	public transient static ArrayList<Parameter> params ;
+	public transient static ArrayList<ArrayList<RootCause>> rootcauses; 
+	private transient static String name;
 
 	public void init() {
 		statusChangeSupport = new PropertyChangeSupport(this);
@@ -140,6 +138,7 @@ public class Simulator extends IMachine implements Serializable{
 		myComponents = new ArrayList<IComponent>();
 		params = new ArrayList<Parameter>();
 		rootcauses = new ArrayList<ArrayList<RootCause> >();
+		
 	}
 
 	private transient SequentialBehaviour loadData;
@@ -166,16 +165,17 @@ public class Simulator extends IMachine implements Serializable{
 		loadComponentData = new LoadComponentBehavior(this);
 		loadMachineParams = new LoadMachineParameterBehavior();
 		loadRootCause = new GetRootCauseDataBehavior();
-		registerthis = new Register2DF();
+				registerthis = new Register2DF();
 		connect2Blackboard = new Connect2BlackBoardBehvaior();
 
 		loadData.addSubBehaviour(loadSimulatorParams);
 		loadData.addSubBehaviour(loadComponentData);
 		loadData.addSubBehaviour(loadMachineParams);
 		loadData.addSubBehaviour(loadRootCause);
+
 		loadData.addSubBehaviour(registerthis);
 		loadData.addSubBehaviour(connect2Blackboard);
-
+		
 		addBehaviour(loadData);
 
 		functionality = new ParallelBehaviour(this,
@@ -188,7 +188,7 @@ public class Simulator extends IMachine implements Serializable{
 		componentAgeMonitor = new ComponentAgeMonitorBehavior();
 		componentAgeMonitor.setDataStore(functionality.getDataStore());
 
-		reportHealth = new reportHealthBehavior(this, 500);
+		reportHealth = new reportHealthBehavior(this, 5000);
 
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(componentAgeMonitor);
@@ -199,20 +199,6 @@ public class Simulator extends IMachine implements Serializable{
 		// Adding a listener to the change in value of the status of simulator 
 		statusChangeSupport.addPropertyChangeListener(
 				new SimulatorStatusListener(Simulator.this));
-
-		//		ACLMessage correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
-		//		try {
-		//			correctiveStartMsg.setContentObject(Simulator.this);
-		//			correctiveStartMsg.setConversationId(MessageIds.Failed);
-		//			correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
-		//			send(correctiveStartMsg);
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
-
-		//		System.out.println("serialization is "+ SerializationUtils.serialize(Simulator.this));
-
-
 
 	}
 
@@ -299,7 +285,7 @@ public class Simulator extends IMachine implements Serializable{
 	 *  required for serializability
 	 *  correct the logic inside
 	 */
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Simulator){
@@ -328,14 +314,16 @@ public class Simulator extends IMachine implements Serializable{
 			super(a, period);
 			health = new ACLMessage(ACLMessage.INFORM);
 			health.setConversationId(MessageIds.MaintMachineHealth);
-			health.addReceiver(Simulator.blackboardAgent);
+			//			health.addReceiver(Simulator.blackboardAgent);
+			health.addReceiver(new AID("maint",AID.ISLOCALNAME));
 		}
 
 		@Override
 		protected void onTick() {
 			try {
-				health.setContentObject(this);
+				health.setContentObject(Simulator.this);
 				myAgent.send(health);
+				System.out.println("reporting health to maitenance agent");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

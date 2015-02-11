@@ -35,6 +35,7 @@ public class AgentStarter {
 //		 agents.put(ID.Customer.LocalName, new CustomerAgent());
 //		 agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
 		 agents.put(ID.Machine.LocalName, new Simulator());
+		 agents.put("maint", new HealthTester());
 	};
 
 	public static void main(String[] args) {

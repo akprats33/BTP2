@@ -1,6 +1,10 @@
 package mas.machine.parametrer;
 
-public class Parameter {
+import jade.util.leap.Serializable;
+
+public class Parameter implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	private String name;
 	private double value;
 	private boolean inspect;
