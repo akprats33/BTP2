@@ -65,6 +65,7 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 				block();
 			}
 			break;
+			
 		case 3:
 			sim.repair(componentsToRepair);
 			step = 3;

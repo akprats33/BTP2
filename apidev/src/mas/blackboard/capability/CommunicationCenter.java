@@ -5,6 +5,7 @@ import jade.lang.acl.MessageTemplate;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import mas.blackboard.plan.AddAgent;
 import mas.blackboard.plan.SubscribeParameter;
 import mas.blackboard.plan.UpdateParam;
@@ -23,15 +24,12 @@ import bdi4jade.util.plan.SimplePlan;
 
 public class CommunicationCenter extends Capability {
 	
-	
-	
+
 	private static final long serialVersionUID = 4783226881361023418L;
 	private static Logger log;
 	
 	static{
-
 		log=LogManager.getLogger();
-
 
 	}
 	
@@ -42,9 +40,16 @@ public class CommunicationCenter extends Capability {
 
 	private static Set<Plan> getPlans() {
 		
-		 Set<Plan> plans = new HashSet<Plan>();
+   	    Set<Plan> plans = new HashSet<Plan>();
 		
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.RegisterMe), AddAgent.class));
+/*   	    plans.add(new SimplePlan(RegisterGoal.class, AddAgent.class));
+		
+		plans.add(new SimplePlan(UpdateParameterGoal.class, UpdateParam.class));
+		
+		plans.add(new SimplePlan(SubscribeParameterGoal.class, SubscribeParameter.class));*/
+			
+		 
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.RegisterMe	), AddAgent.class));
 		
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.UpdateParameter), UpdateParam.class));
 		
@@ -59,13 +64,16 @@ public class CommunicationCenter extends Capability {
 	private static Set<Belief<?>> getBeliefs(BDIAgent bBagent) {
 		
 		Set<Belief<?>> WorkspaceSet = new HashSet<Belief<?>>(); //  '?' means Any type extending Object (including Object)
-		
+		//WorkspaceSet stores Workspaces
 		log.info("Added beleifs");
 		
 		return WorkspaceSet;
 	}
 	
 	 protected void setup(){
+//		 myAgent.addGoal(new RegisterGoal());
+/*		 myAgent.addBehaviour(new SubscribeParameter());
+		 myAgent.addBehaviour(new UpdateParam());*/
 	
 	}
 }

@@ -138,7 +138,6 @@ public class Simulator extends IMachine implements Serializable{
 		myComponents = new ArrayList<IComponent>();
 		params = new ArrayList<Parameter>();
 		rootcauses = new ArrayList<ArrayList<RootCause> >();
-		
 	}
 
 	private transient SequentialBehaviour loadData;

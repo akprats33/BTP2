@@ -1,13 +1,17 @@
 package mas.blackboard.zonespace;
 
 import jade.core.AID;
+import jade.core.Agent;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import mas.blackboard.nameZoneData.NamedZoneData;
 import mas.blackboard.namezonespace.NamedZoneSpace;
@@ -18,15 +22,21 @@ import mas.blackboard.zonedata.ZoneData;
  * @param <V>
  */
 
-public class ZoneSpace implements ZoneSpaceIFace{
+public class ZoneSpace implements ZoneSpaceIFace, Serializable{
 	
 	private String Zname;
 	private HashMap<NamedZoneData, ZoneData> Zdata;
-	private Set<AID> subscribers;
+//	private Set<AID> subscribers;
+	private Logger log;
+	private Agent bb;
 	
-	public ZoneSpace(NamedZoneSpace n){
+	
+	public ZoneSpace(NamedZoneSpace n, Agent blacboard){
+		log=LogManager.getLogger();
 		this.Zname = n.getLocalName();
 		this.Zdata = new HashMap<NamedZoneData,ZoneData>();
+		this.bb=blacboard;
+		
 	}
 	
 	/*public static ZoneSpace newInstance(NamedZone name){
@@ -35,13 +45,13 @@ public class ZoneSpace implements ZoneSpaceIFace{
 	@Override
 	public void createZoneData(NamedZoneData name) {
 		if(! Zdata.containsKey(name)){
-			ZoneData zd = new ZoneData(name);
+			ZoneData zd = new ZoneData(name, name.getUpdateMsgID(), bb);
 			Zdata.put(name, zd);
-		}
+		}		
 	}
 	
 	public void subscribeZoneData(String ZoneDataName, AID subscriber){
-		NamedZoneData nzd=new NamedZoneData(ZoneDataName);
+		NamedZoneData nzd=new NamedZoneData.Builder(ZoneDataName).build();
 		
 		if(findZoneData(nzd)!=null){
 			Zdata.get(nzd).subscribe(subscriber);
@@ -62,6 +72,7 @@ public class ZoneSpace implements ZoneSpaceIFace{
 			createZoneData(var);
 		}
 		findZoneData(var).addItem(obj);
+		
 		
 	}
 	@Override
@@ -84,24 +95,7 @@ public class ZoneSpace implements ZoneSpaceIFace{
 
 	@Override
 	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		ZoneSpace other = (ZoneSpace) obj;
-//		if (Zdata == null) {
-//			if (other.Zdata != null)
-//				return false;
-//		} else if (!Zdata.equals(other.Zdata))
-//			return false;
-//		if (Zname == null) {
-//			if (other.Zname != null)
-//				return false;
-//		} else if (!Zname.equals(other.Zname))
-//			return false;
-//		return true;
+
 		if(obj instanceof ZoneSpace){
 	        final ZoneSpace other = (ZoneSpace) obj;
 	        return new EqualsBuilder()
@@ -115,20 +109,36 @@ public class ZoneSpace implements ZoneSpaceIFace{
 
 	@Override
 	public void unsubscribeZoneData(String ZoneDataName, AID subscriber) {
-		NamedZoneData nzd=new NamedZoneData(ZoneDataName);
+		NamedZoneData nzd=new NamedZoneData.Builder(ZoneDataName).build();
 		
 		if(findZoneData(nzd)!=null){
 			Zdata.get(nzd).unsubscribe(subscriber);
 		}
 		
 	}
+
+	@Override
+	public void subscribeZoneSpace(AID subscriber) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+/*	@Override
+	public void createZoneData(NamedZoneData name, String MsgID) {
+		if(! Zdata.containsKey(name)){
+			ZoneData zd = new ZoneData(name, MsgID);
+			Zdata.put(name, zd);
+		}
+		
+	}*/
 	
-	public void subscribeZoneSpace(AID subscriber){
+	/*public void subscribeZoneSpace(AID subscriber){
 		Iterator it= Zdata.entrySet().iterator();
 		while(it.hasNext()){
 			
 		}
-	}
+	}*/
 
 	
 	
