@@ -30,7 +30,7 @@ public class parentBasicCapability extends Capability {
 
 	private static final long serialVersionUID = 1L;
 	
-	public parentBasicCapability(){
+	public parentBasicCapability() {
 		super(new BeliefBase(getBeliefs()), new PlanLibrary(getPlans()));
 	}
 

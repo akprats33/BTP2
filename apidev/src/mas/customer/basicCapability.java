@@ -1,9 +1,14 @@
 package mas.customer;
 
+import mas.customer.goal.GenerateJobGoal;
+import mas.customer.goal.RegisterAgentToBlackboardGoal;
+import mas.customer.plan.RegisterAgentToBlackboardPlan;
+import mas.customer.plan.jobGeneratorPlan;
 import mas.job.job;
 import mas.util.ID;
 import bdi4jade.belief.Belief;
 import bdi4jade.belief.TransientBelief;
+import bdi4jade.util.plan.SimplePlan;
 
 public class basicCapability extends parentBasicCapability{
 
@@ -13,13 +18,19 @@ public class basicCapability extends parentBasicCapability{
 	
 	public basicCapability() {
 		super();
+		
+		getPlanLibrary().addPlan(new SimplePlan(RegisterAgentToBlackboardGoal.class,
+				RegisterAgentToBlackboardPlan.class));
+		Belief<job> currentJob = 
+				new TransientBelief<job>(ID.Customer.BeliefBase.CURRENT_JOB);
+				
+		this.getBeliefBase().addBelief(currentJob);
 	}
 	
 	@Override
 	protected void setup() {
 		super.setup();
-		Belief<job> currentJob = 
-				new TransientBelief<job>(ID.Customer.BeliefBase.CURRENT_JOB);
-		this.getBeliefBase().addBelief(currentJob);
+		
+		myAgent.addGoal(new RegisterAgentToBlackboardGoal());
 	}
 }

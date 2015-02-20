@@ -37,7 +37,7 @@ public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				ID.LocalScheduler.ZoneData.jobQueue};
 
-		AgentUtil.makeZoneBB(this,zones);
+//		AgentUtil.makeZoneBB(this,zones);
 
 		// subscribe for parameters of other agents
 		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);

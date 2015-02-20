@@ -6,10 +6,6 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.Serializable;
 
@@ -21,20 +17,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import jdk.nashorn.internal.codegen.types.Range.Functionality;
-
-import com.sun.org.apache.xpath.internal.functions.FuncId;
-
-import mas.blackboard.namezone.NamedZone;
 import mas.machine.behaviors.AcceptJobBehavior;
 import mas.machine.behaviors.ComponentAgeMonitorBehavior;
 import mas.machine.behaviors.Connect2BlackBoardBehvaior;
@@ -43,15 +28,11 @@ import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
 import mas.machine.behaviors.Register2DF;
-import mas.machine.behaviors.SimulatorStatusListener;
 import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
-import mas.util.ID;
 import mas.util.MessageIds;
-import net.miginfocom.swing.MigLayout;
-
 
 public class Simulator extends IMachine implements Serializable{
 
@@ -130,7 +111,6 @@ public class Simulator extends IMachine implements Serializable{
 
 	public transient static ArrayList<Parameter> params ;
 	public transient static ArrayList<ArrayList<RootCause>> rootcauses; 
-	private transient static String name;
 
 	public void init() {
 		statusChangeSupport = new PropertyChangeSupport(this);
@@ -187,7 +167,7 @@ public class Simulator extends IMachine implements Serializable{
 		componentAgeMonitor = new ComponentAgeMonitorBehavior();
 		componentAgeMonitor.setDataStore(functionality.getDataStore());
 
-		reportHealth = new reportHealthBehavior(this, 5000);
+		reportHealth = new reportHealthBehavior(this, 10000);
 
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(componentAgeMonitor);

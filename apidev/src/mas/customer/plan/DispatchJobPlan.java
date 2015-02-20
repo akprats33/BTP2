@@ -2,17 +2,11 @@ package mas.customer.plan;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.lang.acl.ACLMessage;
-
-import java.io.IOException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import mas.customer.basicCapability;
 import mas.job.job;
 import mas.util.ID;
-import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
@@ -35,16 +29,16 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
-		
-//		log.info(bfBase.getBelief(basicCapability.CURR_JOB));
-		
+
+		//		log.info(bfBase.getBelief(basicCapability.CURR_JOB));
+
 		jobToDispatch = (job) bfBase
-					.getBelief(ID.Customer.BeliefBase.CURRENT_JOB)
-					.getValue();
-		
+				.getBelief(ID.Customer.BeliefBase.CURRENT_JOB)
+				.getValue();
+
 		this.bba = (AID) bfBase
-					.getBelief(ID.Customer.BeliefBase.blackAgent)
-					.getValue();
+				.getBelief(ID.Customer.BeliefBase.blackAgent)
+				.getValue();
 	}
 
 	/**
@@ -52,21 +46,23 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 	 */
 	@Override
 	public void action() {
-		
-		try {
-			ACLMessage msg = new ACLMessage(ACLMessage.CFP);
-			msg.setContentObject(jobToDispatch);
-			msg.setConversationId(MessageIds.JobFromCustomer);
-			msg.addReceiver(this.bba);
-			myAgent.send(msg);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		//			ACLMessage msg = new ACLMessage(ACLMessage.CFP);
+		//			msg.setContentObject(jobToDispatch);
+		//			msg.setConversationId(MessageIds.JobFromCustomer);
+		//			msg.addReceiver(this.bba);
+		//			myAgent.send(msg);
+
+		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
+				ID.Customer.ZoneData.JobList,
+				jobToDispatch,
+				true);
+
+		jobOrderZoneDataUpdate.send(this.bba,jobOrderZoneDataUpdate, myAgent);
 	}
 
 	@Override
 	public boolean done() {
-		return true;
+		return false;
 	}
 }

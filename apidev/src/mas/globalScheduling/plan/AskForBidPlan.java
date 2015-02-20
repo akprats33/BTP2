@@ -16,10 +16,6 @@ import bdi4jade.plan.PlanInstance.EndState;
 
 public class AskForBidPlan extends Behaviour implements PlanBody{
 
-	/**
-	 * 
-	 */
-	
 	private int step = 0;
 	private ACLMessage[] bids;
 	private int numLSA;
@@ -46,8 +42,8 @@ public class AskForBidPlan extends Behaviour implements PlanBody{
 		
 		switch (step) {
 			case 0:
-					numLSA = (Integer) bfBase.getBelief(AbstractGSCapability
-								.MACHINES).getValue();
+			/*		numLSA = (Integer) bfBase.getBelief(AbstractGSCapability
+								.MACHINES).getValue();*/
 					
 					bids = new ACLMessage[numLSA];
 					step = 1;
@@ -103,15 +99,13 @@ public class AskForBidPlan extends Behaviour implements PlanBody{
 	//			System.out.println("OrderToLSA" + OrderToLSA);
 				step = 3;
 				break;
-			case 3:      			
-					step = 4;
-				break;
+
 		}   
 	}
 
 	@Override
 	public boolean done() {
-		return step >= 4;
+		return step >= 3;
 	}
 
 }

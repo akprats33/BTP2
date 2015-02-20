@@ -47,7 +47,7 @@ public class JobGenerator extends JobGeneratorIFace{
 			XSSFSheet sheet = null;
 			try{
 				FileInputStream file=new FileInputStream(this.jobFilePath +
-														"\\data.xlsx");	
+														"\\jobdata.xlsx");	
 				wb = new XSSFWorkbook(file);
 				sheet = wb.getSheetAt(0);
 			}catch(IOException e){

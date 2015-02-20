@@ -20,7 +20,6 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 
 	@Override
 	public void action() {
-		ACLMessage msg = new ACLMessage(ACLMessage.CFP);
 		
 		myAgent.addBehaviour(new NegotiateBehavior());
 	}

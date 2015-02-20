@@ -14,6 +14,5 @@ public class AbstractlocalSchedulingAgent extends BDIAgent{
 	@Override
 	protected void init() {
 		super.init();
-		AgentUtil.register2DF(this, ID.LocalScheduler.Service);
 	}
 }

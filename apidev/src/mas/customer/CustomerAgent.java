@@ -21,27 +21,26 @@ public class CustomerAgent extends AbstractCustomerAgent {
 		Capability bCap = new basicCapability();
 		addCapability(bCap);
 		log = LogManager.getLogger();
-		
+
 		AID bba = AgentUtil.findBlackboardAgent(this);
 		bCap.getBeliefBase().updateBelief(
-					ID.Customer.BeliefBase.blackAgent, bba);
+				ID.Customer.BeliefBase.blackAgent, bba);
 		
-		String[] zones = {ID.Customer.ZoneData.acceptedJobs,
-						ID.Customer.ZoneData.JobList,
-						ID.Customer.ZoneData.Negotiation};
-		
-		AgentUtil.makeZoneBB(this,zones);
-		log.info(bba);
-		
-		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
-		
-		String[] params = {ID.GlobalScheduler.ZoneData.ConfirmedOrder,
-							ID.GlobalScheduler.ZoneData.NegotiationJob,
-							ID.GlobalScheduler.ZoneData.WorkOrder};
-		
-		SubscriptionForm subform = new SubscriptionForm();
-		subform.AddSubscriptionReq(target, params);
-		
-		AgentUtil.subscribeToParam(this, bba, subform);
+		String[] zones = { ID.Customer.ZoneData.acceptedJobs,
+				ID.Customer.ZoneData.JobList,
+				ID.Customer.ZoneData.Negotiation };
+//
+//		AgentUtil.makeZoneBB(this,zones);
+//
+//		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
+//
+//		String[] params = {ID.GlobalScheduler.ZoneData.ConfirmedOrder,
+//				ID.GlobalScheduler.ZoneData.NegotiationJob,
+//				ID.GlobalScheduler.ZoneData.WorkOrder};
+//
+//		SubscriptionForm subform = new SubscriptionForm();
+//		subform.AddSubscriptionReq(target, params);
+//
+//		AgentUtil.subscribeToParam(this, bba, subform);
 	}
 }

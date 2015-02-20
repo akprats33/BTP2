@@ -73,10 +73,11 @@ public class ID implements Serializable{
 	public class GlobalScheduler{
 		public static final String Service ="global-scheduling-agent";
 		public static final String LocalName ="GlobalSchedulingAgent";
+		
 		/*public class Parameters{
 
 		}
-		 */		
+*/		
 		public class ZoneData{
 			//contains confirmed jobs
 			public static final String WorkOrder="WorkOrderData"; 
@@ -85,7 +86,8 @@ public class ID implements Serializable{
 			public static final String ConfirmedOrder = "ConfirmedOrder";
 			public static final String jobForMachine = "job-for-machine";
 			public static final String askforBid = "ask-for-bid";
-			public static final String waitingTime = "waiting-time";
+			public static final String waitingTime = "waiting-time"; //queue of jobs with calculated expected waiting time
+			public static final String GetWaitingTime = "LocalSchedulingwaiting-time";//contains queue of jobs with  
 		}
 	}
 
@@ -98,7 +100,8 @@ public class ID implements Serializable{
 		}*/
 
 		public class ZoneData {
-
+			public static final String PMdata = "preventiveMaintenanceData";
+			public static final String correctiveMaintdata = "correctiveMaintenancedata";
 		}
 
 		public class BeliefBase {
@@ -119,7 +122,8 @@ public class ID implements Serializable{
 		}*/
 
 		public class ZoneData{
-
+			public static final String myHealth ="machine-health";
+			public static final String finishedJob ="finishedJob-machine";
 		}
 	}
 
