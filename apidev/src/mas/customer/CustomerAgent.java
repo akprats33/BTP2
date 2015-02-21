@@ -30,7 +30,7 @@ public class CustomerAgent extends AbstractCustomerAgent {
 				ID.Customer.ZoneData.JobList,
 				ID.Customer.ZoneData.Negotiation };
 //
-//		AgentUtil.makeZoneBB(this,zones);
+//		AgentUtil.makeZoneBB(this, zones);
 //
 //		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
 //

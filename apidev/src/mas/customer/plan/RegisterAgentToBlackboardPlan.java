@@ -2,10 +2,6 @@ package mas.customer.plan;
 
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
-
-import java.io.IOException;
-
 import mas.blackboard.nameZoneData.NamedZoneData;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -18,7 +14,6 @@ import bdi4jade.plan.PlanInstance.EndState;
 public class RegisterAgentToBlackboardPlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
-	private int step;
 
 	@Override
 	public EndState getEndState() {
@@ -27,7 +22,7 @@ public class RegisterAgentToBlackboardPlan extends OneShotBehaviour implements P
 
 	@Override
 	public void init(PlanInstance planInstance) {
-		step = 0;
+		
 	}
 
 	@Override

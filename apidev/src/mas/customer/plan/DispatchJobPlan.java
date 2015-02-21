@@ -47,12 +47,6 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 	@Override
 	public void action() {
 
-		//			ACLMessage msg = new ACLMessage(ACLMessage.CFP);
-		//			msg.setContentObject(jobToDispatch);
-		//			msg.setConversationId(MessageIds.JobFromCustomer);
-		//			msg.addReceiver(this.bba);
-		//			myAgent.send(msg);
-
 		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
 				ID.Customer.ZoneData.JobList,
 				jobToDispatch,
