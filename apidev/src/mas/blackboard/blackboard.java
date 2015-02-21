@@ -11,6 +11,8 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import bdi4jade.core.BDIAgent;
 import mas.util.*;
 
+
+
 public class blackboard extends BDIAgent {
 	public static BDIAgent BBagent;
 	private Logger log;

@@ -1,56 +1,59 @@
 package mas.blackboard.nameZoneData;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.io.Serializable;
+import java.lang.StringBuilder;
 
-public class NamedZoneData implements ZoneDataName, Serializable {
-	private static final long serialVersionUID = 1L;
-	private String name;
-	private String MsgIDforUpdate; //message ID of update message to be sent by Blackboard to subscribers of ZoneData
-
-	public static class Builder {
-		private String name = null;
-		private String UpdateMsgID=null;
-
-		public Builder(String name){
-			this.name=name;
-		}
-
-		public  Builder MsgID(String UpdateMsgID){
-			this.UpdateMsgID=UpdateMsgID;
-			return this;
-		}
-
-		public NamedZoneData build(){
-			return new NamedZoneData(this);
-		}
-	}
-
-	public NamedZoneData(Builder ConstructorBuilder) {
-		this.name=ConstructorBuilder.name;
-		this.MsgIDforUpdate=ConstructorBuilder.UpdateMsgID;	   
-	}
+public class NamedZoneData implements ZoneDataName, Serializable
+{
+   private String name;
+   private String MsgIDforUpdate; //message ID of update message to be sent by Blackboard to subscribers of ZoneData
 
 
-	public String getName() {
-		return this.name;
-	}
+   public static class Builder {
+	   private String name = null;
+	   private String UpdateMsgID=null;
+	   
+	   public Builder(String name){
+		   this.name=name;
+	   }
+	   
+	   public  Builder MsgID(String UpdateMsgID){
+		   this.UpdateMsgID=UpdateMsgID;
+		   return this;
+	   }
+	   
+	   public NamedZoneData build(){
+		   return new NamedZoneData(this);
+	   }
+   }
+   
+   public NamedZoneData(Builder ConstructorBuilder) {
+	   this.name=ConstructorBuilder.name;
+	   this.MsgIDforUpdate=ConstructorBuilder.UpdateMsgID;	   
+   }
 
-	public String getUpdateMsgID(){
-		return this.MsgIDforUpdate;
-	}
 
-	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof NamedZoneData)) return false;
+   public String getName() {
+      return this.name;
+   }
+   
+   public String getUpdateMsgID(){
+	   return this.MsgIDforUpdate;
+   }
 
-		return this.getName().equals(((NamedZoneData)obj).getName());
-	}
+   public boolean equals(Object obj) {
+      if (obj == null || !(obj instanceof NamedZoneData)) return false;
 
-	public int hashCode() {
-		return new HashCodeBuilder().append(this.name).append(NamedZoneData.class).toHashCode();
-	}
+      return this.getName().equals(((NamedZoneData)obj).getName());
+   }
 
-	public String toString() {
-		return "a NamedParameter \"" + this.getName() + "\"";
-	}
+   public int hashCode() {
+      return new HashCodeBuilder().append(this.name).append(NamedZoneData.class).toHashCode();
+   }
+
+   public String toString() {
+      return "a NamedParameter \"" + this.getName() + "\"";
+   }
 }
