@@ -34,18 +34,16 @@ import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
 import mas.util.MessageIds;
 
-public class Simulator extends IMachine implements Serializable{
+public class Simulator extends Agent implements IMachine,Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private transient static ArrayList<IComponent> myComponents;
+	public static AID blackboardAgent;
+	public static String mySimulator = "Simulator";
+	
+	private static ArrayList<IComponent> myComponents;
 	private long epochTime;
 	private MachineStatus status;
 	protected transient PropertyChangeSupport statusChangeSupport;
-	public static AID blackboardAgent;
-	public static String mySimulator = "Simulator";
-
-	public String IpAddress,JadePort ,ComPort;
-	public int portNumber;
 
 	//percentage variation in processing time
 	public static double percent = 0.10;		
@@ -82,7 +80,7 @@ public class Simulator extends IMachine implements Serializable{
 	public transient static double sd_shiftSdparam = 1;
 
 	// parameters of process parameters
-	public transient  static double mean_shiftParam = 0;					
+	public transient static double mean_shiftParam = 0;					
 	public transient static double sd_shiftparam = 1;
 
 	public transient static double fractionDefective = 0.10;
@@ -144,7 +142,7 @@ public class Simulator extends IMachine implements Serializable{
 		loadComponentData = new LoadComponentBehavior(this);
 		loadMachineParams = new LoadMachineParameterBehavior();
 		loadRootCause = new GetRootCauseDataBehavior();
-				registerthis = new Register2DF();
+		registerthis = new Register2DF();
 		connect2Blackboard = new Connect2BlackBoardBehvaior();
 
 		loadData.addSubBehaviour(loadSimulatorParams);
@@ -154,7 +152,7 @@ public class Simulator extends IMachine implements Serializable{
 
 		loadData.addSubBehaviour(registerthis);
 		loadData.addSubBehaviour(connect2Blackboard);
-		
+
 		addBehaviour(loadData);
 
 		functionality = new ParallelBehaviour(this,

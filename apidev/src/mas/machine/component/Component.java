@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
  *
  */
 
-public class Component extends IComponent implements Serializable {
+public class Component implements IComponent, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String ComponentID;
@@ -41,7 +41,7 @@ public class Component extends IComponent implements Serializable {
 	private double TTR_sd;
 	private double MeanDelay;
 	private double VarianceDelay;
-	private MachineComponent status;
+	private MachineComponentStatus status;
 	private double failureCost;
 	private double replacementCost;
 	private double preventiveMaintenanceCost;
@@ -65,7 +65,7 @@ public class Component extends IComponent implements Serializable {
 		this.replacementCost = builder.replacementCost;
 		this.preventiveMaintenanceCost = builder.prevMaintCost;
 
-		this.status = MachineComponent.WORKING;
+		this.status = MachineComponentStatus.WORKING;
 		// assign ages to this component
 		this.initialAge = 0;
 		this.currentAge = 0;
@@ -227,7 +227,7 @@ public class Component extends IComponent implements Serializable {
 		this.currentAge += millis;
 		
 		if(this.currentAge - this.initialAge >= this.lifeToFailure) {
-			this.status = MachineComponent.FAILED;
+			this.status = MachineComponentStatus.FAILED;
 			this.mySimulator.setStatus(MachineStatus.FAILED);
 		}
 		
@@ -268,7 +268,7 @@ public class Component extends IComponent implements Serializable {
 	}
 
 	@Override
-	public MachineComponent getStatus() {
+	public MachineComponentStatus getStatus() {
 		return this.status;
 	}
 

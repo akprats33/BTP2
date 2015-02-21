@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+/** Represents a manufacturing shop floor job
+ */
+
 public class job implements Serializable{
 
-	/** Represents a manufacturing shop floor job
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	//Required parameters
 	private int jobNo;

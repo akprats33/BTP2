@@ -42,7 +42,6 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 
 	@Override
 	public void action() {
-
 		log = LogManager.getLogger();
 		this.filePath = System.getProperty("user.dir");
 		try {
