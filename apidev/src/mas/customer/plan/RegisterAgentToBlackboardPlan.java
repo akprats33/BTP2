@@ -33,16 +33,19 @@ public class RegisterAgentToBlackboardPlan extends OneShotBehaviour implements P
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.Customer.ZoneData.acceptedJobs).
 				MsgID(MessageIds.ReplyFromScheduler).
+				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.Customer.ZoneData.JobList).
 				MsgID(MessageIds.JobFromScheduler).
+				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName3 = 
 				new NamedZoneData.Builder(ID.Customer.ZoneData.Negotiation).
 				MsgID(MessageIds.Negotiate).
+				appendValue(true).
 				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,

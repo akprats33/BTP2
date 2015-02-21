@@ -26,7 +26,6 @@ public class ZoneSpace implements ZoneSpaceIFace, Serializable{
 	
 	private String Zname;
 	private HashMap<NamedZoneData, ZoneData> Zdata;
-//	private Set<AID> subscribers;
 	private Logger log;
 	private Agent bb;
 	
@@ -45,7 +44,7 @@ public class ZoneSpace implements ZoneSpaceIFace, Serializable{
 	@Override
 	public void createZoneData(NamedZoneData name) {
 		if(! Zdata.containsKey(name)){
-			ZoneData zd = new ZoneData(name, name.getUpdateMsgID(), bb);
+			ZoneData zd = new ZoneData(name, name.getUpdateMsgID(), bb, name.getAppend());
 			Zdata.put(name, zd);
 		}		
 	}

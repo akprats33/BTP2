@@ -9,11 +9,13 @@ public class NamedZoneData implements ZoneDataName, Serializable
 {
    private String name;
    private String MsgIDforUpdate; //message ID of update message to be sent by Blackboard to subscribers of ZoneData
+   private boolean toAppendValues;
 
 
    public static class Builder {
 	   private String name = null;
 	   private String UpdateMsgID=null;
+	   private boolean appendValues=false;
 	   
 	   public Builder(String name){
 		   this.name=name;
@@ -24,6 +26,11 @@ public class NamedZoneData implements ZoneDataName, Serializable
 		   return this;
 	   }
 	   
+	   public Builder appendValue(boolean toAppend){
+		   this.appendValues=toAppend;
+		   return this;
+	   }
+	   
 	   public NamedZoneData build(){
 		   return new NamedZoneData(this);
 	   }
@@ -31,9 +38,13 @@ public class NamedZoneData implements ZoneDataName, Serializable
    
    public NamedZoneData(Builder ConstructorBuilder) {
 	   this.name=ConstructorBuilder.name;
-	   this.MsgIDforUpdate=ConstructorBuilder.UpdateMsgID;	   
+	   this.MsgIDforUpdate=ConstructorBuilder.UpdateMsgID;
+	   this.toAppendValues=ConstructorBuilder.appendValues;
    }
 
+   public boolean getAppend(){
+	   return this.toAppendValues;
+   }
 
    public String getName() {
       return this.name;
@@ -53,6 +64,8 @@ public class NamedZoneData implements ZoneDataName, Serializable
       return new HashCodeBuilder().append(this.name).append(NamedZoneData.class).toHashCode();
    }
 
+   
+   
    public String toString() {
       return "a NamedParameter \"" + this.getName() + "\"";
    }

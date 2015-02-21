@@ -10,11 +10,11 @@ import jade.util.leap.Serializable;
 public class ZoneDataUpdate implements Serializable {
 	String name;
 	Object value;
-	boolean toBeAppended;
-	public ZoneDataUpdate(String ZoneDataName, Object value, boolean ToAppend) {
+//	boolean toBeAppended;
+	public ZoneDataUpdate(String ZoneDataName, Object value) {
 		this.name=ZoneDataName;
 		this.value=value;
-		this.toBeAppended=ToAppend;
+//		this.toBeAppended=ToAppend;
 	}
 	
 	public String getName(){
@@ -25,9 +25,9 @@ public class ZoneDataUpdate implements Serializable {
 		return this.value;
 	}
 	
-	public boolean toAppendToCurrentValue(){
+/*	public boolean toAppendToCurrentValue(){
 		return this.toBeAppended;
-	}
+	}*/
 
 	public void send(AID blackboard_AID, ZoneDataUpdate zdu, Agent Sender) {
 		ACLMessage update=new ACLMessage(ACLMessage.INFORM);

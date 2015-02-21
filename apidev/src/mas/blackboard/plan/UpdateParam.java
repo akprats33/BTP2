@@ -69,17 +69,13 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 
 						if(zs.getName().equalsIgnoreCase(Agent.getLocalName())){
 							NamedZoneData nzd = new NamedZoneData.Builder(info.getName()).build();
+							
 							((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).removeValue(zs);
 
 							if(zs.findZoneData(nzd)!=null){
 							
-						/*		ACLMessage update=new ACLMessage(ACLMessage.INFORM);
-								ZoneData zd=((ZoneData)zs.findZoneData(nzd));
-								update.setConversationId(zd.UpdateMessageID);
-								for(AID reciever : zd.subscribers){
-									update.addReceiver(reciever);	
-								}*/
-								if(info.toAppendToCurrentValue()){
+
+								if((zs.findZoneData(nzd)).getAppendValues()){
 									zs.findZoneData(nzd).addItem(info.getValue());
 								}
 								else{
@@ -88,24 +84,7 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 												
 								((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).addValue(zs);
 								
-		/*						ZoneData temp_zd=zs.findZoneData(nzd);
-								ACLMessage update=new ACLMessage(ACLMessage.INFORM);							
-								update.setConversationId(temp_zd.getUpdateMessageID());
-								for(AID reciever : temp_zd.getSubscribers()){
-									update.addReceiver(reciever);	
-								}
-								try {
-									update.setContentObject((Serializable) temp_zd.getData());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-								myAgent.send(update);*/
-								
-//								log.info("update of "+temp_zd.getName()+ " sent");
-//								log.info("updated value of "+nzd.getName());
-//								log.info("updated ZoneData: "+(((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).getValue().iterator().next().findZoneData(new NamedZoneData.Builder(info.getName()).build())));
-								
-								
+							
 																
 							}
 							else{

@@ -37,7 +37,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 	    ACLMessage msg2=new ACLMessage(ACLMessage.CFP);
 		msg2.setConversationId(MessageIds.RegisterMe);
 		
-		NamedZoneData ZoneDataName1=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.jobForMachine).MsgID(MessageIds.ReplyFromScheduler).build();
+		NamedZoneData ZoneDataName1=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.jobForMachine).MsgID(MessageIds.ReplyFromScheduler).appendValue(true).build();
 		NamedZoneData ZoneDataName2=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.ConfirmedOrder).MsgID("").build();
 		NamedZoneData ZoneDataName3=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.askforBid).MsgID("").build();
 		NamedZoneData ZoneDataName4=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.GetWaitingTime).MsgID("").build();

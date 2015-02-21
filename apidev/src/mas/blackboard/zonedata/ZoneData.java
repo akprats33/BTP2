@@ -24,14 +24,16 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	private Logger log;
 	private String UpdateMessageID;
 	private Agent bb; //needed for sending update message
+	private boolean appendValues;
 	
-	public ZoneData(NamedZoneData name2, String UpdateMsgID, Agent blackboard){
+	public ZoneData(NamedZoneData name2, String UpdateMsgID, Agent blackboard, boolean appendValues){
 		log=LogManager.getLogger();
 		this.name = name2;
 		this.data = new HashSet<Object>();
 		this.subscribers=new HashSet<AID>();
 		this.UpdateMessageID=UpdateMessageID; //ID of message to be used while sending update of data
 		this.bb=blackboard;
+		this.appendValues=appendValues;
 	}
 	
 
@@ -71,7 +73,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	@Override
 	public void addItem(Object obj) {
 		this.data.add(obj);
-		log.info("updated "+data);
+//		log.info("updated "+data);
 		sendUpdate();
 	
 	}
@@ -106,7 +108,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	public void RemoveAllnAdd(Object obj) {
 		data.clear();
 		data.add(obj);
-		log.info("updated "+data);
+//		log.info("updated "+data);
 		sendUpdate();
 	
 	}
@@ -119,6 +121,10 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		return subscribers;
 	}
 	
+	public boolean getAppendValues(){
+		return appendValues;
+	}
+	
 	public Set<Object> getData(){
 		return data;
 	}
@@ -129,7 +135,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		
 		for(AID reciever : getSubscribers()){
 			update.addReceiver(reciever);
-			log.info("sent update of "+name.getName()+" to "+reciever);
+			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" value is "+getData());
 		}
 		try {
 			update.setContentObject((Serializable) getData());
@@ -139,10 +145,5 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		bb.send(update);
 		
 	}
-
-
-
-	
-	
 
 }

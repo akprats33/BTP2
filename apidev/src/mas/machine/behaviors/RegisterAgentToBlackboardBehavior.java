@@ -36,11 +36,13 @@ public class RegisterAgentToBlackboardBehavior extends OneShotBehaviour implemen
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.finishedJob).
 				MsgID(MessageIds.ReplyFromScheduler).
+				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.myHealth).
 				MsgID(MessageIds.JobFromScheduler).
+				appendValue(true).
 				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
