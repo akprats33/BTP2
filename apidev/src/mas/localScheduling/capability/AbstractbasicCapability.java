@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import mas.customer.goal.RegisterAgentToBlackboardGoal;
+import mas.customer.plan.RegisterAgentToBlackboardPlan;
 import mas.job.job;
 import mas.localScheduling.goal.EnqueueJobGoal;
 import mas.localScheduling.goal.ReceiveCompletedJobGoal;
+import mas.localScheduling.goal.RegisterLSAgentServiceGoal;
 import mas.localScheduling.goal.SendBidGoal;
 import mas.localScheduling.goal.SendJobGoal;
 import mas.localScheduling.goal.SendWaitingTimeGoal;
 import mas.localScheduling.plan.EnqueueJobPlan;
 import mas.localScheduling.plan.ReceiveCompletedJobPlan;
+import mas.localScheduling.plan.RegisterLSAgentServicePlan;
 import mas.localScheduling.plan.SendBidPlan;
 import mas.localScheduling.plan.SendJobPlan;
 import mas.localScheduling.plan.SendWaitingTimePlan;
@@ -106,11 +110,19 @@ public class AbstractbasicCapability extends Capability {
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSsendWaitingTimeGS),
 				SendWaitingTimePlan.class));
 		
+		plans.add(new SimplePlan(RegisterAgentToBlackboardGoal.class,
+				RegisterAgentToBlackboardPlan.class));
+		
+		plans.add(new SimplePlan(RegisterLSAgentServiceGoal.class,
+				RegisterLSAgentServicePlan.class));
+		
 		return plans;
 	}	
 
 	@Override
 	protected void setup() {
+		myAgent.addGoal(new RegisterLSAgentServiceGoal());
+		myAgent.addGoal(new RegisterAgentToBlackboardGoal());
 		myAgent.addGoal(new SendBidGoal());
 		myAgent.addGoal(new SendJobGoal());
 		myAgent.addGoal(new SendWaitingTimeGoal());

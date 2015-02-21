@@ -15,7 +15,7 @@ import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
-public class RegisterAgentToBlackboardPlan extends OneShotBehaviour implements PlanBody {
+public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
 	private int step;

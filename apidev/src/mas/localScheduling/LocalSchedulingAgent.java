@@ -27,28 +27,5 @@ public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 		Capability bCap = new LocalSchedulingBasicCapability();
 		addCapability(bCap);
 
-		AID bba = AgentUtil.findBlackboardAgent(this);
-		// store AID of blackboard agent into belief base
-		bCap.getBeliefBase().updateBelief(
-				ID.LocalScheduler.BeliefBase.blackAgent, bba);
-
-		//create zones in blackboard for this agent
-		String[] zones = {ID.LocalScheduler.ZoneData.bidForJob,
-				ID.LocalScheduler.ZoneData.WaitingTime,
-				ID.LocalScheduler.ZoneData.jobQueue};
-
-//		AgentUtil.makeZoneBB(this,zones);
-
-		// subscribe for parameters of other agents
-		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
-
-		String[] params = {ID.GlobalScheduler.ZoneData.jobForMachine,
-				ID.GlobalScheduler.ZoneData.askforBid,
-				ID.GlobalScheduler.ZoneData.waitingTime};
-
-		SubscriptionForm subform = new SubscriptionForm();
-		subform.AddSubscriptionReq(target, params);
-
-		AgentUtil.subscribeToParam(this, bba, subform);
 	}
 }
