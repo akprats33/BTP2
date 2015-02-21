@@ -6,7 +6,10 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import mas.blackboard.nameZoneData.NamedZoneData;
@@ -19,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ZoneData implements ZoneDataIFace, Serializable{
 	protected NamedZoneData name;
-	private Set<Object> data;
+	private LinkedList<Object> data;
 	private Set<AID> subscribers;
 	private Logger log;
 	private String UpdateMessageID;
@@ -29,7 +32,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	public ZoneData(NamedZoneData name2, String UpdateMsgID, Agent blackboard, boolean appendValues){
 		log=LogManager.getLogger();
 		this.name = name2;
-		this.data = new HashSet<Object>();
+		this.data = new LinkedList<Object>();
 		this.subscribers=new HashSet<AID>();
 		this.UpdateMessageID=UpdateMessageID; //ID of message to be used while sending update of data
 		this.bb=blackboard;
@@ -72,8 +75,19 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 
 	@Override
 	public void addItem(Object obj) {
-		this.data.add(obj);
-//		log.info("updated "+data);
+		if(getAppendValues()){
+//			log.info(getAppendValues());
+			this.data.add(obj);
+		}
+		else{
+//			log.info(this.data.isEmpty());
+			if(!this.data.isEmpty()){
+				this.data.remove(); //assumes list contains at max 1 element. This will make list empty
+				
+			}
+			this.data.add(obj);
+		}
+//		log.info(data);
 		sendUpdate();
 	
 	}
@@ -104,14 +118,14 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		
 	}
 
-	@Override
+/*	@Override
 	public void RemoveAllnAdd(Object obj) {
 		data.clear();
 		data.add(obj);
 //		log.info("updated "+data);
-		sendUpdate();
+//		sendUpdate();
 	
-	}
+	}*/
 
 	public String getUpdateMessageID(){
 		return UpdateMessageID;
@@ -125,8 +139,10 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		return appendValues;
 	}
 	
-	public Set<Object> getData(){
-		return data;
+	public Object getData(){
+//		log.info(data);
+		return data.pop();
+		
 	}
 	public void sendUpdate(){
 		
@@ -135,10 +151,12 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		
 		for(AID reciever : getSubscribers()){
 			update.addReceiver(reciever);
-			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" value is "+getData());
+			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName());
 		}
 		try {
-			update.setContentObject((Serializable) getData());
+			Object obj= getData();
+			update.setContentObject((Serializable) obj);
+			log.info("value is "+obj);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

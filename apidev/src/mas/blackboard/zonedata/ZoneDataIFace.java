@@ -9,7 +9,7 @@ public interface ZoneDataIFace {
 	public Object[] getAllItem();
 	public void subscribe(AID agent);
 	public void unsubscribe(AID agent);
-	public void RemoveAllnAdd(Object obj);
+//	public void RemoveAllnAdd(Object obj);
 	public void addItem(Object obj);
 	
 	

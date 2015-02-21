@@ -75,12 +75,12 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 							if(zs.findZoneData(nzd)!=null){
 							
 
-								if((zs.findZoneData(nzd)).getAppendValues()){
+//								if((zs.findZoneData(nzd)).getAppendValues()){
 									zs.findZoneData(nzd).addItem(info.getValue());
-								}
+								/*}
 								else{
 									zs.findZoneData(nzd).RemoveAllnAdd(info.getValue());
-								}
+								}*/
 												
 								((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).addValue(zs);
 								
