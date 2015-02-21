@@ -42,7 +42,7 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 	}
 
 	/**
-	 *  send the generated job to blackboard agent by a FIPA-CFP message
+	 *  send the generated job to it's zonedata
 	 */
 	@Override
 	public void action() {
@@ -63,6 +63,6 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 
 	@Override
 	public boolean done() {
-		return false;
+		return true;
 	}
 }

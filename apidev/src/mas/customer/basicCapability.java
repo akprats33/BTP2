@@ -1,9 +1,7 @@
 package mas.customer;
 
-import mas.customer.goal.GenerateJobGoal;
 import mas.customer.goal.RegisterAgentToBlackboardGoal;
 import mas.customer.plan.RegisterAgentToBlackboardPlan;
-import mas.customer.plan.jobGeneratorPlan;
 import mas.job.job;
 import mas.util.ID;
 import bdi4jade.belief.Belief;
@@ -21,6 +19,7 @@ public class basicCapability extends parentBasicCapability{
 		
 		getPlanLibrary().addPlan(new SimplePlan(RegisterAgentToBlackboardGoal.class,
 				RegisterAgentToBlackboardPlan.class));
+		
 		Belief<job> currentJob = 
 				new TransientBelief<job>(ID.Customer.BeliefBase.CURRENT_JOB);
 				
