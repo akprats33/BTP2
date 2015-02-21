@@ -2,7 +2,9 @@ package mas.globalScheduling;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import jade.core.AID;
+import mas.customer.parentBasicCapability;
 import mas.customer.basicCapability;
 import mas.util.AgentUtil;
 import mas.util.ID;

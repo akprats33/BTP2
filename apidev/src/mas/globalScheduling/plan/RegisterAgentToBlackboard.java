@@ -33,6 +33,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 	@Override
 	public void action() {
 		AID bb_aid=AgentUtil.findBlackboardAgent(myAgent);
+		
 	    ACLMessage msg2=new ACLMessage(ACLMessage.CFP);
 		msg2.setConversationId(MessageIds.RegisterMe);
 		
@@ -51,10 +52,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 		}
 
 		
-		/*String[] zones = {ID.GlobalScheduler.ZoneData.NegotiationJob,
-				ID.GlobalScheduler.ZoneData.WorkOrder				
-		};*/
-			
+
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 		
 		

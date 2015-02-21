@@ -2,8 +2,16 @@ package mas.globalScheduling;
 
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
+
 import java.util.HashSet;
 import java.util.Set;
+
+
+
+
+
+
+
 import mas.globalScheduling.goal.RegisterAgentGoal;
 import mas.globalScheduling.goal.RegisterServiceGoal;
 import mas.globalScheduling.goal.RegisterWithBBGoal;
@@ -13,7 +21,6 @@ import mas.util.MessageIds;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 import bdi4jade.belief.Belief;
 import bdi4jade.belief.BeliefSet;
@@ -55,8 +62,10 @@ public abstract class AbstractGSCapability  extends Capability {
 				TakeOrder.class));
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(
 				MessageIds.Negotiate),Negotiate.class));
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(
+				MessageIds.OrderConfirmation),AskForWaitingTime.class));
+		plans.add(new SimplePlan(AskWaitingTimeGoal.class,AskForWaitingTime.class));
 		
-
 		
 		return plans;
 	}	
