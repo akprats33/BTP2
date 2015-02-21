@@ -37,24 +37,24 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.bidForJob).
-				MsgID(MessageIds.ReplyFromScheduler).
+				MsgID(MessageIds.LSA_JobBid).
 				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.jobQueue).
-				MsgID(MessageIds.JobFromScheduler).
-				appendValue(true).
+				MsgID(MessageIds.LSA_JobQueue).
+				appendValue(false).
 				build();
 
 		NamedZoneData ZoneDataName3 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.WaitingTime).
-				MsgID(MessageIds.Negotiate).
+				MsgID(MessageIds.LSA_JobWaitingTime).
 				appendValue(true).
 				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
-				ZoneDataName2,ZoneDataName3};
+				ZoneDataName2, ZoneDataName3 };
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 

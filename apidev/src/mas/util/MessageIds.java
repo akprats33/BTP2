@@ -11,8 +11,11 @@ public class MessageIds {
 	public static final String LSjobFromGS = "LSjobFromGS";
 	public static final String LSaskForGS = "LSaskForGS";
 	public static final String LSsendBidToGS = "LSsendBidToGS";
+	public static final String LSA_JobBid = "LSABidToGSA";
 	public static final String LSsendWaitingTimeGS = "LSsendWaitingTimeGS";
+	public static final String LSA_JobWaitingTime = "LSA_WaitingTimeTo_GSA";
 	public static final String LSsendJobToMachine = "LSsendJobToMachine";
+	public static final String LSA_JobQueue = "LSA_JobQueue";
 	public static final String LSgetCompletedJobFromMachine = "LSgetCompletedJobFromMachine";
 	
 	public static final String Success="sucess";
