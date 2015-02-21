@@ -48,10 +48,10 @@ public class job implements Serializable{
 		this.operations = operations;
 	}
 
-	public double waitingTime;
-	public double profit;
-	public double delTime;
-	public double delStatus;
+	private double waitingTime;
+	private double profit;
+	private double delTime;
+	private double delStatus;
 
 	public int getPosition() {
 		return position;

@@ -11,7 +11,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.introspection.AddedBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-
+import mas.globalScheduling.behaviour.WaitTime;
 import mas.job.*;
 import mas.util.ID;
 import mas.util.MessageIds;
@@ -21,6 +21,7 @@ public class AskForWaitingTime extends OneShotBehaviour implements PlanBody {
 
 	private job j;
 	private AID blackboard;
+	private int NoOfMachines;
 
 	@Override
 	public EndState getEndState() {
@@ -50,10 +51,13 @@ public class AskForWaitingTime extends OneShotBehaviour implements PlanBody {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		msg.setReplyWith(Integer.toString(j.getJobNo()));
+		
 		msg.addReceiver(blackboard);
 		myAgent.send(msg);
 		
-//		myAgent.addBehaviour(new WaitTime());
+		myAgent.addBehaviour(new WaitTime(NoOfMachines,Integer.toString(j.getJobNo())));
 	}
 
 }

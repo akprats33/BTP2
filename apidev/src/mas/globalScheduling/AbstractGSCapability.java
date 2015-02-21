@@ -1,10 +1,15 @@
 package mas.globalScheduling;
 
 import jade.core.AID;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.MessageTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
+
+
+
 
 
 
@@ -50,11 +55,16 @@ public abstract class AbstractGSCapability  extends Capability {
 		BeliefSet<AID> mSet = 
 				new TransientBeliefSet<AID>(ID.Blackboard.LocalName);
 				
+		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<>(ID.Machine.LocalName);//no of machines==no of LSA
+		NoOfMachines.addValue(GetNoOfMachines());
 		beliefs.add(mSet);
+		beliefs.add(NoOfMachines);
 		
 		return beliefs;
 	}
 	
+
+
 	public static Set<Plan> getPlans() {
 		Set<Plan> plans = new HashSet<Plan>();		
 		plans.add(new SimplePlan(RegisterServiceGoal.class, RegisterServicePlan.class));
@@ -65,8 +75,6 @@ public abstract class AbstractGSCapability  extends Capability {
 				MessageIds.Negotiate),Negotiate.class));
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(
 				MessageIds.OrderConfirmation),AskForWaitingTime.class));
-		
-		
 		
 //		plans.add(new SimplePlan(AskWaitingTimeGoal.class,AskForWaitingTime.class));
 		
