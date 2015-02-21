@@ -11,24 +11,24 @@ public class ID implements Serializable{
 		public static final String main_container_ipaddress = "127.0.0.1";
 	}
 
-	public class Blackboard{
-		public static final String Service="blackboard";
-		public static final String LocalName="blackboard";
+	public class Blackboard {
+		public static final String Service = "blackboard";
+		public static final String LocalName = "blackboard";
 
-		public class ZoneData{
+		public class ZoneData {
 
 		}
 	}
 
-	public class Customer{
-		public static final String Service="customer";
-		public static final String LocalName="customer";
+	public class Customer {
+		public static final String Service = "customer";
+		public static final String LocalName = "customer";
 
 		public class BeliefBase {
-			public static final String JobList="JobList";
-			public static final String JOB_GENERATOR = "JOB-GENERATOR";
-			public static final String blackAgent = "blackboard-agent";
-			public static final String CURRENT_JOB = "Current-job-Customer";
+			public static final String JobList = "customerBeliefBase_JobList";
+			public static final String JOB_GENERATOR = "customerBeliefBase_JOB-GENERATOR";
+			public static final String blackAgent = "customerBeliefBase_blackboard-agent";
+			public static final String CURRENT_JOB = "customerBeliefBase_Current-job";
 		}
 		/*		public class Parameters{
 			public static final String JobList="JobList";
@@ -37,15 +37,15 @@ public class ID implements Serializable{
 		}*/
 
 		public class ZoneData{
-			public static final String JobList = "JobList";
-			public static final String Negotiation = "jobsUnderNegotiation";
-			public static final String acceptedJobs = "jobsAccepted";
+			public static final String JobList = "customer_JobList";
+			public static final String Negotiation = "customer_jobsUnderNegotiation";
+			public static final String acceptedJobs = "customer_jobsAccepted";
 		}
 	}
 
 	public class LocalScheduler{
-		public static final String Service="machine-simulator-schedule";
-		public static final String LocalName="LocalSchedulingAgent";
+		public static final String Service="LSA_machine-simulator-schedule";
+		public static final String LocalName="Local_Scheduling_Agent";
 		/*public class Parameters{
 			public static final String WaitingTime="WaititngTimeData";
 			public static final String Bid="BidData";
@@ -54,18 +54,18 @@ public class ID implements Serializable{
 		}*/
 
 		public class BeliefBase {
-			public static final String blackAgent = "blackboard-agent";
-			public static final String machine = "my-machine";
-			public static final String jobQueue = "my-job-list";
-			public static final String maintAgent = "my-maintenanceAgent";
-			public static final String globalSchAgent = "my-gsAgent";
-			public static final String dataTracker = "my-data-tracker";
+			public static final String blackAgent = "LSABeliefBase_blackboard-agent";
+			public static final String machine = "LSABeliefBase_machine";
+			public static final String jobQueue = "LSABeliefBase_job-list";
+			public static final String maintAgent = "LSABeliefBase_maintenanceAgent";
+			public static final String globalSchAgent = "LSABeliefBase_gsAgent";
+			public static final String dataTracker = "LSABeliefBase_data-tracker";
 		}
 
 		public class ZoneData{
-			public static final String WaitingTime="WaitingTime";
-			public static final String bidForJob ="myBidForJob";
-			public static final String jobQueue ="myJobQueueFormyMachine";
+			public static final String WaitingTime = "LSA_WaitingTime";
+			public static final String bidForJob = "LSA_BidForJob";
+			public static final String jobQueue = "LSA_JobQueueFormyMachine";
 		}
 	}
 
@@ -80,14 +80,14 @@ public class ID implements Serializable{
 */		
 		public class ZoneData{
 			//contains confirmed jobs
-			public static final String WorkOrder="WorkOrderData"; 
+			public static final String WorkOrder="GSA_WorkOrderData"; 
 			//jobs under negotiation
-			public static final String NegotiationJob = "jobsUnderNegotiation"; 
-			public static final String ConfirmedOrder = "ConfirmedOrder";
-			public static final String jobForMachine = "job-for-machine";
-			public static final String askforBid = "ask-for-bid";
-			public static final String waitingTime = "waiting-time"; //queue of jobs with calculated expected waiting time
-			public static final String GetWaitingTime = "LocalSchedulingwaiting-time";//contains queue of jobs with  
+			public static final String NegotiationJob = "GSA_jobsUnderNegotiation"; 
+			public static final String ConfirmedOrder = "GSA_ConfirmedOrder";
+			public static final String jobForMachine = "GSA_job-for-machine";
+			public static final String askforBid = "GSA_ask-for-bid";
+			public static final String waitingTime = "GSA_waiting-time"; //queue of jobs with calculated expected waiting time
+			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";//contains queue of jobs with  
 		}
 	}
 
@@ -100,16 +100,16 @@ public class ID implements Serializable{
 		}*/
 
 		public class ZoneData {
-			public static final String PMdata = "preventiveMaintenanceData";
-			public static final String correctiveMaintdata = "correctiveMaintenancedata";
+			public static final String PMdata = "Maintenance_preventiveMaintenanceData";
+			public static final String correctiveMaintdata = "Maintenance_correctiveMaintenancedata";
 		}
 
 		public class BeliefBase {
-			public static final String blackAgent = "blackboard-agent";
-			public static final String machine = "my-machine";
-			public static final String globalSchAgent = "my-gsAgent";
-			public static final String dataTracker = "my-data-tracker";
-			public static final String maintenanceJob = "my-machine-aintenance-tracker";
+			public static final String blackAgent = "Maintenance_blackboard-agent";
+			public static final String machine = "Maintenance_machine";
+			public static final String globalSchAgent = "Maintenance_gsAgent";
+			public static final String dataTracker = "Maintenance_data-tracker";
+			public static final String maintenanceJob = "Maintenance_machine-maintenance-tracker";
 		}
 	}
 
@@ -122,12 +122,8 @@ public class ID implements Serializable{
 		}*/
 
 		public class ZoneData{
-			public static final String myHealth ="machine-health";
-			public static final String finishedJob ="finishedJob-machine";
+			public static final String myHealth ="machine_health";
+			public static final String finishedJob ="machine_finishedJob";
 		}
 	}
-
-
-
-
 }
