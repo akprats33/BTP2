@@ -8,6 +8,7 @@ package mas.util;
  */
 public class MessageIds {
 
+	public static final String LSJobForMachine = "LSJobForMachine";
 	public static final String LSjobFromGS = "LSjobFromGS";
 	public static final String LSaskForGS = "LSaskForGS";
 	public static final String LSsendBidToGS = "LSsendBidToGS";

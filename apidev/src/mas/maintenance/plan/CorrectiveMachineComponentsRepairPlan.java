@@ -6,7 +6,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
+import mas.util.ID;
 import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,9 +29,9 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 	/**
 	 * 
 	 */
-	
+
 	private static final long serialVersionUID = 1L;
-	private AID sender;
+	private AID blackboard;
 	private ACLMessage msg;
 	private IMachine failedMachine;
 	private BeliefBase bfBase;
@@ -43,12 +45,12 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 		private static final long serialVersionUID = 1L;
 		private int step = 0;
 
-//		MessageTemplate machineCurrentHealth = MessageTemplate.
-//				MatchConversationId(MessageIds.machineState);
+		//		MessageTemplate machineCurrentHealth = MessageTemplate.
+		//				MatchConversationId(MessageIds.machineState);
 		MessageTemplate machineFailureMSG = MessageTemplate.
 				MatchConversationId(MessageIds.maintMachineFailureInfo);
-//		MessageTemplate mt3 = MessageTemplate.
-//				MatchConversationId(MessageIds.failEnd);
+		//		MessageTemplate mt3 = MessageTemplate.
+		//				MatchConversationId(MessageIds.failEnd);
 
 		@Override
 		public void action() {
@@ -58,7 +60,6 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 				if(msg != null) {
 					try {
 						log.info("recieved machine's failure msg");
-						sender = msg.getSender();
 						failedMachine = (IMachine) msg.getContentObject();
 					} catch (UnreadableException e) {
 						e.printStackTrace();
@@ -72,21 +73,19 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 
 			case 1:
 
-				ACLMessage correctiveRepairMSG;
-
 				RepairKit repaitKit = new RepairKit();
 				repaitKit.setMachine(failedMachine);
 				String correctiveMaintData;
 
 				correctiveMaintData = repaitKit.getCoorectiveMaintenanceData();
 
-				correctiveRepairMSG = new ACLMessage(ACLMessage.INFORM);
-				correctiveRepairMSG.setContent(correctiveMaintData);
-				correctiveRepairMSG.setConversationId(MessageIds.correctiveData);
-				correctiveRepairMSG.addReceiver(msg.getSender());
-				myAgent.send(correctiveRepairMSG);
+				ZoneDataUpdate correctiveRepairUpdate = new ZoneDataUpdate(
+						ID.Maintenance.ZoneData.correctiveMaintdata,
+						correctiveMaintData);
 
-				step ++;
+				correctiveRepairUpdate.send(blackboard ,correctiveRepairUpdate, myAgent);
+
+				step = 2;
 			}
 		}
 
@@ -150,5 +149,9 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 	public void init(PlanInstance planInstance) {
 		log = LogManager.getLogger();
 		bfBase = planInstance.getBeliefBase();
+
+		this.blackboard = (AID) bfBase.
+				getBelief(ID.Maintenance.BeliefBase.blackAgent).
+				getValue();
 	}
 }

@@ -8,6 +8,7 @@ import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
 import mas.util.ID;
 import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 
 import org.apache.logging.log4j.Logger;
 
@@ -75,12 +76,13 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 			break;
 		case 1:
 			
-			reply = new ACLMessage(ACLMessage.INFORM);
 			String maintenanceData = solver.getPreventiveMaintenanceData();
-			reply.setContent(maintenanceData);
-			reply.setConversationId(MessageIds.maintenanceJobStartData);
-			reply.addReceiver(this.bba);
-			myAgent.send(reply);
+			ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate(
+					ID.Maintenance.ZoneData.PMdata,
+					maintenanceData);
+
+			maintenanceStartData.send(this.bba ,maintenanceStartData, myAgent);
+			
 			log.info("sending maintenance job data");
 			break;
 		}

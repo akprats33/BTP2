@@ -1,6 +1,7 @@
 package mas.maintenance.plan;
 
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
@@ -16,7 +17,7 @@ import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
-public class machineHealthCheckPlan extends Behaviour implements PlanBody {
+public class machineHealthCheckPlan extends CyclicBehaviour implements PlanBody {
 
 	/**
 	 * 
@@ -53,11 +54,6 @@ public class machineHealthCheckPlan extends Behaviour implements PlanBody {
 			step = 0;
 			break;
 		}
-	}
-
-	@Override
-	public boolean done() {
-		return true;
 	}
 
 	@Override

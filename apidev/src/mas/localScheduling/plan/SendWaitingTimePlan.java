@@ -1,13 +1,15 @@
 package mas.localScheduling.plan;
 
+import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-import java.io.IOException;
+
 import java.util.ArrayList;
+
 import mas.job.job;
 import mas.util.ID;
-import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
@@ -32,6 +34,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private StatsTracker sTracker;
 	private double averageProcessingTime;
 	private double averageQueueSize;
+	private AID blackboard;
 
 	@Override
 	public EndState getEndState() {
@@ -56,6 +59,10 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		sTracker = (StatsTracker) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBase.dataTracker).
 				getValue();
+		
+		this.blackboard = (AID) bfBase.
+				getBelief(ID.LocalScheduler.BeliefBase.blackAgent).
+				getValue();
 	}
 
 	@Override
@@ -69,15 +76,13 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		double avgWaitingTime = averageProcessingTime*averageQueueSize;
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
 
-		ACLMessage waitTime = new ACLMessage(ACLMessage.INFORM);
-		waitTime.addReceiver(msg.getSender());
-		waitTime.setConversationId(MessageIds.waitingTime);
-		try {
-			waitTime.setContentObject(j);
-			myAgent.send(waitTime);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
+				ID.LocalScheduler.ZoneData.WaitingTime,
+				this.j);
+
+		waitingTimeUpdate.send(blackboard ,waitingTimeUpdate, myAgent);
+		
 		//		myAgent.addBehaviour(new CalculateWaitTimeBehavior(JobQueue.size(),GlobalSchedulingAID, j));
 	}
 }

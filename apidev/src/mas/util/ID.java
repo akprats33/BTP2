@@ -104,6 +104,7 @@ public class ID implements Serializable{
 			public static final String PMdata = "Maintenance_preventiveMaintenanceData";
 			public static final String correctiveMaintdata = "Maintenance_correctiveMaintenancedata";
 			public static final String InspectionData = "Maintenance_inspectionData";
+			public static final String preventiveMaintJob = "Maintenance_preventiveMaintJob";
 		}
 
 		public class BeliefBase {

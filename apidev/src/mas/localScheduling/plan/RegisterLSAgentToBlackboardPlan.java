@@ -52,9 +52,15 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 				MsgID(MessageIds.LSA_JobWaitingTime).
 				appendValue(true).
 				build();
+		
+		NamedZoneData ZoneDataName4 = 
+				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.jobForMachine).
+				MsgID(MessageIds.LSJobForMachine).
+				appendValue(false).
+				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
-				ZoneDataName2, ZoneDataName3 };
+				ZoneDataName2, ZoneDataName3, ZoneDataName4 };
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 
