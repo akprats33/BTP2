@@ -20,9 +20,11 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 	private static final long serialVersionUID = 1L;
 	private job comingJob;
 	private Logger log;
+	private Simulator machineSimulator;
 
 	public ProcessJobBehavior(job processJob) {
 		this.comingJob = processJob;
+		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
@@ -39,7 +41,8 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 
 			jDimensions.get(dIndex).setTargetDimension(
 					jDimensions.get(dIndex).getTargetDimension() +
-					Methods.normalRandom(Simulator.mean_shift,Simulator.sd_shift));
+					Methods.normalRandom(machineSimulator.getMean_shift(),
+							machineSimulator.getSd_shift()));
 
 			//			jDimensions.get(dIndex).add(jDimensions.get(dIndex) + 3*Simulator.sd_shift);
 			//			jDimensions.get(dIndex).add(jDimensions.get(dIndex) - 3*Simulator.sd_shift);
@@ -52,7 +55,7 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 		int AttIndex;
 
 		BinomialDistribution bernoulli =
-				new BinomialDistribution(1, Simulator.fractionDefective);
+				new BinomialDistribution(1, machineSimulator.getFractionDefective());
 
 		boolean conforming;
 		

@@ -3,7 +3,7 @@ package mas.machine.parametrer;
 import jade.util.leap.Serializable;
 
 public class Parameter implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private double value;

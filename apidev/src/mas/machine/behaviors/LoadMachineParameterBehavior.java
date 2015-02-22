@@ -30,10 +30,12 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 	private String filePath;
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
+	private Simulator machineSimulator;
 
 	@Override
 	public void action() {
 		log = LogManager.getLogger();
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 		this.filePath = System.getProperty("user.dir");
 		try {
 			InputStream fStream = new FileInputStream (filePath + 
@@ -54,8 +56,6 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 		boolean isInspection = false;
 		int updateFrequency = 0;
 
-		Simulator.params.clear();
-		
 		while( rows.hasNext() )  {
 			row = (XSSFRow) rows.next();
 			Iterator<Cell> cells = row.cellIterator();
@@ -84,7 +84,7 @@ public class LoadMachineParameterBehavior extends OneShotBehaviour {
 				}
 				count++;
 			}
-			Simulator.params.add(new Parameter(paramName,
+			machineSimulator.addMachineParameter(new Parameter(paramName,
 					value, isInspection, updateFrequency));
 		}
 		try {

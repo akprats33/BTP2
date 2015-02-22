@@ -1,7 +1,6 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.OneShotBehaviour;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +26,12 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
 	private long minute2Millis = 60000;
+	private Simulator machineSimulator;
 
 	@Override
 	public void action() {
 		log = LogManager.getLogger();
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 		this.filePath = System.getProperty("user.dir");
 		try {
 			InputStream fStream = new FileInputStream (filePath + 
@@ -46,58 +47,74 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 
 		Iterator<Row> rows = simulatorParameterSheet.rowIterator();
 		XSSFRow row = (XSSFRow) rows.next();
+		
+		int rowNumber = 0;
 		while( rows.hasNext() ) {
 
-			row = (XSSFRow) rows.next();
 			Iterator<Cell> cells = row.cellIterator();
 			int cellNumber = 0;
-			
+
 			while(cells.hasNext()) {
 
 				XSSFCell cell = (XSSFCell) cells.next();
 
-				switch(cellNumber) {
-				case 0:
-//					Simulator.r = (double)cell.getNumericCellValue();
-					break;
-				case 1:
-					Simulator.percent = (double)cell.getNumericCellValue();
-					Simulator.percent /= 100;
-//					log.info("percent is " + Simulator.percent);
-					break;
-				case 2:
-					Simulator.meanLoadingTime = (double)cell.getNumericCellValue();
-					break;
-				case 3:
-					Simulator.sdLoadingTime = (double)cell.getNumericCellValue();
-					break;
-				case 4:
-					Simulator.meanUnloadingTime = (double)cell.getNumericCellValue();
-					break;
-				case 5:
-					Simulator.sdUnloadingTime =(double)cell.getNumericCellValue();
-					break;
-				case 6:
-					Simulator.mean_shiftInMean = (double)cell.getNumericCellValue();
-					break;
-				case 7:
-					Simulator.sd_shiftInMean = (double)cell.getNumericCellValue();
-					break;
-				case 8:
-					Simulator.mean_shiftInSd = (double)cell.getNumericCellValue();
-					break;
-				case 9:
-					Simulator.sd_shiftInSd = (double)cell.getNumericCellValue();
-					break;
-				case 10:
-					Simulator.rateShift = (double)cell.getNumericCellValue();
-					break;
-				case 11:
-					Simulator.fractionDefective = (double)cell.getNumericCellValue();
-					break;
+				if(cellNumber == 1) {
+					switch (rowNumber) {
+
+					case 0:
+						machineSimulator.setPercentProcessingTimeVariation(
+								(double)cell.getNumericCellValue());
+
+						machineSimulator.setPercentProcessingTimeVariation(
+								machineSimulator.getPercentProcessingTimeVariation()/100);
+						break;
+
+					case 1:
+						machineSimulator.setMeanLoadingTime(
+								(double)cell.getNumericCellValue());
+						break;
+					case 2:
+						machineSimulator.setSdLoadingTime(
+								(double)cell.getNumericCellValue());
+						break;
+					case 3:
+						machineSimulator.setMeanUnloadingTime(
+								(double)cell.getNumericCellValue() );
+						break;
+					case 4:
+						machineSimulator.setSdUnloadingTime(
+								(double)cell.getNumericCellValue());
+						break;
+						
+					case 5:
+						machineSimulator.setFractionDefective(
+								(double)cell.getNumericCellValue() );
+						break;
+					case 6:
+						machineSimulator.setMean_shiftInMean(
+								(double)cell.getNumericCellValue());
+						break;
+					case 7:
+						machineSimulator.setSd_shiftInMean(
+								(double)cell.getNumericCellValue());
+						break;
+					case 8:
+						machineSimulator.setMean_shiftInSd(
+								(double)cell.getNumericCellValue());
+						break;
+					case 9:
+						machineSimulator.setSd_shiftInSd(
+								(double)cell.getNumericCellValue());
+						break;
+					case 10:
+						machineSimulator.setRateShift(
+								(double)cell.getNumericCellValue() );
+						break;
+					}
 				}
 				cellNumber++;
 			}
+			rowNumber++;
 		}
 		try {
 			workBook.close();

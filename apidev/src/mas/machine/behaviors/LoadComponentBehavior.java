@@ -31,13 +31,15 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 	private String filePath;
 	private String fileName =  "machine_config.xlsx";
 	private Logger log;
-	private Simulator mySim;
-	// data being read is in hours/minutes/seconds
-	// convert that into milliseconds
+	private Simulator machineSimulator;
+	/**
+	 *  data being read is in hours/minutes/seconds
+	 *  convert that into milliseconds
+	 */
 	private int unitConversion = 3600000;
 	
-	public LoadComponentBehavior(Simulator s) {
-		mySim = s;
+	public LoadComponentBehavior() {
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
@@ -128,9 +130,9 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 						prevMaintCost(preventiveMaintenanceCost).
 						meanDelay(meanDelay).
 						sdDelay(sdDelay).
-						build(mySim);
+						build(machineSimulator);
 		
-		Simulator.addComponent(tempComponent);
+		machineSimulator.addComponent(tempComponent);
 		}
 		try {
 			workBook.close();

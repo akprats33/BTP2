@@ -8,20 +8,15 @@ import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.Serializable;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import mas.machine.behaviors.AcceptJobBehavior;
-import mas.machine.behaviors.ComponentAgeMonitorBehavior;
 import mas.machine.behaviors.Connect2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
@@ -37,88 +32,87 @@ import mas.util.MessageIds;
 public class Simulator extends Agent implements IMachine,Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	// ID of this simulator
+	public String ID_Simulator;
+
+	// AID of blackboard agent to which it will connect and publish-receive information from
 	public static AID blackboardAgent;
-	public static String mySimulator = "Simulator";
+
+	// name of data store used in behavior's to update this object
+	public static String simulatorStoreName = "simulatorStoreName";
 	
-	private static ArrayList<IComponent> myComponents;
+	public static long healthReportTimeMillis = 20000;
+
+	// list of components of machine
+	private ArrayList<IComponent> myComponents;
+
+	//starting time of this machine agent 
 	private long epochTime;
+
+	// status of this machine i.e. working/failed etc.
 	private MachineStatus status;
+
+	// property change support for status of simulator
 	protected transient PropertyChangeSupport statusChangeSupport;
 
-	//percentage variation in processing time
-	public static double percent = 0.10;		
+	// percentage variation in processing time of jobs
+	private double percentProcessingTimeVariation = 0.10;		
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	public static double meanLoadingTime = 1000.0;					
-	public static double sdLoadingTime = 1.0;
+	private double meanLoadingTime = 1000.0;					
+	private double sdLoadingTime = 1.0;
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	public static double meanUnloadingTime = 1000.0;				
-	public static double sdUnloadingTime=1.0;
+	private double meanUnloadingTime = 1000.0;				
+	private double sdUnloadingTime = 1.0;
+
+	// fraction defective for attributes of jobs
+	private transient double fractionDefective = 0.10;
+
+	// parameters of process
+	private transient double mean_shift = 0;					
+	private transient double sd_shift = 1;
 
 	// parameters of normal distribution causing shift in process mean
-	public static double mean_shiftInMean = 0;				
-	public static double sd_shiftInMean = 1;
+	private double mean_shiftInMean = 0;				
+	private double sd_shiftInMean = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
-	public transient static double mean_shiftInSd = 0;				
-	public transient static double sd_shiftInSd = 1;
-
-	// parameters of process mean
-	public transient static double mean_shift = 0;					
-	public transient static double sd_shift = 1;
+	private transient double mean_shiftInSd = 0;				
+	private transient double sd_shiftInSd = 1;
 
 	//rate of process mean shifting (per hour)
-	public transient static double rateShift = 0.01;				
-
-	// parameters of normal distribution causing shift in process paramters
-	public transient static double mean_shiftInMeanParam = 0;				
-	public transient static double sd_shiftInMeanParam = 1;
-
-	// parameters of normal distribution causing shift in process standard deviation
-	public transient static double mean_shiftInSdParam = 0;				
-	public transient static double sd_shiftSdparam = 1;
+	private transient double rateProcessShift = 0.01;				
 
 	// parameters of process parameters
-	public transient static double mean_shiftParam = 0;					
-	public transient static double sd_shiftparam = 1;
+	private transient double mean_shiftParam = 0;					
+	private transient double sd_shiftparam = 1;
 
-	public transient static double fractionDefective = 0.10;
+	// parameters of normal distribution causing shift in process parameters
+	private transient double mean_shiftInMeanParam = 0;				
+	private transient double sd_shiftInMeanParam = 1;
 
-	// for writing data to file
-	public transient static BufferedWriter fout;					
-	public transient static String filename;
+	// parameters of normal distribution causing shift in process standard deviation
+	private transient double mean_shiftInSdParam = 0;				
+	private transient double sd_shiftInSdparam = 1;
 
-	public transient static ArrayList<String> nameParams  = new ArrayList<String>();
-	public transient static ArrayList<Double> valueParams = new ArrayList<Double>();
-	public transient static int[] frequencyParams;
-	public transient static ArrayList<Integer> inspectionParamsIndex = new ArrayList<Integer>();
-	public transient static ArrayList<Integer> inspectionParamFrequency = new ArrayList<Integer>();
+	// machine parameters
+	private transient ArrayList<Parameter> machineParameters ;
+	
+	// root causes for machine parameters which will make a shift in parameter's generative process
+	private transient ArrayList<ArrayList<RootCause>> mParameterRootcauses; 
 
-	public transient static double rootCause[];
-
-	//public node[] rootcauseAffectedParams;
-
-	public transient static double[] rootcause_timeto_occur;
-
-	//	public static  DefaultTableModel AttrDTM, DimDTM;
-	//	public static JPanel jobAttrPanel=new JPanel(new MigLayout());
-	//	public static JTable AttrTable, DimTable;
-	//	public static JScrollPane AttrScrollPane, DimScrollPane;
-	//	public static JFrame win_Dimtable,win_attrTable;
-
-	public transient static ArrayList<Parameter> params ;
-	public transient static ArrayList<ArrayList<RootCause>> rootcauses; 
-
-	public void init() {
+	private void init() {
 		statusChangeSupport = new PropertyChangeSupport(this);
 		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
-		params = new ArrayList<Parameter>();
-		rootcauses = new ArrayList<ArrayList<RootCause> >();
+		machineParameters = new ArrayList<Parameter>();
+		mParameterRootcauses = new ArrayList<ArrayList<RootCause> >();
 	}
 
 	private transient SequentialBehaviour loadData;
+	
 	private transient Behaviour loadSimulatorParams;
 	private transient Behaviour loadComponentData;
 	private transient Behaviour loadMachineParams;
@@ -126,7 +120,6 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private transient Behaviour registerthis;
 	private transient Behaviour connect2Blackboard;
 	private transient Behaviour acceptIncomingJobs;
-	private transient Behaviour componentAgeMonitor;
 	private transient Behaviour reportHealth;
 
 	private transient ParallelBehaviour functionality ;
@@ -134,12 +127,17 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	@Override
 	protected void setup() {
 		super.setup();
+		
+		/**
+		 * initialize the variables
+		 */
 		init();
 
 		loadData = new SequentialBehaviour(this);
+		loadData.getDataStore().put(simulatorStoreName, Simulator.this);
 
 		loadSimulatorParams = new LoadSimulatorParamsBehavior();
-		loadComponentData = new LoadComponentBehavior(this);
+		loadComponentData = new LoadComponentBehavior();
 		loadMachineParams = new LoadMachineParameterBehavior();
 		loadRootCause = new GetRootCauseDataBehavior();
 		registerthis = new Register2DF();
@@ -157,23 +155,19 @@ public class Simulator extends Agent implements IMachine,Serializable {
 
 		functionality = new ParallelBehaviour(this,
 				ParallelBehaviour.WHEN_ALL);
-		functionality.getDataStore().put(mySimulator, Simulator.this);
+		functionality.getDataStore().put(simulatorStoreName, Simulator.this);
 
 		acceptIncomingJobs = new AcceptJobBehavior();
-		acceptIncomingJobs.setDataStore(functionality.getDataStore());
-
-		componentAgeMonitor = new ComponentAgeMonitorBehavior();
-		componentAgeMonitor.setDataStore(functionality.getDataStore());
-
-		reportHealth = new reportHealthBehavior(this, 10000);
+		reportHealth = new reportHealthBehavior(this, healthReportTimeMillis);
 
 		functionality.addSubBehaviour(acceptIncomingJobs);
-		functionality.addSubBehaviour(componentAgeMonitor);
 		functionality.addSubBehaviour(reportHealth);
 
 		addBehaviour(functionality);
 
-		// Adding a listener to the change in value of the status of simulator 
+		/**
+		 *  Adding a listener to the change in value of the status of simulator 
+		 */
 		statusChangeSupport.addPropertyChangeListener(
 				new SimulatorStatusListener(Simulator.this));
 
@@ -209,7 +203,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		}
 	}
 
-	public static void addComponent(Component c) {
+	public void addComponent(Component c) {
 		myComponents.add(c);
 	}
 
@@ -250,9 +244,187 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		}
 	}
 
+	public String getID_Simulator() {
+		return ID_Simulator;
+	}
+
+	public void setID_Simulator(String iD_Simulator) {
+		this.ID_Simulator = iD_Simulator;
+	}
+
+	public double getPercentProcessingTimeVariation() {
+		return percentProcessingTimeVariation;
+	}
+
+	public void setPercentProcessingTimeVariation(
+			double percentProcessingTimeVariation) {
+		this.percentProcessingTimeVariation = percentProcessingTimeVariation;
+	}
+
+	public double getMeanLoadingTime() {
+		return meanLoadingTime;
+	}
+
+	public void setMeanLoadingTime(double meanLoadingTime) {
+		this.meanLoadingTime = meanLoadingTime;
+	}
+
+	public double getSdLoadingTime() {
+		return sdLoadingTime;
+	}
+
+	public void setSdLoadingTime(double sdLoadingTime) {
+		this.sdLoadingTime = sdLoadingTime;
+	}
+
+	public double getMeanUnloadingTime() {
+		return meanUnloadingTime;
+	}
+
+	public void setMeanUnloadingTime(double meanUnloadingTime) {
+		this.meanUnloadingTime = meanUnloadingTime;
+	}
+
+	public double getSdUnloadingTime() {
+		return sdUnloadingTime;
+	}
+
+	public void setSdUnloadingTime(double sdUnloadingTime) {
+		this.sdUnloadingTime = sdUnloadingTime;
+	}
+
+	public double getFractionDefective() {
+		return fractionDefective;
+	}
+
+	public void setFractionDefective(double fractionDefective) {
+		this.fractionDefective = fractionDefective;
+	}
+
+	public double getMean_shiftInMean() {
+		return mean_shiftInMean;
+	}
+
+	public void setMean_shiftInMean(double mean_shiftInMean) {
+		this.mean_shiftInMean = mean_shiftInMean;
+	}
+
+	public double getSd_shiftInMean() {
+		return sd_shiftInMean;
+	}
+
+	public void setSd_shiftInMean(double sd_shiftInMean) {
+		this.sd_shiftInMean = sd_shiftInMean;
+	}
+
+	public double getMean_shiftInSd() {
+		return mean_shiftInSd;
+	}
+
+	public void setMean_shiftInSd(double mean_shiftInSd) {
+		this.mean_shiftInSd = mean_shiftInSd;
+	}
+
+	public double getSd_shiftInSd() {
+		return sd_shiftInSd;
+	}
+
+	public void setSd_shiftInSd(double sd_shiftInSd) {
+		this.sd_shiftInSd = sd_shiftInSd;
+	}
+
+	public double getMean_shift() {
+		return mean_shift;
+	}
+
+	public void setMean_shift(double mean_shift) {
+		this.mean_shift = mean_shift;
+	}
+
+	public double getSd_shift() {
+		return sd_shift;
+	}
+
+	public void setSd_shift(double sd_shift) {
+		this.sd_shift = sd_shift;
+	}
+
+	public double getRateShift() {
+		return rateProcessShift;
+	}
+
+	public void setRateShift(double rateShift) {
+		this.rateProcessShift = rateShift;
+	}
+
+	public double getMean_shiftInMeanParam() {
+		return mean_shiftInMeanParam;
+	}
+
+	public void setMean_shiftInMeanParam(double mean_shiftInMeanParam) {
+		this.mean_shiftInMeanParam = mean_shiftInMeanParam;
+	}
+
+	public double getSd_shiftInMeanParam() {
+		return sd_shiftInMeanParam;
+	}
+
+	public void setSd_shiftInMeanParam(double sd_shiftInMeanParam) {
+		this.sd_shiftInMeanParam = sd_shiftInMeanParam;
+	}
+
+	public double getMean_shiftInSdParam() {
+		return mean_shiftInSdParam;
+	}
+
+	public void setMean_shiftInSdParam(double mean_shiftInSdParam) {
+		this.mean_shiftInSdParam = mean_shiftInSdParam;
+	}
+
+	public double getSd_shiftSdparam() {
+		return sd_shiftInSdparam;
+	}
+
+	public void setSd_shiftSdparam(double sd_shiftSdparam) {
+		this.sd_shiftInSdparam = sd_shiftSdparam;
+	}
+
+	public double getMean_shiftParam() {
+		return mean_shiftParam;
+	}
+
+	public void setMean_shiftParam(double mean_shiftParam) {
+		this.mean_shiftParam = mean_shiftParam;
+	}
+
+	public double getSd_shiftparam() {
+		return sd_shiftparam;
+	}
+
+	public void setSd_shiftparam(double sd_shiftparam) {
+		this.sd_shiftparam = sd_shiftparam;
+	}
+
+	public ArrayList<Parameter> getMachineParameters() {
+		return machineParameters;
+	}
+
+	public void addMachineParameter(Parameter p ){
+		this.machineParameters.add(p);
+	}
+
+	public ArrayList<ArrayList<RootCause>> getmParameterRootcauses() {
+		return mParameterRootcauses;
+	}
+
+	public void addmParameterRootCause(ArrayList<RootCause> rootcause) {
+		this.mParameterRootcauses.add(rootcause);
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().
+				append(ID_Simulator).
 				append(myComponents).
 				hashCode();
 	}
@@ -268,6 +440,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		if(obj instanceof Simulator){
 			final Simulator other = (Simulator) obj;
 			return new EqualsBuilder()
+			.append(ID_Simulator, other.ID_Simulator)
 			.append(myComponents, other.myComponents)
 			.isEquals();
 		} else {

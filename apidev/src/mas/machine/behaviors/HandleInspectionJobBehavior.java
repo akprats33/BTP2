@@ -42,7 +42,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 	public void action() {
 		switch(step){
 		case 0:
-			mySim = (Simulator) getDataStore().get(Simulator.mySimulator);
+			mySim = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 			mySim.setStatus(MachineStatus.UNDER_MAINTENANCE);
 			inspectionStartMsg =  new ACLMessage(ACLMessage.REQUEST);
 			inspectionStartMsg.setContent("Inspection about to start.");

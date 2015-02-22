@@ -17,18 +17,19 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 	private transient MessageTemplate jobMsgTemplate;
 	private transient Logger log;
 	private transient job jobToProcess;
-	private transient Simulator sim;
+	private transient Simulator machineSimulator;
 
 	public AcceptJobBehavior() {
 		log = LogManager.getLogger();
 		jobMsgTemplate = MessageTemplate.
 				MatchConversationId(MessageIds.SendJob);
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
 	public void action() {
-		sim = (Simulator) getDataStore().get(Simulator.mySimulator);
-		if(sim.getStatus() != MachineStatus.FAILED) {
+		
+		if(machineSimulator.getStatus() != MachineStatus.FAILED) {
 			try {
 //				log.info("Job accepter running");
 				ACLMessage msg = myAgent.receive(jobMsgTemplate);

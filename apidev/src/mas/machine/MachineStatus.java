@@ -5,5 +5,4 @@ public enum MachineStatus {
 	PROCESSING,
 	FAILED,
 	UNDER_MAINTENANCE
-	
 }

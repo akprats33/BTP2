@@ -29,12 +29,17 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 	private  ArrayList<ArrayList<JTextField> > txt_sdShiftParameters = null;
 	private  ArrayList<ArrayList<JCheckBox> > chk_paramsAffected = null;
 	private  int numRootCauses = 0;
+	private int numMachineParameters = 0;
 	private Logger log;
 	public boolean autoInput = true;
+	private Simulator machineSimulator;
 
 	@Override
 	public void action() {
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 		log = LogManager.getLogger();
+		numMachineParameters = machineSimulator.getMachineParameters().size();
+		
 		final JFrame win = new JFrame();
 		final JPanel firstPanel = new JPanel (new MigLayout());
 
@@ -73,7 +78,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 					chk_paramsAffected = new ArrayList<ArrayList<JCheckBox>>();
 
 					Font headingFont = new Font("CalibriLight",Font.BOLD,20);
-					
+
 					for(int causeIndex = 0 ; causeIndex < numRootCauses ; causeIndex++ ) {
 
 						lbl_rootCause.add(new JLabel("Root Cause "+ (causeIndex + 1)) );
@@ -89,28 +94,28 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 						tempMeanShift.clear();
 						tempSdShift.clear();
 
-						for (paramIndex = 0 ; paramIndex < Simulator.params.size() ; paramIndex++) {
+						for (paramIndex = 0 ; paramIndex < numMachineParameters ; paramIndex++) {
 
 							tempChecklist.add(new JCheckBox(
-									Simulator.params.get(paramIndex).getname()));
+									machineSimulator.getMachineParameters().get(paramIndex).getname()));
 							tempMeanShift.add(new JTextField(
 									"0",10) );
 							tempSdShift.add(new JTextField(
 									"1",10));
 						}
-						
+
 						chk_paramsAffected.add(tempChecklist);
 						txt_meanShiftParameters.add(tempMeanShift);
 						txt_sdShiftParameters.add(tempSdShift);
 
-						for (paramIndex = 0 ; paramIndex < Simulator.params.size() ; paramIndex++) {
+						for (paramIndex = 0 ; paramIndex < numMachineParameters ; paramIndex++) {
 
 							chk_paramsAffected.get(causeIndex).get(paramIndex).
 							addActionListener(new ActionListener() {
 								@Override
 								public void actionPerformed(ActionEvent e) {
 									for(int i = 0 ; i < numRootCauses ; i++) {
-										for (int j=0 ; j < Simulator.params.size() ; j++) {
+										for (int j=0 ; j < numMachineParameters ; j++) {
 											if(e.getSource() == chk_paramsAffected.get(i).get(j)) {
 
 												if(chk_paramsAffected.get(i).get(j).isSelected()){
@@ -144,10 +149,9 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							Simulator.rootcauses = new ArrayList<ArrayList<RootCause>>();
 							for(int i= 0 ; i < numRootCauses ; i++) {
 								ArrayList<RootCause> templist = new ArrayList<RootCause>();
-								for (int j = 0 ; j < Simulator.params.size() ; j++) {
+								for (int j = 0 ; j < numMachineParameters ; j++) {
 									if(chk_paramsAffected.get(i).get(j).isSelected()) {
 										double a,b;
 										a = Double.parseDouble(txt_meanShiftParameters.get(i).get(j).getText());
@@ -156,7 +160,7 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 										templist.add(temp);
 									}
 								}
-								Simulator.rootcauses.add(templist);
+								machineSimulator.addmParameterRootCause(templist);
 							}
 							win.dispose();
 						}
@@ -169,6 +173,6 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 		if(autoInput)
 			btn_submit.doClick();
 
-//		log.info("Root cause input completed");
+		//		log.info("Root cause input completed");
 	}
 }

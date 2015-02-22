@@ -46,7 +46,7 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
-				ZoneDataName2};
+				ZoneDataName2 };
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 

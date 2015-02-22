@@ -1,15 +1,17 @@
 package mas.maintenance.agent;
 
 import jade.core.AID;
-
 import java.util.HashSet;
 import java.util.Set;
-
 import mas.maintenance.goal.CorrectiveMachineComponentsRepairGoal;
 import mas.maintenance.goal.MaintenanceStartSendInfoGoal;
+import mas.maintenance.goal.RegisterMaintenanceAgentServiceGoal;
+import mas.maintenance.goal.RegisterMaintenanceAgentToBlackboardGoal;
 import mas.maintenance.goal.machineHealthCheckGoal;
 import mas.maintenance.plan.CorrectiveMachineComponentsRepairPlan;
 import mas.maintenance.plan.MaintenanceStartSendInfoPlan;
+import mas.maintenance.plan.RegisterMaintenanceAgentServicePlan;
+import mas.maintenance.plan.RegisterMaintenanceAgentToBlackboardPlan;
 import mas.maintenance.plan.machineHealthCheckPlan;
 import mas.util.ID;
 import bdi4jade.belief.Belief;
@@ -20,9 +22,6 @@ import bdi4jade.util.plan.SimplePlan;
 
 public class RootMaintenanceBasicCapability extends Capability{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public Set<Belief<?>> getBeliefs() {
@@ -49,18 +48,26 @@ public class RootMaintenanceBasicCapability extends Capability{
 
 		plans.add(new SimplePlan(CorrectiveMachineComponentsRepairGoal.class,
 				CorrectiveMachineComponentsRepairPlan.class));
-		
+
 		plans.add(new SimplePlan(MaintenanceStartSendInfoGoal.class,
 				MaintenanceStartSendInfoPlan.class));
+
+		plans.add(new SimplePlan(RegisterMaintenanceAgentServiceGoal.class,
+				RegisterMaintenanceAgentServicePlan.class));
+
+		plans.add(new SimplePlan(RegisterMaintenanceAgentToBlackboardGoal.class,
+				RegisterMaintenanceAgentToBlackboardPlan.class));
 
 		return plans;
 	}	
 
 	@Override
 	protected void setup() {
+		myAgent.addGoal(new RegisterMaintenanceAgentServiceGoal());
+		myAgent.addGoal(new RegisterMaintenanceAgentToBlackboardGoal());
+
 		myAgent.addGoal(new machineHealthCheckGoal());
 		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal());
 		myAgent.addGoal(new MaintenanceStartSendInfoGoal());
 	}
-
 }

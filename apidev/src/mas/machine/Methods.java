@@ -16,7 +16,12 @@ public class Methods implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	//generating random number array following a normal distribution with mean and sd
+	/**
+	 * @param mean
+	 * @param sd
+	 * @param arraySize
+	 * @return random number array following a normal distribution with mean and sd
+	 */
 	public static double[] normalRandom(double mean, double sd, int arraySize) {
 		RandomGenerator rg = new JDKRandomGenerator();
 		GaussianRandomGenerator g= new GaussianRandomGenerator(rg);
@@ -27,7 +32,11 @@ public class Methods implements Serializable {
 		return a;
 	}
 
-	//gives random number following nomral distribution with mean and sd
+	/**
+	 * @param mean
+	 * @param sd
+	 * @return a random number with mean 'mean' and standard deviation 'sd'
+	 */
 	public static double normalRandom(double mean, double sd) {				
 		RandomGenerator rg = new JDKRandomGenerator();
 		GaussianRandomGenerator g= new GaussianRandomGenerator(rg);
@@ -35,7 +44,12 @@ public class Methods implements Serializable {
 		return a;
 	}
 
-	//generate random number array following exponential distribution
+	/**
+	 * 
+	 * @param rate
+	 * @param sizeArray
+	 * @return random number array following exponential distribution
+	 */
 	public static double[] rexp(double rate,int sizeArray) {
 		ExponentialDistribution g=new ExponentialDistribution(rate);
 		int i=0;
@@ -47,7 +61,11 @@ public class Methods implements Serializable {
 		return arr;
 	}
 
-	//generate random number(between 0 and 1) following discrete distribution of weights
+	/**
+	 * @param numSamples
+	 * @param weights
+	 * @return random number(between 0 and 1) following discrete distribution of weights
+	 */
 	public static int[] runif(int numSamples,int[] weights) {
 		
 		int[] numsToGenerate = new int[] {0 ,1  , 2  ,  3,  4 ,  5,    6,  7 ,  8 , 9 };

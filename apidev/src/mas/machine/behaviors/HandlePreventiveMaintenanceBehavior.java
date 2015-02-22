@@ -45,7 +45,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 	public void action() {
 		switch(step) {
 		case 0 :
-			mySim = (Simulator) getDataStore().get(Simulator.mySimulator);
+			mySim = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 			mySim.setStatus(MachineStatus.UNDER_MAINTENANCE);
 			maintenanceStartMsg = new ACLMessage(ACLMessage.REQUEST);
 			maintenanceStartMsg.setConversationId(MessageIds.machinePrevMaintenanceStart);

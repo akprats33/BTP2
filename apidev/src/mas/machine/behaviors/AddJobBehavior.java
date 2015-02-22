@@ -21,14 +21,15 @@ public class AddJobBehavior extends Behaviour {
 	private int step = 0;
 	// time step in milliseconds
 	private long TIME_STEP = 30;
-	
+
 	private double processingTime;
-	private Simulator sim;
+	private Simulator machineSimulator;
 
 	public AddJobBehavior(job comingJob) {
 		this.comingJob = comingJob;
 		this.IsJobComplete = false;
 		log = LogManager.getLogger();
+		this.machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	public void action() {
@@ -43,11 +44,11 @@ public class AddJobBehavior extends Behaviour {
 
 				double newProcessingTime =
 						Methods.normalRandom(comingJob.getProcessingTime(),
-								comingJob.getProcessingTime()*Simulator.percent )+
-								Methods.getLoadingTime(Simulator.meanLoadingTime,
-										Simulator.sdLoadingTime) +
-										Methods.getunloadingTime(Simulator.meanUnloadingTime,
-												Simulator.sdUnloadingTime);
+								comingJob.getProcessingTime()*machineSimulator.getPercentProcessingTimeVariation())+
+								Methods.getLoadingTime(machineSimulator.getMeanLoadingTime(),
+										machineSimulator.getSdLoadingTime()) +
+										Methods.getunloadingTime(machineSimulator.getMeanUnloadingTime(),
+												machineSimulator.getSdUnloadingTime());
 
 				comingJob.setProcessingTime((long)newProcessingTime) ;
 
@@ -56,9 +57,9 @@ public class AddJobBehavior extends Behaviour {
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 						"processing time : "+comingJob.getProcessingTime());
 
-				sim = (Simulator) getDataStore().get(Simulator.mySimulator);
+				machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 				//				log.info("Simulator is " + sim);
-				sim.setStatus(MachineStatus.PROCESSING);
+				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
 				comingJob.setStartTime(new Date(System.currentTimeMillis()));
 
@@ -86,15 +87,15 @@ public class AddJobBehavior extends Behaviour {
 
 		case 1:
 			if( processingTime > 0 &&
-					sim.getStatus() != MachineStatus.FAILED ) {
+					machineSimulator.getStatus() != MachineStatus.FAILED ) {
 
 				processingTime = processingTime - TIME_STEP; 
-				sim.AgeComponents(TIME_STEP);
+				machineSimulator.AgeComponents(TIME_STEP);
 				block(TIME_STEP); 
 
 			} else if( processingTime <= 0) {
 				step = 2;
-			} else if(sim.getStatus() != MachineStatus.FAILED) {
+			} else if(machineSimulator.getStatus() != MachineStatus.FAILED) {
 				block(TIME_STEP); 
 			}
 
@@ -105,9 +106,9 @@ public class AddJobBehavior extends Behaviour {
 				IsJobComplete = true;
 				log.info("Job No:" + comingJob.getJobNo() + " completed");
 				myAgent.addBehaviour(new ProcessJobBehavior(comingJob));
-				sim.setStatus(MachineStatus.IDLE);
+				machineSimulator.setStatus(MachineStatus.IDLE);
 			}
-			
+
 			break;
 		}
 	}
