@@ -5,8 +5,6 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
-import jade.core.behaviours.TickerBehaviour;
-import jade.lang.acl.ACLMessage;
 import jade.util.leap.Serializable;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -17,22 +15,25 @@ import java.util.ArrayList;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import mas.machine.behaviors.AcceptJobBehavior;
-import mas.machine.behaviors.Connect2BlackBoardBehvaior;
+import mas.machine.behaviors.RegisterMachine2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
 import mas.machine.behaviors.LoadComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
 import mas.machine.behaviors.Register2DF;
+import mas.machine.behaviors.ReportHealthBehavior;
 import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
-import mas.util.MessageIds;
 
 public class Simulator extends Agent implements IMachine,Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// time step in milliseconds
+	public static int TIME_STEP = 30;
+	
 	// ID of this simulator
 	public String ID_Simulator;
 
@@ -141,7 +142,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		loadMachineParams = new LoadMachineParameterBehavior();
 		loadRootCause = new GetRootCauseDataBehavior();
 		registerthis = new Register2DF();
-		connect2Blackboard = new Connect2BlackBoardBehvaior();
+		connect2Blackboard = new RegisterMachine2BlackBoardBehvaior();
 
 		loadData.addSubBehaviour(loadSimulatorParams);
 		loadData.addSubBehaviour(loadComponentData);
@@ -158,7 +159,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		functionality.getDataStore().put(simulatorStoreName, Simulator.this);
 
 		acceptIncomingJobs = new AcceptJobBehavior();
-		reportHealth = new reportHealthBehavior(this, healthReportTimeMillis);
+		reportHealth = new ReportHealthBehavior(this, healthReportTimeMillis);
 
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
@@ -454,29 +455,5 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	}
 	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-	}
-
-	public class reportHealthBehavior extends TickerBehaviour {
-
-		private static final long serialVersionUID = 1L;
-		private ACLMessage health;
-		public reportHealthBehavior(Agent a, long period) {
-			super(a, period);
-			health = new ACLMessage(ACLMessage.INFORM);
-			health.setConversationId(MessageIds.MaintMachineHealth);
-			//			health.addReceiver(Simulator.blackboardAgent);
-			health.addReceiver(new AID("maint",AID.ISLOCALNAME));
-		}
-
-		@Override
-		protected void onTick() {
-			try {
-				health.setContentObject(Simulator.this);
-				myAgent.send(health);
-				System.out.println("reporting health to maitenance agent");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

@@ -1,10 +1,11 @@
 package mas.machine.behaviors;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import mas.machine.Simulator;
+import mas.util.ID;
 import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import jade.core.behaviours.Behaviour;
@@ -17,16 +18,17 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 	private Logger log;
 	private int step = 0;
 	private MessageTemplate correctiveDataMsgTemplate;
-	private ACLMessage correctiveStartMsg;
 	private ACLMessage correctiveDataMsg;
 	private StringTokenizer token;
 	private long repairTime;
 	private ArrayList<Integer> componentsToRepair;
-	private Simulator sim;
+	private Simulator machineSimulator;
+	private long remaintingTimeMillis;
 
 	public HandleSimulatorFailedBehavior() {
 		log = LogManager.getLogger();
-		this.sim = (Simulator) myAgent;
+		this.machineSimulator = (Simulator) getParent().
+				getDataStore().get(Simulator.simulatorStoreName);
 		correctiveDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.machinePrevMaintenanceData);
 	}
@@ -35,25 +37,30 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 	public void action() {
 		switch(step) {
 		case 0:
-			correctiveStartMsg = new ACLMessage(ACLMessage.REQUEST);
-			try {
-				correctiveStartMsg.setContentObject(sim);
-				correctiveStartMsg.setConversationId(MessageIds.Failed);
-				correctiveStartMsg.addReceiver(Simulator.blackboardAgent);
-				myAgent.send(correctiveStartMsg);
-				step = 1;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			/**
+			 * update zone data for machine's failure
+			 */
+			ZoneDataUpdate machineFailureUpdate = new ZoneDataUpdate(
+					ID.Machine.ZoneData.myHealth,
+					machineSimulator);
+
+			machineFailureUpdate.send(Simulator.blackboardAgent ,
+					machineFailureUpdate, myAgent);
+			step = 1;
 
 			break;
 		case 1:
+			/**
+			 * receive data for repairing the simulator
+			 */
 			correctiveDataMsg = myAgent.receive(correctiveDataMsgTemplate);
 			if(correctiveDataMsg != null) {
 
 				token = new StringTokenizer(correctiveDataMsg.getContent());
 				repairTime = Long.parseLong(token.nextToken());
-				block(repairTime);
+				remaintingTimeMillis = repairTime;
+//				block(repairTime);
 				componentsToRepair = new ArrayList<Integer>();
 
 				while(token.hasMoreTokens()) {
@@ -65,17 +72,29 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 				block();
 			}
 			break;
-			
+
+		case 2:
+			/**
+			 * keep the machine blocked for the required repairing time
+			 */
+			if(remaintingTimeMillis >= 0){
+				
+				remaintingTimeMillis = remaintingTimeMillis - Simulator.TIME_STEP;
+				block(Simulator.TIME_STEP);
+				
+			} else if( remaintingTimeMillis <= 0) {
+				step = 3;
+			}
 		case 3:
-			sim.repair(componentsToRepair);
-			step = 3;
+			machineSimulator.repair(componentsToRepair);
+			step = 4;
 			break;
 		}
 	}
 
 	@Override
 	public boolean done() {
-		return step >= 3;
+		return step > 3;
 	}
 
 }

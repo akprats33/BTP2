@@ -66,6 +66,7 @@ public class ID implements Serializable{
 			public static final String WaitingTime = "LSA_WaitingTime";
 			public static final String bidForJob = "LSA_BidForJob";
 			public static final String jobQueue = "LSA_JobQueueFormyMachine";
+			public static final String jobForMachine = "LSA_jobForMachine";
 		}
 	}
 
@@ -102,6 +103,7 @@ public class ID implements Serializable{
 		public class ZoneData {
 			public static final String PMdata = "Maintenance_preventiveMaintenanceData";
 			public static final String correctiveMaintdata = "Maintenance_correctiveMaintenancedata";
+			public static final String InspectionData = "Maintenance_inspectionData";
 		}
 
 		public class BeliefBase {
@@ -124,6 +126,9 @@ public class ID implements Serializable{
 		public class ZoneData{
 			public static final String myHealth ="machine_health";
 			public static final String finishedJob ="machine_finishedJob";
+			public static final String maintenanceStart ="machine_maintenanceStart";
+			public static final String inspectionStart ="machine_inspectionStart";
+			public static final String machineFailures ="machine_machineFailures";
 		}
 	}
 }

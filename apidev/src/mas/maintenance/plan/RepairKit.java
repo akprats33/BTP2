@@ -1,7 +1,6 @@
 package mas.maintenance.plan;
 
 import java.util.Random;
-
 import mas.MAS;
 import mas.machine.IMachine;
 import mas.machine.component.IComponent;

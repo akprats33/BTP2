@@ -5,7 +5,9 @@ import java.util.StringTokenizer;
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
+import mas.util.ID;
 import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,11 +24,10 @@ public class HandleInspectionJobBehavior extends Behaviour{
 	private Logger log;
 	private int step = 0;
 	private MessageTemplate InspectionDataMsgTemplate;
-	private ACLMessage inspectionStartMsg;
 	private ACLMessage inspectioneDataMsg;
 	private String inspectionData;
 	private StringTokenizer token;
-	private Simulator mySim;
+	private Simulator machineSimulator;
 	
 	public HandleInspectionJobBehavior(job comingJob) {
 		
@@ -35,24 +36,26 @@ public class HandleInspectionJobBehavior extends Behaviour{
 		log = LogManager.getLogger();
 		InspectionDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.machinePrevMaintenanceData);
-
+		
+		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
 	public void action() {
 		switch(step){
 		case 0:
-			mySim = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
-			mySim.setStatus(MachineStatus.UNDER_MAINTENANCE);
-			inspectionStartMsg =  new ACLMessage(ACLMessage.REQUEST);
-			inspectionStartMsg.setContent("Inspection about to start.");
-			inspectionStartMsg.addReceiver(Simulator.blackboardAgent);
-			inspectionStartMsg.setConversationId(MessageIds.machineInspectionStart);
-			myAgent.send(inspectionStartMsg);
-			step = 1;
-			log.info("recieving inspection data for machine");
+			ZoneDataUpdate inspectionZoneUpdate = new ZoneDataUpdate(
+					ID.Machine.ZoneData.inspectionStart,
+					comingJob);
 
+			inspectionZoneUpdate.send(Simulator.blackboardAgent ,
+					inspectionZoneUpdate, myAgent);
+			
+			log.info("recieving inspection data for machine");
+			machineSimulator.setStatus(MachineStatus.UNDER_MAINTENANCE);
+			step = 1;
 			break;
+			
 		case 1:
 			inspectioneDataMsg = myAgent.receive(InspectionDataMsgTemplate);
 			
@@ -62,7 +65,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 				token = new StringTokenizer(inspectionData);
 				long procTime = Long.parseLong(token.nextToken());	
 				comingJob.setProcessingTime(procTime);
-				step++;
+				step ++;
 				log.info("Starting inspection of machine");
 			}
 			else

@@ -39,7 +39,7 @@ public class MessageIds {
 
 	public static String BidForJob ="Bid-For-Job";
 
-	public static String MachineFailed = "Failure-of-Machine";
+	public static String MachineFailure = "Failure-of-Machine";
 
 	public static String WaitTime = "MaxWaitingTimeForJob";
 
@@ -64,7 +64,7 @@ public class MessageIds {
 	public static String completedJobFromMachine = "completedJobFromMachine";
 	
 	public static String failEnd = "Fail-End";
-	public static String MaintMachineHealth = "Machine-State";
+	public static String machineSimulatorHealth = "Machine-Simualtor-State";
 	public static String MaintMachineRepaired = "Machine-failure-End";
 	public static String maintenanceJob = "Maintenance-Job";
 	public static String maintenanceJobStartData = "maintenanceJobStartData";

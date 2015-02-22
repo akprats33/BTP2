@@ -70,6 +70,6 @@ public class machineHealthCheckPlan extends Behaviour implements PlanBody {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
 		myMachine = null;
-		machineHealth = MessageTemplate.MatchConversationId(MessageIds.MaintMachineHealth);
+		machineHealth = MessageTemplate.MatchConversationId(MessageIds.machineSimulatorHealth);
 	}
 }

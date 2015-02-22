@@ -9,7 +9,7 @@ import mas.customer.goal.GenerateJobGoal;
 import mas.customer.goal.RegisterAgentToBlackboardGoal;
 import mas.customer.goal.dispatchJobGoal;
 import mas.customer.plan.DispatchJobPlan;
-import mas.customer.plan.RegisterAgentToBlackboardPlan;
+import mas.customer.plan.RegisterCustomerAgentToBlackboardPlan;
 import mas.customer.plan.jobGeneratorPlan;
 import mas.util.ID;
 import bdi4jade.belief.Belief;
@@ -53,7 +53,7 @@ public class parentBasicCapability extends Capability {
 		Set<Plan> plans = new HashSet<Plan>();
 		
 		plans.add(new SimplePlan(RegisterAgentToBlackboardGoal.class,
-					RegisterAgentToBlackboardPlan.class));
+					RegisterCustomerAgentToBlackboardPlan.class));
 
 		plans.add(new SimplePlan(GenerateJobGoal.class,
 				jobGeneratorPlan.class));

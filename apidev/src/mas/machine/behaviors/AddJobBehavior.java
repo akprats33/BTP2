@@ -1,8 +1,9 @@
 package mas.machine.behaviors;
 
+import jade.core.behaviours.Behaviour;
+
 import java.util.Date;
 
-import jade.core.behaviours.Behaviour;
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Methods;
@@ -19,9 +20,6 @@ public class AddJobBehavior extends Behaviour {
 	private String maintJobID = "0";
 	private Logger log;
 	private int step = 0;
-	// time step in milliseconds
-	private long TIME_STEP = 30;
-
 	private double processingTime;
 	private Simulator machineSimulator;
 
@@ -89,14 +87,14 @@ public class AddJobBehavior extends Behaviour {
 			if( processingTime > 0 &&
 					machineSimulator.getStatus() != MachineStatus.FAILED ) {
 
-				processingTime = processingTime - TIME_STEP; 
-				machineSimulator.AgeComponents(TIME_STEP);
-				block(TIME_STEP); 
+				processingTime = processingTime - Simulator.TIME_STEP; 
+				machineSimulator.AgeComponents(Simulator.TIME_STEP);
+				block(Simulator.TIME_STEP); 
 
 			} else if( processingTime <= 0) {
 				step = 2;
-			} else if(machineSimulator.getStatus() != MachineStatus.FAILED) {
-				block(TIME_STEP); 
+			} else if(machineSimulator.getStatus() == MachineStatus.FAILED) {
+				block(Simulator.TIME_STEP); 
 			}
 
 			break;
