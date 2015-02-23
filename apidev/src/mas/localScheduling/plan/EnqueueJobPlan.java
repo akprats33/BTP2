@@ -48,10 +48,10 @@ public class EnqueueJobPlan extends OneShotBehaviour implements PlanBody {
 		 * 
 		 */
 		BeliefSet<ArrayList<job>> JobQueue = 
-				new TransientBeliefSet<ArrayList<job>>(ID.LocalScheduler.BeliefBase.jobQueue);;
+				new TransientBeliefSet<ArrayList<job>>(ID.LocalScheduler.BeliefBaseConst.jobQueue);;
 				
 		JobQueue.addValue(solution);
-		bfBase.updateBelief(ID.LocalScheduler.BeliefBase.jobQueue, solution);
+		bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue, solution);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class EnqueueJobPlan extends OneShotBehaviour implements PlanBody {
 		}
 		
 		jobQueue = (ArrayList<job>) bfBase.
-					getBelief(ID.LocalScheduler.BeliefBase.jobQueue).
+					getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 					getValue();
 		
 		jobQueue.add(j);

@@ -49,7 +49,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		bfBase = pInstance.getBeliefBase();
 		
 		this.blackboard = (AID) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBase.blackAgent).
+				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
 		
 		msg = ((MessageGoal)pInstance.getGoal()).getMessage();
@@ -79,7 +79,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 
 	private void setBid(job j){
 		jobQueue = (ArrayList<job>) bfBase.
-						getBelief(ID.LocalScheduler.BeliefBase.jobQueue).
+						getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 						getValue();
 		
 		long tim = System.currentTimeMillis() / 1000 ;

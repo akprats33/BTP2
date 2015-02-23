@@ -22,7 +22,7 @@ public class CustomerAgent extends AbstractCustomerAgent {
 
 		AID bba = AgentUtil.findBlackboardAgent(this);
 		bCap.getBeliefBase().updateBelief(
-				ID.Customer.BeliefBase.blackAgent, bba);
+				ID.Customer.BeliefBaseConst.blackboardAgent, bba);
 		
 	}
 }

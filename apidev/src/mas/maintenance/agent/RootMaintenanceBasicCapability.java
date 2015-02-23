@@ -27,10 +27,10 @@ public class RootMaintenanceBasicCapability extends Capability{
 	public Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
-		Belief<AID> bboard = new TransientBelief<AID>(ID.Maintenance.BeliefBase.blackAgent);
-		Belief<AID> myMachine = new TransientBelief<AID>(ID.Maintenance.BeliefBase.machine);
-		Belief<AID> mygsAgent = new TransientBelief<AID>(ID.Maintenance.BeliefBase.globalSchAgent);
-		Belief<AID> maintJob  = new TransientBelief<AID>(ID.Maintenance.BeliefBase.maintenanceJob);
+		Belief<AID> bboard = new TransientBelief<AID>(ID.Maintenance.BeliefBaseConst.blackboardAgent);
+		Belief<AID> myMachine = new TransientBelief<AID>(ID.Maintenance.BeliefBaseConst.machine);
+		Belief<AID> mygsAgent = new TransientBelief<AID>(ID.Maintenance.BeliefBaseConst.globalSchAgent);
+		Belief<AID> maintJob  = new TransientBelief<AID>(ID.Maintenance.BeliefBaseConst.maintenanceJob);
 
 		beliefs.add(bboard);
 		beliefs.add(myMachine);

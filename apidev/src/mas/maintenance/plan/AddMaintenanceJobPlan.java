@@ -112,15 +112,15 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 	public void init(PlanInstance pInstance) {
 		this.bfBase = pInstance.getBeliefBase();
 		this.myMachine = (IMachine) bfBase.
-				getBelief(ID.Maintenance.BeliefBase.machine).
+				getBelief(ID.Maintenance.BeliefBaseConst.machine).
 				getValue();
 
 		this.maintenanceJob = (job) bfBase.
-				getBelief(ID.Maintenance.BeliefBase.maintenanceJob).
+				getBelief(ID.Maintenance.BeliefBaseConst.maintenanceJob).
 				getValue();
 		
 		this.bAgent = (AID) bfBase.
-						getBelief(ID.Maintenance.BeliefBase.blackAgent).
+						getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgent).
 						getValue();
 
 		this.solver = new RepairKit();

@@ -15,6 +15,10 @@ public class ID implements Serializable{
 		public static final String Service = "blackboard";
 		public static final String LocalName = "blackboard";
 
+		public class BeliefBaseConst{
+			public static final String NoOfMachines="NoOfMachines";
+		}
+		
 		public class ZoneData {
 
 		}
@@ -24,10 +28,10 @@ public class ID implements Serializable{
 		public static final String Service = "customer";
 		public static final String LocalName = "customer";
 
-		public class BeliefBase {
+		public class BeliefBaseConst {
 			public static final String JobList = "customerBeliefBase_JobList";
 			public static final String JOB_GENERATOR = "customerBeliefBase_JOB-GENERATOR";
-			public static final String blackAgent = "customerBeliefBase_blackboard-agent";
+			public static final String blackboardAgent = "customerBeliefBase_blackboard-agent";
 			public static final String CURRENT_JOB = "customerBeliefBase_Current-job";
 		}
 		/*		public class Parameters{
@@ -53,8 +57,8 @@ public class ID implements Serializable{
 			public static final String WorkOrder="WorkOrderData";
 		}*/
 
-		public class BeliefBase {
-			public static final String blackAgent = "LSABeliefBase_blackboard-agent";
+		public class BeliefBaseConst {
+			public static final String blackboardAgent = "LSABeliefBase_blackboard-agent";
 			public static final String machine = "LSABeliefBase_machine";
 			public static final String jobQueue = "LSABeliefBase_job-list";
 			public static final String maintAgent = "LSABeliefBase_maintenanceAgent";
@@ -107,8 +111,8 @@ public class ID implements Serializable{
 			public static final String preventiveMaintJob = "Maintenance_preventiveMaintJob";
 		}
 
-		public class BeliefBase {
-			public static final String blackAgent = "Maintenance_blackboard-agent";
+		public class BeliefBaseConst {
+			public static final String blackboardAgent = "Maintenance_blackboard-agent";
 			public static final String machine = "Maintenance_machine";
 			public static final String globalSchAgent = "Maintenance_gsAgent";
 			public static final String dataTracker = "Maintenance_data-tracker";

@@ -50,7 +50,7 @@ public class machineHealthCheckPlan extends CyclicBehaviour implements PlanBody 
 			
 		case 1:
 			log.info("updating belief base of machine's health");
-			bfBase.updateBelief(ID.Maintenance.BeliefBase.machine, myMachine);
+			bfBase.updateBelief(ID.Maintenance.BeliefBaseConst.machine, myMachine);
 			step = 0;
 			break;
 		}

@@ -151,7 +151,7 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 		bfBase = planInstance.getBeliefBase();
 
 		this.blackboard = (AID) bfBase.
-				getBelief(ID.Maintenance.BeliefBase.blackAgent).
+				getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgent).
 				getValue();
 	}
 }

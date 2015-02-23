@@ -52,7 +52,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 		solver = new RepairKit();
 		
 		this.bba = (AID) bfBase.
-				getBelief(ID.Maintenance.BeliefBase.blackAgent).
+				getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgent).
 				getValue();
 	}
 

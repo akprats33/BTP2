@@ -1,21 +1,21 @@
 package mas.globalScheduling.plan;
 
+import jade.core.AID;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
+
 import java.io.IOException;
 
+import mas.globalScheduling.behaviour.WaitTimeBehvr;
+import mas.job.job;
+import mas.util.ID;
+import mas.util.MessageIds;
+import mas.util.ZoneDataUpdate;
 import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
-import jade.core.AID;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.domain.introspection.AddedBehaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.UnreadableException;
-import mas.globalScheduling.behaviour.WaitTime;
-import mas.job.*;
-import mas.util.ID;
-import mas.util.MessageIds;
-import mas.util.ZoneDataUpdate;
 
 public class AskForWaitingTime extends OneShotBehaviour implements PlanBody {
 
@@ -57,7 +57,8 @@ public class AskForWaitingTime extends OneShotBehaviour implements PlanBody {
 		msg.addReceiver(blackboard);
 		myAgent.send(msg);
 		
-		myAgent.addBehaviour(new WaitTime(NoOfMachines,Integer.toString(j.getJobNo())));
+		
+		myAgent.addBehaviour(new WaitTimeBehvr(blackboard, NoOfMachines,Integer.toString(j.getJobNo())));
 	}
 
 }

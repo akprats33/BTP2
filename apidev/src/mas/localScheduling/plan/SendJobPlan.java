@@ -42,11 +42,11 @@ public class SendJobPlan extends OneShotBehaviour implements PlanBody {
 		ACLMessage msg = ((MessageGoal)pInstance.getGoal()).getMessage();
 
 		jobQueue = (ArrayList<job>) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBase.jobQueue).
+				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 				getValue();
 
 		this.blackboard = (AID) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBase.blackAgent).
+				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
 	}
 
@@ -65,7 +65,7 @@ public class SendJobPlan extends OneShotBehaviour implements PlanBody {
 			/**
 			 * update the belief base
 			 */
-			bfBase.updateBelief(ID.LocalScheduler.BeliefBase.jobQueue, jobQueue);		
+			bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue, jobQueue);		
 		}
 	}
 }

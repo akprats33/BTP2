@@ -35,7 +35,7 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 		sTracker.storeJob(j);
 				
 		log.info("updating belief for stats tracker :" + sTracker);
-		bfBase.updateBelief(ID.LocalScheduler.BeliefBase.dataTracker, sTracker);
+		bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker, sTracker);
 	}
 
 	@Override
@@ -52,11 +52,11 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 		}
 		
 		jobQueue = (ArrayList<job>) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBase.jobQueue).
+				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 				getValue();
 		
 		sTracker = (StatsTracker) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBase.dataTracker).
+				getBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker).
 				getValue();
 		
 	}

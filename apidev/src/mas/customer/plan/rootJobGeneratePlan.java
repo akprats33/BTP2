@@ -45,14 +45,14 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	public void action() {
 		this.jGen.readFile();
 		log.info("Job file loaded");
-		bfBase.updateBelief(ID.Customer.BeliefBase.JOB_GENERATOR, jGen);
+		bfBase.updateBelief(ID.Customer.BeliefBaseConst.JOB_GENERATOR, jGen);
 		myAgent.addBehaviour(new TickerBehaviour(myAgent, 1000) {
 			
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTick() {
-				bfBase.updateBelief(ID.Customer.BeliefBase.CURRENT_JOB, jGen.getNextJob());
+				bfBase.updateBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB, jGen.getNextJob());
 				planInstance.dispatchSubgoal(new dispatchJobGoal());
 				reset(getInterArrivalTimeMillis());
 //				log.info("waiting time :"+getInterArrivalTime());

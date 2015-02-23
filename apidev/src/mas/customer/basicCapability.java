@@ -21,7 +21,7 @@ public class basicCapability extends parentBasicCapability{
 				RegisterCustomerAgentToBlackboardPlan.class));
 		
 		Belief<job> currentJob = 
-				new TransientBelief<job>(ID.Customer.BeliefBase.CURRENT_JOB);
+				new TransientBelief<job>(ID.Customer.BeliefBaseConst.CURRENT_JOB);
 				
 		this.getBeliefBase().addBelief(currentJob);
 	}

@@ -33,11 +33,11 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 		//		log.info(bfBase.getBelief(basicCapability.CURR_JOB));
 
 		jobToDispatch = (job) bfBase
-				.getBelief(ID.Customer.BeliefBase.CURRENT_JOB)
+				.getBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB)
 				.getValue();
 
 		this.bba = (AID) bfBase
-				.getBelief(ID.Customer.BeliefBase.blackAgent)
+				.getBelief(ID.Customer.BeliefBaseConst.blackboardAgent)
 				.getValue();
 	}
 

@@ -40,9 +40,9 @@ public class parentBasicCapability extends Capability {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
 		Belief<JobGeneratorIFace> generator = 
-				new TransientBelief<JobGeneratorIFace>(ID.Customer.BeliefBase.JOB_GENERATOR);
+				new TransientBelief<JobGeneratorIFace>(ID.Customer.BeliefBaseConst.JOB_GENERATOR);
 		
-		Belief<AID> bboard = new TransientBelief<AID>(ID.Customer.BeliefBase.blackAgent);
+		Belief<AID> bboard = new TransientBelief<AID>(ID.Customer.BeliefBaseConst.blackboardAgent);
 		
 		beliefs.add(generator);
 		beliefs.add(bboard);

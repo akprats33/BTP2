@@ -49,22 +49,22 @@ public class AbstractbasicCapability extends Capability {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
 		Belief<AID> bboard = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBase.blackAgent);
+				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
 
 		Belief<AID> myMachine = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBase.machine);
+				ID.LocalScheduler.BeliefBaseConst.machine);
 
 		Belief<AID> myMcMaintAgent = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBase.maintAgent);
+				ID.LocalScheduler.BeliefBaseConst.maintAgent);
 
 		Belief<AID> mygsAgent = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBase.globalSchAgent);
+				ID.LocalScheduler.BeliefBaseConst.globalSchAgent);
 
 		Belief<StatsTracker> dtrack = new TransientBelief<StatsTracker>(
-				ID.LocalScheduler.BeliefBase.dataTracker);
+				ID.LocalScheduler.BeliefBaseConst.dataTracker);
 
 		Belief<ArrayList<job> > jobSet = new TransientBelief<ArrayList<job> >(
-				ID.LocalScheduler.BeliefBase.jobQueue);
+				ID.LocalScheduler.BeliefBaseConst.jobQueue);
 
 		beliefs.add(bboard);
 		beliefs.add(jobSet);

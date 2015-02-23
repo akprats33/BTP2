@@ -18,6 +18,9 @@ import java.util.Set;
 
 
 
+
+
+import mas.globalScheduling.goal.GetNoOfMachinesGoal;
 import mas.globalScheduling.goal.RegisterAgentGoal;
 import mas.globalScheduling.goal.RegisterServiceGoal;
 import mas.globalScheduling.goal.RegisterWithBBGoal;
@@ -55,18 +58,16 @@ public abstract class AbstractGSCapability  extends Capability {
 		BeliefSet<AID> mSet = 
 				new TransientBeliefSet<AID>(ID.Blackboard.LocalName);
 				
-		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<>(ID.Machine.LocalName);//no of machines==no of LSA
-		NoOfMachines.addValue(GetNoOfMachines());
+		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines);//no of machines==no of LSA		
 		beliefs.add(mSet);
 		beliefs.add(NoOfMachines);
 		
 		return beliefs;
 	}
 	
-
-
 	public static Set<Plan> getPlans() {
-		Set<Plan> plans = new HashSet<Plan>();		
+		Set<Plan> plans = new HashSet<Plan>();
+		plans.add(new SimplePlan(GetNoOfMachinesGoal.class,GetNoOfMachinesPlan.class));
 		plans.add(new SimplePlan(RegisterServiceGoal.class, RegisterServicePlan.class));
 		plans.add(new SimplePlan(RegisterAgentGoal.class,RegisterAgentToBlackboard.class));
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.JobFromCustomer),
@@ -84,8 +85,7 @@ public abstract class AbstractGSCapability  extends Capability {
 	
 	@Override
 	protected void setup() {
-		log=LogManager.getLogger();
-		
+		log=LogManager.getLogger();		
 		myAgent.addGoal(new RegisterServiceGoal());
 		myAgent.addGoal(new RegisterAgentGoal());
 //		log.info(myAgent.getAllGoals());
