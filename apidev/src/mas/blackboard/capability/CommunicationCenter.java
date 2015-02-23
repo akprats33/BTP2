@@ -70,7 +70,7 @@ public class CommunicationCenter extends Capability {
 		return WorkspaceSet;
 	}
 	
-	 protected void setup(){
+	 protected void setup() {
 //		 myAgent.addGoal(new RegisterGoal());
 /*		 myAgent.addBehaviour(new SubscribeParameter());
 		 myAgent.addBehaviour(new UpdateParam());*/

@@ -20,11 +20,11 @@ public class ReportHealthBehavior extends TickerBehaviour{
 		machineSimulator = (Simulator) getParent().
 				getDataStore().get(Simulator.simulatorStoreName);
 		
-		ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
-				ID.Machine.ZoneData.myHealth,
-				machineSimulator);
-
-		machineHealthUpdate.send(Simulator.blackboardAgent ,
-				machineHealthUpdate, myAgent);
+//		ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
+//				ID.Machine.ZoneData.myHealth,
+//				machineSimulator);
+//
+//		machineHealthUpdate.send(Simulator.blackboardAgent ,
+//				machineHealthUpdate, myAgent);
 	}
 }

@@ -6,20 +6,14 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.util.leap.Serializable;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.EnumSet;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import mas.job.OperationType;
 import mas.machine.behaviors.AcceptJobBehavior;
 import mas.machine.behaviors.ParameterShifterBehavaior;
@@ -41,24 +35,24 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	// machine's status property (used in decoding the failure event of machine
-	public static String machineStatusProperty = "_machineStatusProperty";
+	public transient static String machineStatusProperty = "_machineStatusProperty";
 	
 	// machine's type i.e. ability to perform number of operations
-	private EnumSet<OperationType> supportedOperations;
+	private transient EnumSet<OperationType> supportedOperations;
 	
 	// time step in milliseconds
-	public static int TIME_STEP = 30;
+	public transient static int TIME_STEP = 30;
 	
 	// ID of this simulator
-	public String ID_Simulator;
+	public transient String ID_Simulator;
 
 	// AID of blackboard agent to which it will connect and publish-receive information from
-	public static AID blackboardAgent;
+	public transient static AID blackboardAgent;
 
 	// name of data store used in behavior's to update this object
-	public static String simulatorStoreName = "simulatorStoreName";
+	public transient static String simulatorStoreName = "simulatorStoreName";
 	
-	public static long healthReportTimeMillis = 20000;
+	public transient static long healthReportTimeMillis = 200;
 
 	// list of components of machine
 	private ArrayList<IComponent> myComponents;
@@ -73,15 +67,15 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	protected transient PropertyChangeSupport statusChangeSupport;
 
 	// percentage variation in processing time of jobs
-	private double percentProcessingTimeVariation = 0.10;		
+	private transient double percentProcessingTimeVariation = 0.10;		
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	private double meanLoadingTime = 1000.0;					
-	private double sdLoadingTime = 1.0;
+	private transient double meanLoadingTime = 1000.0;					
+	private transient double sdLoadingTime = 1.0;
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	private double meanUnloadingTime = 1000.0;				
-	private double sdUnloadingTime = 1.0;
+	private transient double meanUnloadingTime = 1000.0;				
+	private transient double sdUnloadingTime = 1.0;
 
 	// fraction defective for attributes of jobs
 	private transient double fractionDefective = 0.10;
@@ -91,8 +85,8 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private transient double sd_shift = 1;
 
 	// parameters of normal distribution causing shift in process mean
-	private double mean_shiftInMean = 0;				
-	private double sd_shiftInMean = 1;
+	private transient double mean_shiftInMean = 0;				
+	private transient double sd_shiftInMean = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
 	private transient double mean_shiftInSd = 0;				
@@ -119,7 +113,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	// root causes for machine parameters which will make a shift in parameter's generative process
 	private transient ArrayList<ArrayList<RootCause>> mParameterRootcauses; 
 	
-	private Logger log;
+	private transient Logger log;
 
 	private void init() {
 		log = LogManager.getLogger();
@@ -483,13 +477,5 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		} else {
 			return false;
 		}
-	}
-
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.defaultWriteObject();
-		out.writeObject(status);
-	}
-	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
 	}
 }
