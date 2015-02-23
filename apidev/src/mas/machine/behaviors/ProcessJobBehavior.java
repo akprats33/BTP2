@@ -1,7 +1,6 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.OneShotBehaviour;
-
 import java.util.ArrayList;
 import mas.job.job;
 import mas.job.jobAttribute;
@@ -14,9 +13,6 @@ import org.apache.logging.log4j.Logger;
 
 public class ProcessJobBehavior extends OneShotBehaviour{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private job comingJob;
 	private Logger log;

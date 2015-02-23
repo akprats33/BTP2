@@ -1,7 +1,7 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.WakerBehaviour;
+import mas.machine.MachineStatus;
 import mas.machine.Methods;
 import mas.machine.Simulator;
 
@@ -13,45 +13,61 @@ public class ShiftInProcessBahavior extends CyclicBehaviour {
 	boolean mean,sd;
 	int count;
 	double expRandom;
-	private Simulator machinesSimulator;
+	private int step = 0;
+	private long timeToOccur;
+	private Simulator machineSimulator;
 
 	/**
 	 * shifter shifts the process mean or standard deviation
 	 * @param byMean
 	 * @param bySd
 	 */
-	ShiftInProcessBahavior(boolean byMean,boolean bySd ) 
-	{
+	public ShiftInProcessBahavior(boolean byMean, boolean bySd ) {
 		this.mean = byMean;
 		this.sd = bySd;
-		machinesSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
+		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 		//shifting of process is exponentially distributed
-		expRandom = Methods.rexp(1/machinesSimulator.getRateShift(), 1)[0];			 		
+		expRandom = Methods.rexp(1/machineSimulator.getRateShift(), 1)[0];			 		
 	}
-	
+
 	@Override
 	public void action() {
-		
-		expRandom = Methods.rexp(1/machinesSimulator.getRateShift(), 1)[0];
-		long timeToOccur = (long) Math.max(1, expRandom*1000);
-		
-		myAgent.addBehaviour(new WakerBehaviour(myAgent,timeToOccur) {
 
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void handleElapsedTimeout() {
-				if(mean == true) {
-					machinesSimulator.setMean_shift(machinesSimulator.getMean_shift()*(1.0 + 
-							(Methods.normalRandom(machinesSimulator.getMean_shiftInMean(),
-									machinesSimulator.getSd_shiftInMean())/100.0) ) );	
-				}
-				if(sd == true) {
-					machinesSimulator.setSd_shift( machinesSimulator.getSd_shift()*(1.0 + 
-							(Methods.normalRandom(machinesSimulator.getMean_shiftInSd(),
-									machinesSimulator.getSd_shiftInSd())/100.0) ) );
-				}
+		switch(step) {
+		case 0:
+			expRandom = Methods.rexp(1/machineSimulator.getRateShift(), 1)[0];
+			timeToOccur = (long) Math.max(1, expRandom*1000);
+			step = 1;
+			break;
+		case 1:
+			if(machineSimulator.getStatus() != MachineStatus.FAILED &&
+			timeToOccur >= 0) {
+				timeToOccur = timeToOccur - Simulator.TIME_STEP;
+				block(Simulator.TIME_STEP);
 			}
-		});
+			else if(timeToOccur < 0) {
+				step = 2;
+			}
+			else {
+				// machine is failed
+				block(Simulator.TIME_STEP);
+			}
+			break;
+		case 2:
+
+			if(mean == true) {
+				machineSimulator.setMean_shift(machineSimulator.getMean_shift()*(1.0 + 
+						(Methods.normalRandom(machineSimulator.getMean_shiftInMean(),
+								machineSimulator.getSd_shiftInMean())/100.0) ) );	
+			}
+			if(sd == true) {
+				machineSimulator.setSd_shift( machineSimulator.getSd_shift()*(1.0 + 
+						(Methods.normalRandom(machineSimulator.getMean_shiftInSd(),
+								machineSimulator.getSd_shiftInSd())/100.0) ) );
+			}
+
+			step = 0;
+			break;
+		}
 	}
 }

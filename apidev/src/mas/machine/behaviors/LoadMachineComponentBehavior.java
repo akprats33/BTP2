@@ -20,7 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import jade.core.behaviours.OneShotBehaviour;
 
-public class LoadComponentBehavior extends OneShotBehaviour{
+public class LoadMachineComponentBehavior extends OneShotBehaviour{
 
 	/**
 	 * 
@@ -38,7 +38,7 @@ public class LoadComponentBehavior extends OneShotBehaviour{
 	 */
 	private int unitConversion = 3600000;
 	
-	public LoadComponentBehavior() {
+	public LoadMachineComponentBehavior() {
 		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 

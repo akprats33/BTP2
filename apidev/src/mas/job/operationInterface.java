@@ -1,5 +1,11 @@
 package mas.job;
 
+import java.util.Date;
+
 public interface operationInterface {
-	public double meanProcessingTime();
+	public long getProcessingTime();
+	public OperationType getJobOperationType();
+	public Date getLocalDueDate();
+	public Date getGlobalDueDate();
+	
 }

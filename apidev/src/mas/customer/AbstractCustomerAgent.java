@@ -11,7 +11,7 @@ public abstract class AbstractCustomerAgent extends BDIAgent {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private void registerMe(){
+	private void registerMe() {
 		DFAgentDescription mc = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType(ID.Customer.Service);

@@ -18,7 +18,7 @@ public class SimulatorStatusListener implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName().equals("Machine status")) {
+		if(evt.getPropertyName().equals(Simulator.machineStatusProperty)) {
 			
 			if(evt.getNewValue().equals(MachineStatus.FAILED)) {
 				log.info("Simulator is in failed state :" );
@@ -26,19 +26,16 @@ public class SimulatorStatusListener implements PropertyChangeListener {
 				sim.addBehaviour(new HandleSimulatorFailedBehavior());
 			} 
 			else if(evt.getNewValue().equals(MachineStatus.IDLE)) {
-				log.info("Simulator is in failed state :" );
+				log.info("Simulator is idle " );
 
-//				sim.addBehaviour(new HandleSimulatorFailedBehavior());
 			}
 			else if(evt.getNewValue().equals(MachineStatus.PROCESSING)) {
-				log.info("Simulator is in failed state :" );
+				log.info("Simulator is processing " );
 
-//				sim.addBehaviour(new HandleSimulatorFailedBehavior());
 			}
 			else if(evt.getNewValue().equals(MachineStatus.UNDER_MAINTENANCE)) {
-				log.info("Simulator is in failed state :" );
+				log.info("Simulator is under maintenance " );
 
-//				sim.addBehaviour(new HandleSimulatorFailedBehavior());
 			}
 		}
 	}

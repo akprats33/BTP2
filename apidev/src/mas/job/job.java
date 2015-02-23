@@ -23,7 +23,7 @@ public class job implements Serializable{
 	private Date completionTime;
 
 	//Optional parameters initialized to default values
-	public int operationNo = 1;
+	public int currentOperationNumber = 0;
 	public int acceptance = 0;
 	public double slack;
 	private double regret;
@@ -88,6 +88,7 @@ public class job implements Serializable{
 		private long procTime;
 		private Date genTime;
 		// Optional parameters - initialized to default values
+		private ArrayList<jobOperation> jOperations;
 		private ArrayList<jobDimension> dimensions;						
 		private ArrayList<jobAttribute> attributes;	
 
@@ -123,6 +124,9 @@ public class job implements Serializable{
 
 		public Builder jobDimensions(ArrayList<jobDimension> val)
 		{ dimensions.addAll(val); return this; }
+		
+		public Builder jobOperation(ArrayList<jobOperation> val)
+		{ jOperations.addAll(val); return this; }
 
 		public Builder jobAttrbitues(ArrayList<jobAttribute> val)
 		{ attributes.addAll(val); return this; }

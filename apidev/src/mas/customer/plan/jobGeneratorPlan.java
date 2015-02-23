@@ -5,10 +5,6 @@ import bdi4jade.plan.PlanInstance.EndState;
 
 public class jobGeneratorPlan extends rootJobGeneratePlan{
 
-	/**
-	 * 
-	 */
-	
 	private static final long serialVersionUID = 1L;
 
 	@Override
