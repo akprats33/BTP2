@@ -2,6 +2,9 @@ package mas.globalScheduling.behaviour;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import bdi4jade.core.BDIAgent;
 import mas.job.job;
 import mas.util.ID;
@@ -13,7 +16,7 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-//askdjakjgshdlaksjds
+
 public class WaitTimeBehvr extends Behaviour {
 	//..//
 	private String[] s= new String[3] ;  
@@ -27,13 +30,14 @@ public class WaitTimeBehvr extends Behaviour {
 	private String CustomerAgent;
 	private String msgReplyID;
 	private AID bba;
+	private Logger log;
 	
 	
 	public WaitTimeBehvr(AID bb_AID, int NoOfmachines, String replyID){		
-		this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
+//		this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
 
 		this.bba = bb_AID;
-				
+		this.log=LogManager.getLogger();
 		
 		this.msgReplyID=replyID;
 			mt=MessageTemplate.and(
@@ -44,6 +48,8 @@ public class WaitTimeBehvr extends Behaviour {
 	public void action() {
 		switch (step) {
 		case 0:
+			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
+			log.info(MachineCount);
 			WaitingTime=new ACLMessage[MachineCount];
 			step = 1;
 			break;

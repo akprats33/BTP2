@@ -93,6 +93,7 @@ public class ID implements Serializable{
 			public static final String askforBid = "GSA_ask-for-bid";
 			public static final String waitingTime = "GSA_waiting-time"; //queue of jobs with calculated expected waiting time
 			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";//contains queue of jobs with  
+			public static final String NewJobFromCustomer = "NewJobFromCustomer";
 		}
 	}
 

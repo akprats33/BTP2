@@ -46,17 +46,7 @@ public class AskForWaitingTime extends OneShotBehaviour implements PlanBody {
 		ACLMessage msg=new ACLMessage(ACLMessage.CFP);
 		msg.setConversationId(MessageIds.UpdateParameter);
 		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
-/*		try {
-			msg.setContentObject(update);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		msg.setReplyWith(Integer.toString(j.getJobNo()));
-		
-		msg.addReceiver(blackboard);
-		myAgent.send(msg);*/
-		
+		update.send(blackboard, update, myAgent);
 		
 		myAgent.addBehaviour(new WaitTimeBehvr(blackboard, NoOfMachines,Integer.toString(j.getJobNo())));
 	}

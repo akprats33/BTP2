@@ -57,9 +57,9 @@ public class GetNoOfMachinesPlan extends Behaviour implements PlanBody{
 
 			  DFAgentDescription[] result = DFService.search(myAgent,dfd);
 			  Integer NoOfMachines= result.length;
-         	 
-    		Belief<Integer> new_belief=new TransientBelief<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines, NoOfMachines);
-           	 ((BDIAgent)myAgent).getRootCapability().getBeliefBase().addOrUpdateBelief(new_belief); //update belief base      
+//         	 log.info(NoOfMachines);
+			  Belief<Integer> new_belief=new TransientBelief<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines, NoOfMachines);
+	          ((BDIAgent)myAgent).getRootCapability().getBeliefBase().addOrUpdateBelief(new_belief); //update belief base      
 		
            	 
            	 
