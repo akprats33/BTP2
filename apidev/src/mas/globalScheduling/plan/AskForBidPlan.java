@@ -33,7 +33,7 @@ public class AskForBidPlan extends Behaviour implements PlanBody{
 	@Override
 	public void init(PlanInstance pInstance) {
 		bfBase = pInstance.getBeliefBase();
-		mt = MessageTemplate.MatchConversationId(MessageIds.BidForJob);
+		mt = MessageTemplate.MatchConversationId(MessageIds.msgbidForJob);
 		repliesCnt = 0;
 	}
 
@@ -94,7 +94,7 @@ public class AskForBidPlan extends Behaviour implements PlanBody{
 					e.printStackTrace();
 				}
 				OrderToLSA.addReceiver(min.getSender());
-				OrderToLSA.setConversationId(MessageIds.WorkOrder);
+				OrderToLSA.setConversationId(MessageIds.msgbidResultJob);
 				myAgent.send(OrderToLSA);
 	//			System.out.println("OrderToLSA" + OrderToLSA);
 				step = 3;

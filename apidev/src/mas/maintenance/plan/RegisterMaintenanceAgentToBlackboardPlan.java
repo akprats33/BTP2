@@ -37,12 +37,12 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.Maintenance.ZoneData.correctiveMaintdata).
-				MsgID(MessageIds.ReplyFromScheduler).
+				MsgID(MessageIds.msgcorrectiveMaintdata).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.Maintenance.ZoneData.prevMaintData).
-				MsgID(MessageIds.JobFromScheduler).
+				MsgID(MessageIds.msgprevMaintData).
 				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,

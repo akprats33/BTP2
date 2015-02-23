@@ -30,7 +30,7 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 		this.machineSimulator = (Simulator) getParent().
 				getDataStore().get(Simulator.simulatorStoreName);
 		correctiveDataMsgTemplate = MessageTemplate.MatchConversationId(
-				MessageIds.machinePrevMaintenanceData);
+				MessageIds.msgcorrectiveMaintdata);
 	}
 
 	@Override

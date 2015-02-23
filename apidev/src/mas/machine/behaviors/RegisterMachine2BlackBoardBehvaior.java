@@ -32,31 +32,31 @@ public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 		 */
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.myHealth).
-				MsgID(MessageIds.machineSimulatorHealth).
+				MsgID(MessageIds.msgmyHealth).
 				appendValue(false).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.finishedJob).
-				MsgID(MessageIds.completedJobFromMachine).
+				MsgID(MessageIds.msgfinishedJob).
 				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName3 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.inspectionStart).
-				MsgID(MessageIds.machineInspectionStart).
+				MsgID(MessageIds.msginspectionStart).
 				appendValue(false).
 				build();
 		
 		NamedZoneData ZoneDataName4 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.maintenanceStart).
-				MsgID(MessageIds.machinePrevMaintenanceStart).
+				MsgID(MessageIds.msgmaintenanceStart).
 				appendValue(false).
 				build();
 		
 		NamedZoneData ZoneDataName5 = 
 				new NamedZoneData.Builder(ID.Machine.ZoneData.machineFailures).
-				MsgID(MessageIds.MachineFailure).
+				MsgID(MessageIds.msgmachineFailures).
 				appendValue(false).
 				build();
 

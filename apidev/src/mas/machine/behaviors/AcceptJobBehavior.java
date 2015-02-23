@@ -22,7 +22,7 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 	public AcceptJobBehavior() {
 		log = LogManager.getLogger();
 		jobMsgTemplate = MessageTemplate.
-				MatchConversationId(MessageIds.SendJob);
+				MatchConversationId(MessageIds.msgjobForMachine);
 	}
 
 	@Override

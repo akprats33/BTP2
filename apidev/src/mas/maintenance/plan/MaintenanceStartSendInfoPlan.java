@@ -48,7 +48,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		bfBase = pInstance.getBeliefBase();
 		msgTemplate = MessageTemplate.MatchConversationId(
-				MessageIds.machinePrevMaintenanceData);
+				MessageIds.msgmaintenanceStart);
 		solver = new RepairKit();
 		
 		this.bba = (AID) bfBase.

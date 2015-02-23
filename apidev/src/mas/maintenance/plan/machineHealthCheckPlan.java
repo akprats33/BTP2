@@ -66,6 +66,6 @@ public class machineHealthCheckPlan extends CyclicBehaviour implements PlanBody 
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
 		myMachine = null;
-		machineHealth = MessageTemplate.MatchConversationId(MessageIds.machineSimulatorHealth);
+		machineHealth = MessageTemplate.MatchConversationId(MessageIds.msgmyHealth);
 	}
 }

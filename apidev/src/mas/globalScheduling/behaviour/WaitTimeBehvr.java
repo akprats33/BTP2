@@ -41,7 +41,7 @@ public class WaitTimeBehvr extends Behaviour {
 		
 		this.msgReplyID=replyID;
 			mt=MessageTemplate.and(
-					MessageTemplate.MatchConversationId(MessageIds.WaitTime),
+					MessageTemplate.MatchConversationId(MessageIds.msgWaitingTime),
 					MessageTemplate.MatchInReplyTo(replyID));	
 		}
 
@@ -92,7 +92,7 @@ public class WaitTimeBehvr extends Behaviour {
 				
 			}
 			else{
-				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation, JobToSend);
+				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				NegotiationUpdate.send(this.bba, NegotiationUpdate, myAgent);
 				/*replyToCust.setContentObject(JobToSend);												
 				replyToCust.addReceiver(new AID(CustomerAgent, false));

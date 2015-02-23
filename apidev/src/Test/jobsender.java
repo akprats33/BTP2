@@ -79,7 +79,7 @@ public class jobsender extends Agent{
 					cfp.addReceiver(seller);
 					job newJob = (job) jGen.getNextJob();
 					cfp.setContentObject(newJob);
-					cfp.setConversationId(MessageIds.SendJob);
+					cfp.setConversationId(MessageIds.msgnewWorkOrderFromCustomer);
 					cfp.setReplyWith("cfp"+System.currentTimeMillis()); // Unique value
 					send(cfp);
 					

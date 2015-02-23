@@ -35,7 +35,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 		this.IsJobComplete = false;
 		log = LogManager.getLogger();
 		InspectionDataMsgTemplate = MessageTemplate.MatchConversationId(
-				MessageIds.machinePrevMaintenanceData);
+				MessageIds.msginspectionJobData);
 		
 		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 	}

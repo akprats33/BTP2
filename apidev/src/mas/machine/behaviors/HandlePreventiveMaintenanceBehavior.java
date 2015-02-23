@@ -41,7 +41,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 		this.comingJob = comingJob;
 		log = LogManager.getLogger();
 		pmDataMsgTemplate = MessageTemplate.MatchConversationId(
-				MessageIds.machinePrevMaintenanceData);
+				MessageIds.msgprevMaintData);
 		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 
 	}
@@ -52,7 +52,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 		case 0 :
 			
 			ZoneDataUpdate maintenanceStartUpdate = new ZoneDataUpdate(
-					ID.Machine.ZoneData.inspectionStart,
+					ID.Machine.ZoneData.maintenanceStart,
 					comingJob);
 
 			maintenanceStartUpdate.send(Simulator.blackboardAgent ,

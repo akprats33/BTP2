@@ -37,34 +37,34 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 		ACLMessage msg2=new ACLMessage(ACLMessage.CFP);
 		msg2.setConversationId(MessageIds.RegisterMe);
 
-		NamedZoneData ZoneDataName2=new NamedZoneData.Builder
-				(ID.GlobalScheduler.ZoneData.ConfirmedOrder).
-				MsgID(MessageIds.ReplyFromScheduler).
+		NamedZoneData ZoneDataName1 = new NamedZoneData.Builder
+				(ID.GlobalScheduler.ZoneData.GSAConfirmedOrder).
+				MsgID(MessageIds.msgGSAConfirmedOrder).
 				build();
 
-		NamedZoneData ZoneDataName3=new NamedZoneData.Builder(
+		NamedZoneData ZoneDataName2 = new NamedZoneData.Builder(
 				ID.GlobalScheduler.ZoneData.askBidForJobFromLSA).
-				MsgID(MessageIds.GSABidForJobFromLSA).
+				MsgID(MessageIds.msgaskBidForJobFromLSA).
 				build();
 
-		NamedZoneData ZoneDataName4=new NamedZoneData.Builder(
+		NamedZoneData ZoneDataName3 = new NamedZoneData.Builder(
 				ID.GlobalScheduler.ZoneData.GetWaitingTime).
-				MsgID(MessageIds.GSAwaitingTimeFromLSA).
+				MsgID(MessageIds.msgGetWaitingTime).
 				build();
 
-		NamedZoneData ZoneDataName5=new NamedZoneData.Builder(
-				ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation).
-				MsgID(MessageIds.GSANegotiationJobsCustomer).
+		NamedZoneData ZoneDataName4 = new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation).
+				MsgID(MessageIds.msgGSAjobsUnderNegaotiation).
 				build();
 
-		NamedZoneData ZoneDataName6=new NamedZoneData.Builder(
-				ID.GlobalScheduler.ZoneData.WorkOrder).
-				MsgID(MessageIds.WorkOrder).
+		NamedZoneData ZoneDataName5 = new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.jobForLSA).
+				MsgID(MessageIds.msgjobForLSA).
 				build();
 
 		NamedZoneData[] ZoneDataNames={ZoneDataName2,
 				ZoneDataName3,ZoneDataName4,
-				ZoneDataName5,ZoneDataName6};
+				ZoneDataName5 };
 		try {
 			msg2.setContentObject(ZoneDataNames);
 		} catch (IOException e1) {
@@ -79,8 +79,8 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 
 		SubscriptionForm subform = new SubscriptionForm();
 		AID target = new AID(ID.Customer.LocalName, AID.ISLOCALNAME);
-		String[] params = {ID.Customer.ZoneData.confirmedJobs,ID.Customer.ZoneData.newWorkOrderFromCustomer,
-				ID.Customer.ZoneData.jobsUnderNegotiation};
+		String[] params = {ID.Customer.ZoneData.customerConfirmedJobs,ID.Customer.ZoneData.newWorkOrderFromCustomer,
+				ID.Customer.ZoneData.customerJobsUnderNegotiation};
 
 		subform.AddSubscriptionReq(target, params);
 

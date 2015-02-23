@@ -48,7 +48,7 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 		//		MessageTemplate machineCurrentHealth = MessageTemplate.
 		//				MatchConversationId(MessageIds.machineState);
 		MessageTemplate machineFailureMSG = MessageTemplate.
-				MatchConversationId(MessageIds.maintMachineFailureInfo);
+				MatchConversationId(MessageIds.msgmachineFailures);
 		//		MessageTemplate mt3 = MessageTemplate.
 		//				MatchConversationId(MessageIds.failEnd);
 

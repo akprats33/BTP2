@@ -94,19 +94,19 @@ public class AbstractbasicCapability extends Capability {
 //		plans.add(new SimplePlan(SendWaitingTimeGoal.class,
 //				SendWaitingTimePlan.class));
 		
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSjobFromGS),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgbidResultJob),
 				EnqueueJobPlan.class));
 
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSgetCompletedJobFromMachine),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgfinishedJob),
 				ReceiveCompletedJobPlan.class));
 		
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSsendBidToGS),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskBidForJobFromLSA),
 				SendBidPlan.class));
 		
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSsendJobToMachine),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskJobFromLSA),
 				SendJobPlan.class));
 		
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.LSsendWaitingTimeGS),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgGetWaitingTime),
 				SendWaitingTimePlan.class));
 		
 		plans.add(new SimplePlan(RegisterLSAgentToBlackboardGoal.class,

@@ -41,10 +41,10 @@ public class ID implements Serializable{
 			public static final String newWorkOrderFromCustomer = "customer_newWorkOrderFromCustomer";
 
 			// jobs under negotiation
-			public static final String jobsUnderNegotiation = "customer_jobsUnderNegotiation";
+			public static final String customerJobsUnderNegotiation = "customer_jobsUnderNegotiation";
 
 			// accepted jobs by GSA
-			public static final String confirmedJobs = "customer_jobsAccepted";
+			public static final String customerConfirmedJobs = "customer_jobsAccepted";
 		}
 	}
 
@@ -83,13 +83,13 @@ public class ID implements Serializable{
 
 		public class ZoneData {
 			// final confirmed order coming from customer which has to be accepted
-			public static final String ConfirmedOrder = "NewJobFromCustomer";
+			public static final String GSAConfirmedOrder = "NewJobFromCustomer";
 
 			// jobs under negotiation
-			public static final String jobsUnderNegaotiation = "GSA_jobsUnderNegaotiation"; 
+			public static final String GSAjobsUnderNegaotiation = "GSA_jobsUnderNegaotiation"; 
 
 			// job which are confirmed and advertised for machine
-			public static final String jobForMachine = "GSA_job-for-machine";
+			public static final String jobForLSA = "GSA_job-for-machine";
 
 			// advertise job for bids from LSA
 			public static final String askBidForJobFromLSA = "GSA_ask-for-bid";
@@ -134,6 +134,9 @@ public class ID implements Serializable{
 		public static final String LocalName ="machine-simulator";
 
 		public class ZoneData{
+			
+			//update new job for the machine
+			public static final String askJobFromLSA = "_askJobFromLSA";
 			
 			// update machine's health  here
 			public static final String myHealth ="machine_health";
