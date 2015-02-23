@@ -44,8 +44,10 @@ public class ZoneSpace implements ZoneSpaceIFace, Serializable{
 	@Override
 	public void createZoneData(NamedZoneData name) {
 		if(! Zdata.containsKey(name)){
+			
 			ZoneData zd = new ZoneData(name, name.getUpdateMsgID(), bb, name.getAppend());
 			Zdata.put(name, zd);
+			log.info("creating zone Data with "+zd.getUpdateMessageID() );
 		}		
 	}
 	

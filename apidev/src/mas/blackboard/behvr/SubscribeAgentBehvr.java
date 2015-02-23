@@ -110,6 +110,7 @@ public class SubscribeAgentBehvr extends Behaviour {
 
 	@Override
 	public boolean done() {
+//		log.info("ending susbscribe behvr"+step+" searching "+AgentToReg.getLocalName());
 		return step>2;
 	}
 

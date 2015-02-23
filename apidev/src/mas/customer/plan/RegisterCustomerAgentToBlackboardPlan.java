@@ -1,5 +1,8 @@
 package mas.customer.plan;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import mas.blackboard.nameZoneData.NamedZoneData;
@@ -14,6 +17,7 @@ import bdi4jade.plan.PlanInstance.EndState;
 public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
+	private Logger log;
 
 	@Override
 	public EndState getEndState() {
@@ -22,7 +26,7 @@ public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour impl
 
 	@Override
 	public void init(PlanInstance planInstance) {
-		
+		log=LogManager.getLogger();
 	}
 
 	@Override
@@ -51,6 +55,8 @@ public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour impl
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
 				ZoneDataName2,ZoneDataName3};
 
+		
+		
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 
 		SubscriptionForm subform = new SubscriptionForm();
