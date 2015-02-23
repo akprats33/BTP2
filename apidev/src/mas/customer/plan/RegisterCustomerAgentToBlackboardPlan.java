@@ -42,7 +42,7 @@ public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour impl
 
 		NamedZoneData ZoneDataName2 = 
 				new NamedZoneData.Builder(ID.Customer.ZoneData.JobList).
-				MsgID(MessageIds.JobFromScheduler).
+				MsgID(MessageIds.JobFromCustomer).
 				appendValue(true).
 				build();
 

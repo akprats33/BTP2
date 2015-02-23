@@ -66,7 +66,8 @@ public class TakeOrder extends Behaviour implements PlanBody {
 
 public void init(PlanInstance planInstance) {
 	log=LogManager.getLogger();
-	log.info("update recieved");
+	log.info("order from customer recieved");
+	log.info(planInstance.getBeliefBase().getBelief(ID.Blackboard.LocalName).getValue());
 	Blackboard_AID=(AID) planInstance.getBeliefBase().getBelief(ID.Blackboard.LocalName).getValue();
 	
 	try {
