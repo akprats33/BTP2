@@ -73,12 +73,12 @@ public abstract class AbstractGSCapability  extends Capability {
 		plans.add(new SimplePlan(GetNoOfMachinesGoal.class,GetNoOfMachinesPlan.class));
 		plans.add(new SimplePlan(RegisterServiceGoal.class, RegisterServicePlan.class));
 		plans.add(new SimplePlan(RegisterAgentGoal.class,RegisterAgentToBlackboard.class));
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.JobFromCustomer),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.OrderConfirmation),
 				TakeOrder.class));
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(
 				MessageIds.Negotiate),Negotiate.class));
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(
-				MessageIds.OrderConfirmation),AskForWaitingTime.class));
+				MessageIds.JobFromCustomer),AskForWaitingTime.class));
 		
 //		plans.add(new SimplePlan(AskWaitingTimeGoal.class,AskForWaitingTime.class));
 		

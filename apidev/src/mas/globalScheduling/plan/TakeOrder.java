@@ -92,7 +92,7 @@ public void init(PlanInstance planInstance) {
 public void action() {
 		try {
 			
-			ZoneDataUpdate zdu=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.NegotiationJob, order);
+			ZoneDataUpdate zdu=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.NewJobFromCustomer, order);
 			zdu.send(Blackboard_AID,zdu, myAgent);
 			log.info("zodeDataUpdate sent");
 			this.sent=true;
