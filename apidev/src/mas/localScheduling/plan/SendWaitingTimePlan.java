@@ -67,7 +67,6 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public void action() {		
-		
 		sTracker.addSize( jobQueue.size() );
 		
 		// get average queue size and waiting time in the queue
