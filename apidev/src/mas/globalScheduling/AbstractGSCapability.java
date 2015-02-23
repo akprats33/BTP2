@@ -88,6 +88,7 @@ public abstract class AbstractGSCapability  extends Capability {
 		log=LogManager.getLogger();		
 		myAgent.addGoal(new RegisterServiceGoal());
 		myAgent.addGoal(new RegisterAgentGoal());
+		myAgent.addGoal(new GetNoOfMachinesGoal());
 //		log.info(myAgent.getAllGoals());
 	//Plan to register with bb is to be implemented by user
 	}

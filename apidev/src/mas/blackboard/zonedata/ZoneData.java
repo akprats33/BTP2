@@ -151,7 +151,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		
 		for(AID reciever : getSubscribers()){
 			update.addReceiver(reciever);
-			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName());
+			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" with ID "+UpdateMessageID);
 		}
 		try {
 			Object obj= getData();
