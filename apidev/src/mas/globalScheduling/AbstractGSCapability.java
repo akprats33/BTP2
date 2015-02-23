@@ -20,6 +20,7 @@ import java.util.Set;
 
 
 
+
 import mas.globalScheduling.goal.GetNoOfMachinesGoal;
 import mas.globalScheduling.goal.RegisterAgentGoal;
 import mas.globalScheduling.goal.RegisterServiceGoal;
@@ -33,6 +34,7 @@ import org.apache.logging.log4j.Logger;
 
 import bdi4jade.belief.Belief;
 import bdi4jade.belief.BeliefSet;
+import bdi4jade.belief.TransientBelief;
 import bdi4jade.belief.TransientBeliefSet;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.core.Capability;
@@ -55,8 +57,8 @@ public abstract class AbstractGSCapability  extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
-		BeliefSet<AID> mSet = 
-				new TransientBeliefSet<AID>(ID.Blackboard.LocalName);
+		Belief<AID> mSet = 
+				new TransientBelief<AID>(ID.Blackboard.LocalName);
 				
 		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines);//no of machines==no of LSA		
 		beliefs.add(mSet);
