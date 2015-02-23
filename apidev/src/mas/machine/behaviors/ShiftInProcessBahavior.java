@@ -25,7 +25,7 @@ public class ShiftInProcessBahavior extends CyclicBehaviour {
 	public ShiftInProcessBahavior(boolean byMean, boolean bySd ) {
 		this.mean = byMean;
 		this.sd = bySd;
-		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
+		
 	}
 
 	@Override
@@ -33,6 +33,7 @@ public class ShiftInProcessBahavior extends CyclicBehaviour {
 
 		switch(step) {
 		case 0:
+			machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 			expRandom = Methods.rexp(1/machineSimulator.getRateShift(), 1)[0];
 			timeToOccur = (long) Math.max(1, expRandom*1000);
 			step = 1;

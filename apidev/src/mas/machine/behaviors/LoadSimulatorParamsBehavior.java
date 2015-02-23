@@ -114,10 +114,12 @@ public class LoadSimulatorParamsBehavior extends OneShotBehaviour{
 				}
 				cellNumber++;
 			}
+			row = (XSSFRow) rows.next();
 			rowNumber++;
 		}
 		try {
 			workBook.close();
+//			log.info("input done");
 		} catch (IOException e) {
 			log.debug("Error in closing excel file");
 			e.printStackTrace();

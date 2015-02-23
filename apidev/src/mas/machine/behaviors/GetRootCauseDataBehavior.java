@@ -165,14 +165,15 @@ public class GetRootCauseDataBehavior extends OneShotBehaviour{
 							win.dispose();
 						}
 					});
+					
 					if(autoInput)
 						btn_rootcause.doClick();
 				}
 			}
 		});
+		
 		if(autoInput)
 			btn_submit.doClick();
-
-		//		log.info("Root cause input completed");
+//			log.info("Root cause input completed");
 	}
 }

@@ -50,6 +50,8 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
 				ID.Customer.ZoneData.JobList,
 				jobToDispatch);
+		
+//		log.info("Job dispatching custoemr " + jobToDispatch );
 
 		jobOrderZoneDataUpdate.send(this.bba,jobOrderZoneDataUpdate, myAgent);
 	}

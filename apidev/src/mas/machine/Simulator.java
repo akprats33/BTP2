@@ -17,6 +17,8 @@ import java.util.EnumSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import mas.job.OperationType;
 import mas.machine.behaviors.AcceptJobBehavior;
@@ -116,8 +118,11 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	
 	// root causes for machine parameters which will make a shift in parameter's generative process
 	private transient ArrayList<ArrayList<RootCause>> mParameterRootcauses; 
+	
+	private Logger log;
 
 	private void init() {
+		log = LogManager.getLogger();
 		statusChangeSupport = new PropertyChangeSupport(this);
 		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
@@ -172,7 +177,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		loadData.addSubBehaviour(registerMachineOnBB);
 
 		addBehaviour(loadData);
-
+		
 		functionality = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
 		functionality.getDataStore().put(simulatorStoreName, Simulator.this);
 
@@ -186,7 +191,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
 		functionality.addSubBehaviour(processDimensionShifter);
-//		functionality.addSubBehaviour(machineParameterShifter);
+		functionality.addSubBehaviour(machineParameterShifter);
 
 		addBehaviour(functionality);
 

@@ -40,6 +40,7 @@ public class ParameterShifterBehavaior extends CyclicBehaviour{
 			if(this.numRootCauses == -1) {
 				this.numRootCauses = machineSimulator.getmParameterRootcauses().size();
 				timeToOccur = new double[numRootCauses];
+				this.parameterShiftRate = 0.010;
 			}
 			timeToOccur = Methods.rexp (this.parameterShiftRate, numRootCauses );
 			break;
