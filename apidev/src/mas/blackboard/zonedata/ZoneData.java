@@ -34,7 +34,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		this.name = name2;
 		this.data = new LinkedList<Object>();
 		this.subscribers=new HashSet<AID>();
-		this.UpdateMessageID=UpdateMessageID; //ID of message to be used while sending update of data
+		this.UpdateMessageID=UpdateMsgID; //ID of message to be used while sending update of data
 		this.bb=blackboard;
 		this.appendValues=appendValues;
 	}
@@ -117,15 +117,6 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		subscribers.remove(agent);
 		
 	}
-
-/*	@Override
-	public void RemoveAllnAdd(Object obj) {
-		data.clear();
-		data.add(obj);
-//		log.info("updated "+data);
-//		sendUpdate();
-	
-	}*/
 
 	public String getUpdateMessageID(){
 		return UpdateMessageID;
