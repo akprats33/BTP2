@@ -2,14 +2,11 @@ package mas.customer.plan;
 
 import mas.customer.JobGenerator;
 import mas.customer.JobGeneratorIFace;
-import mas.customer.basicCapability;
 import mas.customer.goal.dispatchJobGoal;
 import mas.util.ID;
-
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import bdi4jade.core.BeliefBase;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
@@ -44,7 +41,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	@Override
 	public void action() {
 		this.jGen.readFile();
-		log.info("Job file loaded");
+//		log.info("Job file loaded");
 		bfBase.updateBelief(ID.Customer.BeliefBaseConst.JOB_GENERATOR, jGen);
 		myAgent.addBehaviour(new TickerBehaviour(myAgent, 1000) {
 			
