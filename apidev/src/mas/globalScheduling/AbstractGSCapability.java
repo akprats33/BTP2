@@ -57,11 +57,12 @@ public abstract class AbstractGSCapability  extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
-		Belief<AID> mSet = 
-				new TransientBelief<AID>(ID.Blackboard.LocalName);
-				
+		Belief<AID> BB_AID = 
+				new TransientBelief<AID>(ID.Blackboard.LocalName);		
+		BB_AID.setValue(new AID(ID.Blackboard.LocalName,false));
+		
 		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines);//no of machines==no of LSA		
-		beliefs.add(mSet);
+		beliefs.add(BB_AID);
 		beliefs.add(NoOfMachines);
 		
 		return beliefs;

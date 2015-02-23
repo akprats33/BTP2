@@ -66,9 +66,10 @@ public class TakeOrder extends Behaviour implements PlanBody {
 
 public void init(PlanInstance planInstance) {
 	log=LogManager.getLogger();
-	log.info("order from customer recieved");
-	log.info(planInstance.getBeliefBase().getBelief(ID.Blackboard.LocalName).getValue());
+//	log.info("order from customer recieved");
+	
 	Blackboard_AID=(AID) planInstance.getBeliefBase().getBelief(ID.Blackboard.LocalName).getValue();
+//	log.info(Blackboard_AID);
 	
 	try {
 		order=(job) ((MessageGoal)planInstance.getGoal()).getMessage().getContentObject();
@@ -94,7 +95,7 @@ public void action() {
 			ZoneDataUpdate zdu=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.NegotiationJob, order);
 			zdu.send(Blackboard_AID,zdu, myAgent);
 			log.info("zodeDataUpdate sent");
-
+			this.sent=true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.print(e);
