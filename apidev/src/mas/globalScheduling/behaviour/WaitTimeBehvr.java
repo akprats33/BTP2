@@ -92,7 +92,7 @@ public class WaitTimeBehvr extends Behaviour {
 				
 			}
 			else{
-				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.NegotiationJob, JobToSend);
+				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation, JobToSend);
 				NegotiationUpdate.send(this.bba, NegotiationUpdate, myAgent);
 				/*replyToCust.setContentObject(JobToSend);												
 				replyToCust.addReceiver(new AID(CustomerAgent, false));

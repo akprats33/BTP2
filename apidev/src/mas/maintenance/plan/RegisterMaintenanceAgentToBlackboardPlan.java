@@ -41,7 +41,7 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 				build();
 
 		NamedZoneData ZoneDataName2 = 
-				new NamedZoneData.Builder(ID.Maintenance.ZoneData.PMdata).
+				new NamedZoneData.Builder(ID.Maintenance.ZoneData.prevMaintData).
 				MsgID(MessageIds.JobFromScheduler).
 				build();
 

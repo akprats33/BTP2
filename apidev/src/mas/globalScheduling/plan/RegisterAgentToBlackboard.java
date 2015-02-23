@@ -16,7 +16,7 @@ import bdi4jade.plan.PlanInstance.EndState;
 
 public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanBody {
 	int step;
-	
+
 	@Override
 	public EndState getEndState() {
 
@@ -26,48 +26,68 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 	@Override
 	public void init(PlanInstance planInstance) {
 		step=0;
-		
-	
+
+
 	}
 
 	@Override
 	public void action() {
 		AID bb_aid=AgentUtil.findBlackboardAgent(myAgent);
-		
-	    ACLMessage msg2=new ACLMessage(ACLMessage.CFP);
+
+		ACLMessage msg2=new ACLMessage(ACLMessage.CFP);
 		msg2.setConversationId(MessageIds.RegisterMe);
-		
-		NamedZoneData ZoneDataName1=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.jobForMachine).MsgID(MessageIds.ReplyFromScheduler).appendValue(true).build();
-		NamedZoneData ZoneDataName2=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.ConfirmedOrder).MsgID("").build();
-		NamedZoneData ZoneDataName3=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.askforBid).MsgID("").build();
-		NamedZoneData ZoneDataName4=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.GetWaitingTime).MsgID("").build();
-		NamedZoneData ZoneDataName5=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.NegotiationJob).MsgID("").build();
-		NamedZoneData ZoneDataName6=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.waitingTime).MsgID("").build();
-		NamedZoneData ZoneDataName7=new NamedZoneData.Builder(ID.GlobalScheduler.ZoneData.WorkOrder).MsgID("").build();
-		NamedZoneData[] ZoneDataNames={ZoneDataName1,ZoneDataName2,ZoneDataName3,ZoneDataName4,ZoneDataName5,ZoneDataName6,ZoneDataName7};
+
+		NamedZoneData ZoneDataName2=new NamedZoneData.Builder
+				(ID.GlobalScheduler.ZoneData.ConfirmedOrder).
+				MsgID(MessageIds.ReplyFromScheduler).
+				build();
+
+		NamedZoneData ZoneDataName3=new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.askBidForJobFromLSA).
+				MsgID(MessageIds.GSABidForJobFromLSA).
+				build();
+
+		NamedZoneData ZoneDataName4=new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.GetWaitingTime).
+				MsgID(MessageIds.GSAwaitingTimeFromLSA).
+				build();
+
+		NamedZoneData ZoneDataName5=new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation).
+				MsgID(MessageIds.GSANegotiationJobsCustomer).
+				build();
+
+		NamedZoneData ZoneDataName6=new NamedZoneData.Builder(
+				ID.GlobalScheduler.ZoneData.WorkOrder).
+				MsgID(MessageIds.WorkOrder).
+				build();
+
+		NamedZoneData[] ZoneDataNames={ZoneDataName2,
+				ZoneDataName3,ZoneDataName4,
+				ZoneDataName5,ZoneDataName6};
 		try {
 			msg2.setContentObject(ZoneDataNames);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
-		
+
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
-		
-		
-		
+
+
+
 		SubscriptionForm subform = new SubscriptionForm();
 		AID target = new AID(ID.Customer.LocalName, AID.ISLOCALNAME);
-		String[] params = {ID.Customer.ZoneData.acceptedJobs,ID.Customer.ZoneData.JobList,
-						ID.Customer.ZoneData.Negotiation};
-		
-		subform.AddSubscriptionReq(target, params);
-		
+		String[] params = {ID.Customer.ZoneData.confirmedJobs,ID.Customer.ZoneData.newWorkOrderFromCustomer,
+				ID.Customer.ZoneData.jobsUnderNegotiation};
 
-		
+		subform.AddSubscriptionReq(target, params);
+
+
+
 		AgentUtil.subscribeToParam(myAgent, bb_aid, subform);
-		
+
 	}
 
 }

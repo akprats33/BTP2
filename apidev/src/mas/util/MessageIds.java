@@ -1,13 +1,16 @@
 package mas.util;
 
 /**
- * 
  * @author Anand Prajapati, Nikhil chilwant
- * Class contains Id's for all message communication between agents
- *
+ * Class contains Id's for all message communication between agents.
+ * Whenever there is an update in one of the zonedata's, a message with some message id will be sent to all the registered observers
  */
-public class MessageIds {
 
+public class MessageIds {
+	// Customer message id's here
+	
+	
+	// Local scheduling Agent id's here
 	public static final String LSJobForMachine = "LSJobForMachine";
 	public static final String LSjobFromGS = "LSjobFromGS";
 	public static final String LSaskForGS = "LSaskForGS";
@@ -18,7 +21,7 @@ public class MessageIds {
 	public static final String LSsendJobToMachine = "LSsendJobToMachine";
 	public static final String LSA_JobQueue = "LSA_JobQueue";
 	public static final String LSgetCompletedJobFromMachine = "LSgetCompletedJobFromMachine";
-	
+
 	public static final String Success="sucess";
 	public static final String Failed="failed";
 	public static final String RegisterMe = "Register";
@@ -38,21 +41,21 @@ public class MessageIds {
 
 	public static String ReplyFromScheduler ="Reply-to-Job-From-Scheduler";
 
-	public static String BidForJob ="Bid-For-Job";
+	public static String GSABidForJobFromLSA ="Bid-For-Job";
 
 	public static String MachineFailure = "Failure-of-Machine";
 
 	public static String WaitTime = "MaxWaitingTimeForJob";
 
-	public static String Negotiate = "Negotiation";
+	public static String GSANegotiationJobsCustomer = "_GSANegotiationJobsCustomer";
 
 	public static String OrderConfirmation = "OrderConfirmation";
 
-	public static String WorkOrder = "WorkOrder";
+	public static String GSA_NewWorkOrder_fromCustomer = "GSA_NewWorkOrder_fromCustomer";
 
 	public static String SendJob="SendJob";
 
-	public static String waitingTime="waiting-time";
+	public static String GSAwaitingTimeFromLSA = "_waitingTimeFromLSA";
 
 	public static String GiveJob="GiveJob";
 
@@ -63,7 +66,7 @@ public class MessageIds {
 	public static String machineInspectionStart = "machineInspectionStart";
 	public static String machineInspectionData = "machineInspectionStart";
 	public static String completedJobFromMachine = "completedJobFromMachine";
-	
+
 	public static String failEnd = "Fail-End";
 	public static String machineSimulatorHealth = "Machine-Simualtor-State";
 	public static String MaintMachineRepaired = "Machine-failure-End";

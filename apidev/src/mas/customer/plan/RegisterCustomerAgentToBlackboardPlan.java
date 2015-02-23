@@ -35,19 +35,19 @@ public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour impl
 		AID bb_aid = AgentUtil.findBlackboardAgent(myAgent);
 
 		NamedZoneData ZoneDataName1 = 
-				new NamedZoneData.Builder(ID.Customer.ZoneData.acceptedJobs).
+				new NamedZoneData.Builder(ID.Customer.ZoneData.confirmedJobs).
 				MsgID(MessageIds.ReplyFromScheduler).
 				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName2 = 
-				new NamedZoneData.Builder(ID.Customer.ZoneData.JobList).
+				new NamedZoneData.Builder(ID.Customer.ZoneData.newWorkOrderFromCustomer).
 				MsgID(MessageIds.JobFromCustomer).
 				appendValue(true).
 				build();
 
 		NamedZoneData ZoneDataName3 = 
-				new NamedZoneData.Builder(ID.Customer.ZoneData.Negotiation).
+				new NamedZoneData.Builder(ID.Customer.ZoneData.jobsUnderNegotiation).
 				MsgID(MessageIds.Negotiate).
 				appendValue(true).
 				build();
@@ -62,7 +62,7 @@ public class RegisterCustomerAgentToBlackboardPlan extends OneShotBehaviour impl
 		SubscriptionForm subform = new SubscriptionForm();
 		AID target = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
 		
-		String[] params = {ID.GlobalScheduler.ZoneData.NegotiationJob,
+		String[] params = {ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation,
 				ID.GlobalScheduler.ZoneData.ConfirmedOrder};
 
 		subform.AddSubscriptionReq(target, params);

@@ -30,7 +30,7 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 
 	@Override
 	public void action() {
-		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.NegotiationJob, (Object)1); 
+		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.jobsUnderNegaotiation, (Object)1); 
 		//Negotiation logic under development
 		update.send(bb, update, myAgent);
 	}

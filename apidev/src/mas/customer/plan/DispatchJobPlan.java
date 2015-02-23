@@ -48,7 +48,7 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 	public void action() {
 
 		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
-				ID.Customer.ZoneData.JobList,
+				ID.Customer.ZoneData.newWorkOrderFromCustomer,
 				jobToDispatch);
 		
 //		log.info("Job dispatching custoemr " + jobToDispatch );

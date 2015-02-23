@@ -55,13 +55,13 @@ public class RegisterAgentToBlackboardBehavior extends OneShotBehaviour implemen
 		
 		// subscription form for maintenance agent
 		SubscriptionForm MaintenanceSubform = new SubscriptionForm();
-		String[] maintParams = {ID.Maintenance.ZoneData.PMdata,
+		String[] maintParams = {ID.Maintenance.ZoneData.prevMaintData,
 				ID.Maintenance.ZoneData.correctiveMaintdata};
 		MaintenanceSubform.AddSubscriptionReq(maintTarget, maintParams);
 		
 		// subscription form for local scheduling agent
 		SubscriptionForm lSchedulingSubform = new SubscriptionForm();
-		String[] lSchedulingParams = {ID.LocalScheduler.ZoneData.jobQueue };
+		String[] lSchedulingParams = {ID.LocalScheduler.ZoneData.machineJobQueue };
 		lSchedulingSubform.AddSubscriptionReq(lSchedulingTarget, lSchedulingParams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, MaintenanceSubform);
