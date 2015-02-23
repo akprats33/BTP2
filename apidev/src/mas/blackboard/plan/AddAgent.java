@@ -47,7 +47,10 @@ public class AddAgent extends OneShotBehaviour implements PlanBody{
 		belief=PI.getBeliefBase();
 		try {
 			Object temp=Message.getContentObject();
-			ZoneDataNameArray=(NamedZoneData[])temp;			
+			ZoneDataNameArray=(NamedZoneData[])temp;
+			/*for(int i=0;i<ZoneDataNameArray.length;i++){
+				log.info("for "+ZoneDataNameArray[i].getName()+" -> "+ZoneDataNameArray[i].getUpdateMsgID());
+			}*/
 		} catch (UnreadableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
