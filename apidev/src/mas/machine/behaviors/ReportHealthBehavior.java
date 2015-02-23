@@ -13,12 +13,13 @@ public class ReportHealthBehavior extends TickerBehaviour{
 
 	public ReportHealthBehavior(Agent a, long period) {
 		super(a, period);
-		machineSimulator = (Simulator) getParent().
-				getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
 	protected void onTick() {
+		machineSimulator = (Simulator) getParent().
+				getDataStore().get(Simulator.simulatorStoreName);
+		
 		ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
 				ID.Machine.ZoneData.myHealth,
 				machineSimulator);

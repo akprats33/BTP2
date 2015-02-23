@@ -37,14 +37,16 @@ public class LoadMachineComponentBehavior extends OneShotBehaviour{
 	 *  convert that into milliseconds
 	 */
 	private int unitConversion = 3600000;
-	
+
 	public LoadMachineComponentBehavior() {
-		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
 	public void action() {
 		log = LogManager.getLogger();
+		machineSimulator = (Simulator) getParent().
+				getDataStore().
+				get(Simulator.simulatorStoreName);
 		this.filePath = System.getProperty("user.dir");
 		try {
 			InputStream fStream = new FileInputStream (filePath + 
@@ -120,19 +122,19 @@ public class LoadMachineComponentBehavior extends OneShotBehaviour{
 				}
 				cellCount++;
 			}
-		tempComponent = new Component.Builder(eta, beta).
-						restorationFactor(restorationFactor).
-						restorationFactorType(rfType).
-						MTTR(MTTR).
-						TTR_sd(TTR_sd).
-						replacementCost(replacementCost).
-						failureCost(failureCost).
-						prevMaintCost(preventiveMaintenanceCost).
-						meanDelay(meanDelay).
-						sdDelay(sdDelay).
-						build(machineSimulator);
-		
-		machineSimulator.addComponent(tempComponent);
+			tempComponent = new Component.Builder(eta, beta).
+					restorationFactor(restorationFactor).
+					restorationFactorType(rfType).
+					MTTR(MTTR).
+					TTR_sd(TTR_sd).
+					replacementCost(replacementCost).
+					failureCost(failureCost).
+					prevMaintCost(preventiveMaintenanceCost).
+					meanDelay(meanDelay).
+					sdDelay(sdDelay).
+					build(machineSimulator);
+
+			machineSimulator.addComponent(tempComponent);
 		}
 		try {
 			workBook.close();

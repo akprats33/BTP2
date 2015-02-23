@@ -179,12 +179,14 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		acceptIncomingJobs = new AcceptJobBehavior();
 		reportHealth = new ReportHealthBehavior(this, healthReportTimeMillis);
 		processDimensionShifter = new ShiftInProcessBahavior(true, true);
+		processDimensionShifter.getDataStore().put(simulatorStoreName, Simulator.this);
 		machineParameterShifter = new ParameterShifterBehavaior();
+		machineParameterShifter.getDataStore().put(simulatorStoreName, Simulator.this);
 
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
 		functionality.addSubBehaviour(processDimensionShifter);
-		functionality.addSubBehaviour(machineParameterShifter);
+//		functionality.addSubBehaviour(machineParameterShifter);
 
 		addBehaviour(functionality);
 

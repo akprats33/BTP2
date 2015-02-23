@@ -26,8 +26,6 @@ public class ShiftInProcessBahavior extends CyclicBehaviour {
 		this.mean = byMean;
 		this.sd = bySd;
 		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
-		//shifting of process is exponentially distributed
-		expRandom = Methods.rexp(1/machineSimulator.getRateShift(), 1)[0];			 		
 	}
 
 	@Override

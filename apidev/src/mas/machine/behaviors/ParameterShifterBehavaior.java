@@ -16,7 +16,7 @@ public class ParameterShifterBehavaior extends CyclicBehaviour{
 
 	private static final long serialVersionUID = 1L;
 	private int occuredRootCause;
-	private int numRootCauses;
+	private int numRootCauses = -1;
 	private Logger log;
 	private Simulator machineSimulator;
 	private double[] timeToOccur;
@@ -27,9 +27,7 @@ public class ParameterShifterBehavaior extends CyclicBehaviour{
 
 		log = LogManager.getLogger();
 
-		this.numRootCauses = machineSimulator.getmParameterRootcauses().size();
-		timeToOccur = new double[numRootCauses];
-		//		this.parameterShiftRate = machineSimulator.get
+//		this.parameterShiftRate = machineSimulator.get
 
 	}
 
@@ -38,6 +36,11 @@ public class ParameterShifterBehavaior extends CyclicBehaviour{
 		switch(step) {
 
 		case 0:
+			this.machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
+			if(this.numRootCauses == -1) {
+				this.numRootCauses = machineSimulator.getmParameterRootcauses().size();
+				timeToOccur = new double[numRootCauses];
+			}
 			timeToOccur = Methods.rexp (this.parameterShiftRate, numRootCauses );
 			break;
 

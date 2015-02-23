@@ -23,12 +23,11 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 		log = LogManager.getLogger();
 		jobMsgTemplate = MessageTemplate.
 				MatchConversationId(MessageIds.SendJob);
-		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	@Override
 	public void action() {
-		
+		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 		if(machineSimulator.getStatus() != MachineStatus.FAILED) {
 			try {
 //				log.info("Job accepter running");
