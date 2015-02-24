@@ -1,6 +1,7 @@
 package mas.util;
 
 import java.io.IOException;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -9,6 +10,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import mas.blackboard.nameZoneData.NamedZoneData;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,4 +101,18 @@ public class AgentUtil {
 			msg.addReceiver(findBlackboardAgent(sender));
 			sender.send(msg);
 		}
+	
+	public static void sendZoneDataUpdate(AID blackboard_AID, ZoneDataUpdate zdu, Agent Sender) {
+//		log.info(zdu.name);
+		ACLMessage update=new ACLMessage(ACLMessage.INFORM);
+		update.addReceiver(blackboard_AID);
+		try {
+			update.setContentObject(zdu);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		update.setConversationId(MessageIds.UpdateParameter);
+		Sender.send(update);
+//		log.info(update);
+	}
 }

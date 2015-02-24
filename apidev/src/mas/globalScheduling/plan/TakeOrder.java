@@ -22,6 +22,7 @@ import jade.lang.acl.UnreadableException;
 
 
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ID.Customer.ZoneData;
 import mas.util.ZoneDataUpdate;
@@ -93,7 +94,7 @@ public void action() {
 		try {
 			
 			ZoneDataUpdate zdu=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAConfirmedOrder, order);
-			zdu.send(Blackboard_AID,zdu, myAgent);
+			AgentUtil.sendZoneDataUpdate(Blackboard_AID,zdu, myAgent);
 			log.info("zodeDataUpdate sent");
 			this.sent=true;
 		} catch (Exception e) {

@@ -93,7 +93,7 @@ public class SubscribeAgentBehvr extends Behaviour {
 									step++;									
 								}
 								else{
-									log.error("Couldn't find zone "+zs.getName());
+									log.error("Couldn't find zone "+nzd.getName());
 								}
 
 							}

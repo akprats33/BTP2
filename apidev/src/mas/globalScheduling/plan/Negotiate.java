@@ -2,6 +2,7 @@ package mas.globalScheduling.plan;
 
 
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -32,6 +33,6 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 	public void action() {
 		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, (Object)1); 
 		//Negotiation logic under development
-		update.send(bb, update, myAgent);
+		AgentUtil.sendZoneDataUpdate(bb, update, myAgent);
 	}
 }

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import bdi4jade.core.BDIAgent;
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MASconstants;
 import mas.util.MessageIds;
@@ -93,7 +94,7 @@ public class WaitTimeBehvr extends Behaviour {
 			}
 			else{
 				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
-				NegotiationUpdate.send(this.bba, NegotiationUpdate, myAgent);
+				AgentUtil.sendZoneDataUpdate(this.bba, NegotiationUpdate, myAgent);
 				/*replyToCust.setContentObject(JobToSend);												
 				replyToCust.addReceiver(new AID(CustomerAgent, false));
 				replyToCust.setConversationId(MessageIds.ReplyFromScheduler.toString());*/

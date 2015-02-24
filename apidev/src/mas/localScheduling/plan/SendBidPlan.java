@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import mas.job.job;
 import mas.localScheduling.algorithm.ScheduleSequence;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 
@@ -69,7 +70,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 					ID.LocalScheduler.ZoneData.bidForJob,
 					jobToBidFor);
 
-			bidForJobUpdate.send(blackboard ,bidForJobUpdate, myAgent);
+			AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);
 			
 			log.info("Sending bid for job :" + jobToBidFor);
 		}catch(Exception e){

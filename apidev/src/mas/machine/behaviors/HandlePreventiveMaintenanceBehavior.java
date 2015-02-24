@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -55,7 +56,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 					ID.Machine.ZoneData.maintenanceStart,
 					comingJob);
 
-			maintenanceStartUpdate.send(Simulator.blackboardAgent ,
+			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					maintenanceStartUpdate, myAgent);
 
 			machineSimulator.setStatus(MachineStatus.UNDER_MAINTENANCE);

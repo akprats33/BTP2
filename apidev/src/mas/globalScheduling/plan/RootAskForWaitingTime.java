@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import mas.globalScheduling.behaviour.WaitTimeBehvr;
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -44,6 +45,8 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 
 	@Override
 	public void init(PlanInstance PI) {
+		log=LogManager.getLogger();
+		
 		try {
 			j=(job)((MessageGoal)PI.getGoal()).getMessage().getContentObject();
 		} catch (UnreadableException e) {
@@ -58,7 +61,6 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				MessageTemplate.MatchConversationId(MessageIds.msgWaitingTime),
 				MessageTemplate.MatchInReplyTo(msgReplyID));
 
-		log=LogManager.getLogger();
 	}
 
 	@Override
@@ -69,7 +71,8 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 			ACLMessage msg=new ACLMessage(ACLMessage.CFP);
 			msg.setConversationId(MessageIds.UpdateParameter);
 			ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
-			update.send(blackboard, update, myAgent);
+			AgentUtil.sendZoneDataUpdate(blackboard, update, myAgent);
+			
 			
 			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
 			log.info(MachineCount);
@@ -99,7 +102,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 			break;
 		case 2:
 			try {
-
+				
 				ACLMessage max=ChooseWaitingTimeToSend(WaitingTime);
 				job JobToSend=(job)(max.getContentObject());
 				ACLMessage replyToCust = new ACLMessage(ACLMessage.PROPOSE);
@@ -108,7 +111,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				}
 				else{
 					ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
-					NegotiationUpdate.send(blackboard, NegotiationUpdate, myAgent);
+					AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate, myAgent);
 					/*replyToCust.setContentObject(JobToSend);												
 				replyToCust.addReceiver(new AID(CustomerAgent, false));
 				replyToCust.setConversationId(MessageIds.ReplyFromScheduler.toString());*/

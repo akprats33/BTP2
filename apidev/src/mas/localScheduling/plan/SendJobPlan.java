@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -59,7 +60,7 @@ public class SendJobPlan extends OneShotBehaviour implements PlanBody {
 					ID.LocalScheduler.ZoneData.jobForMachine,
 					jobQueue.get(0));
 
-			jobForMachineUpdate.send(blackboard ,jobForMachineUpdate, myAgent);
+			AgentUtil.sendZoneDataUpdate(blackboard ,jobForMachineUpdate, myAgent);
 
 			jobQueue.remove(0);			
 			/**

@@ -8,6 +8,7 @@ import jade.lang.acl.UnreadableException;
 import java.util.ArrayList;
 
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
@@ -72,7 +73,8 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		// get average queue size and waiting time in the queue
 		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
 		averageProcessingTime = sTracker.getAvgProcessingTime();
-
+	
+		
 		double avgWaitingTime = averageProcessingTime*averageQueueSize;
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
 
@@ -81,7 +83,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j);
 
-		waitingTimeUpdate.send(blackboard ,waitingTimeUpdate, myAgent);
+		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
 		
 		//		myAgent.addBehaviour(new CalculateWaitTimeBehavior(JobQueue.size(),GlobalSchedulingAID, j));
 	}

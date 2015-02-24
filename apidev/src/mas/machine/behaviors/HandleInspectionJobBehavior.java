@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -48,7 +49,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 					ID.Machine.ZoneData.inspectionStart,
 					comingJob);
 
-			inspectionZoneUpdate.send(Simulator.blackboardAgent ,
+			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					inspectionZoneUpdate, myAgent);
 			
 			log.info("recieving inspection data for machine");

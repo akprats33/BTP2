@@ -2,12 +2,16 @@ package mas.machine.behaviors;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+
 import mas.machine.Simulator;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -45,7 +49,7 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 					ID.Machine.ZoneData.myHealth,
 					machineSimulator);
 
-			machineFailureUpdate.send(Simulator.blackboardAgent ,
+			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					machineFailureUpdate, myAgent);
 			step = 1;
 
