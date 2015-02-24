@@ -47,7 +47,7 @@ public class AgentStarter {
 		//		log.info(log.isInfoEnabled());
 
 		List<String> params = new ArrayList<String>();
-		params.add("-gui");
+//		params.add("-gui");
 		//		params.add("-detect-main:false");
 
 		log.info("parameters for console :" +params);

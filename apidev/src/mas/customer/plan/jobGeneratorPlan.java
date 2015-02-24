@@ -9,7 +9,10 @@ public class jobGeneratorPlan extends rootJobGeneratePlan{
 
 	@Override
 	public long getInterArrivalTimeMillis() {
-		return super.getInterArrivalTimeMillis();
+	
+		return super.getInterArrivalTimeMillis(); //return inter-arrival time between jobs in mililiseconds
+		//used by tootJobGeneratePlan to reset tick interval
+		
 	}
 
 	@Override
