@@ -105,6 +105,9 @@ public class AgentUtil {
 	public static void sendZoneDataUpdate(AID blackboard_AID, ZoneDataUpdate zdu, Agent Sender) {
 //		log.info(zdu.name);
 		ACLMessage update=new ACLMessage(ACLMessage.INFORM);
+		if(blackboard_AID==null){
+			log.error("blackboard_AID is null");
+		}
 		update.addReceiver(blackboard_AID);
 		try {
 			update.setContentObject(zdu);

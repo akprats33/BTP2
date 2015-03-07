@@ -48,8 +48,11 @@ public class AbstractbasicCapability extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
+		AID temp_bb_AID=new AID(ID.Blackboard.LocalName,false);
 		Belief<AID> bboard = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
+				ID.LocalScheduler.BeliefBaseConst.blackboardAgent, temp_bb_AID);
+		
+		
 
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);
@@ -122,10 +125,10 @@ public class AbstractbasicCapability extends Capability {
 	protected void setup() {
 		myAgent.addGoal(new RegisterLSAgentServiceGoal());
 		myAgent.addGoal(new RegisterLSAgentToBlackboardGoal());
-		myAgent.addGoal(new SendBidGoal());
+	/*	myAgent.addGoal(new SendBidGoal());
 		myAgent.addGoal(new SendJobGoal());
 		myAgent.addGoal(new SendWaitingTimeGoal());
 		myAgent.addGoal(new EnqueueJobGoal());
-		myAgent.addGoal(new ReceiveCompletedJobGoal());
+		myAgent.addGoal(new ReceiveCompletedJobGoal());*/
 	}
 }

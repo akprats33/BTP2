@@ -43,7 +43,7 @@ public class MessageIds {
 	// Local scheduling agent message ids here
 
 	// update your waiting time for the job here
-	public static final String msgWaitingTime = "LSA_WaitingTime";
+	public static final String msgWaitingTime = "WaitingTime_LSA";
 
 	// update your bid for job here
 	public static final String msgbidForJob = "LSA_BidForJob";

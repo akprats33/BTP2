@@ -78,7 +78,7 @@ public class AddAgent extends OneShotBehaviour implements PlanBody{
 			zs.createZoneData(ZoneDataNameArray[i]);
 		}
 		wspace.addValue(zs);
-		((BDIAgent)myAgent).getRootCapability().getBeliefBase().addBelief(wspace); //update belief base
+		((BDIAgent)myAgent).getRootCapability().getBeliefBase().addOrUpdateBelief(wspace); //update belief base
 		log.info(AgentType +" type Agent added");
 //		log.info(((BDIAgent)myAgent).getRootCapability().getBeliefBase());
 	}

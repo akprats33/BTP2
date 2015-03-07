@@ -17,7 +17,7 @@ import jade.core.behaviours.TickerBehaviour;
 public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 
 	private static final long serialVersionUID = 1L;
-	public double rate = 0.10;
+	public double rate = 1;
 	private PlanInstance planInstance;
 	private ExponentialDistribution exp;
 	private JobGeneratorIFace jGen;
@@ -64,7 +64,8 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	 */
 	
 	public long getInterArrivalTimeMillis(){
-		return (long) Math.max(1, exp.sample()*1000);
+//		return (long) Math.max(1, exp.sample()*1000);
+		return (long) 10000;
 	}
 
 	@Override
