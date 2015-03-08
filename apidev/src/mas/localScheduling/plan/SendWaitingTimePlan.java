@@ -96,6 +96,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
 		
+		
 		//		myAgent.addBehaviour(new CalculateWaitTimeBehavior(JobQueue.size(),GlobalSchedulingAID, j));
 	}
 }

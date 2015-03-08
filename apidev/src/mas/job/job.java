@@ -1,5 +1,7 @@
 package mas.job;
 
+import jade.core.AID;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +54,7 @@ public class job implements Serializable{
 	private double profit;
 	private double delTime;
 	private double delStatus;
+	private AID WinnerLSA;
 
 	public int getPosition() {
 		return position;
@@ -312,6 +315,14 @@ public class job implements Serializable{
 
 	public void setBidByLSA(double bidByLSA) {
 		BidByLSA = bidByLSA;
+	}
+	
+	public AID getBidWinnerLSA(){
+		return WinnerLSA;
+	}
+	
+	public void setBidWinnerLSA(AID winner_LSA){
+		this.WinnerLSA=winner_LSA;
 	}
 
 }

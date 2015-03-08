@@ -47,12 +47,14 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 			
 			private static final long serialVersionUID = 1L;
 
+			int NoOfJobs=0;
 			@Override
 			protected void onTick() {
 				bfBase.updateBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB, jGen.getNextJob());
 				planInstance.dispatchSubgoal(new dispatchJobGoal());
 				reset(getInterArrivalTimeMillis());
-//				log.info("waiting time :"+getInterArrivalTime());
+				log.info("NoOfJobs :"+NoOfJobs);
+				NoOfJobs++;
 			}
 		});
 	}
@@ -65,7 +67,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	
 	public long getInterArrivalTimeMillis(){
 //		return (long) Math.max(1, exp.sample()*1000);
-		return (long) 10000;
+		return (long) 100000;
 	}
 
 	@Override

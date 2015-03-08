@@ -37,11 +37,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 	private ACLMessage[] WaitingTime;
 	private int repliesCnt = 0; // The counter of replies from seller agents
 
-	@Override
-	public EndState getEndState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public void init(PlanInstance PI) {
@@ -68,20 +64,16 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 	public void action() {
 		switch (step) {
 		case 0:
-
-			ACLMessage msg=new ACLMessage(ACLMessage.CFP);
-			msg.setConversationId(MessageIds.UpdateParameter);
-			ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
-			AgentUtil.sendZoneDataUpdate(blackboard, update, myAgent);
-			
 			
 			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
 //			log.info(MachineCount);
 			
 			if(MachineCount!=0){
+				ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
+				AgentUtil.sendZoneDataUpdate(blackboard, update, myAgent);
 				WaitingTime=new ACLMessage[MachineCount];
 				step = 1;
-				log.info("mt="+mt);
+//				log.info("mt="+mt);
 			}
 			
 			break;
@@ -94,7 +86,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				if (reply != null) {
 					WaitingTime[repliesCnt]=reply;
 					repliesCnt++;
-//					log.info("recieved message");
+//					log.info("repliesCnt = "+repliesCnt);
 
 					if (repliesCnt == MachineCount) {				
 						step = 2; 
@@ -119,8 +111,6 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				job JobToSend=(job)(max.getContentObject());
 				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate, myAgent);
-
-
 
 			} catch (UnreadableException e) {
 
@@ -155,6 +145,17 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 	@Override
 	public boolean done() {
 
-		return step==3;
+		return (step==3);
+	}
+	
+	@Override
+	public EndState getEndState() {
+		if(step==3){
+			return EndState.SUCCESSFUL;
+		}
+		else{
+			return EndState.FAILED;
+		}
+		
 	}
 }

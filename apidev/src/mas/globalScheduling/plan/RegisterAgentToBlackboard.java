@@ -84,7 +84,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 		subform.AddSubscriptionReq(target, params);
 		
 		AID target_LSA=new AID(ID.LocalScheduler.LocalName,AID.ISLOCALNAME);
-		String[] LSAparams={ID.LocalScheduler.ZoneData.WaitingTime};
+		String[] LSAparams={ID.LocalScheduler.ZoneData.WaitingTime, ID.LocalScheduler.ZoneData.bidForJob};
 		subform.AddSubscriptionReq(target_LSA, LSAparams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, subform);

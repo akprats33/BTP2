@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import mas.job.job;
 import mas.localScheduling.algorithm.ScheduleSequence;
@@ -69,17 +70,22 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 			ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
 					ID.LocalScheduler.ZoneData.bidForJob,
 					jobToBidFor);
-
+		
+			
 			AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);
 			
-			log.info("Sending bid for job :" + jobToBidFor);
+//			log.info("Sending bid for job :" + jobToBidFor);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
 	private void setBid(job j){
-		jobQueue = (ArrayList<job>) bfBase.
+		Random r=new Random();	
+		j.setBidByLSA(r.nextDouble());
+		
+		
+		/*jobQueue = (ArrayList<job>) bfBase.
 						getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 						getValue();
 		
@@ -93,7 +99,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		ScheduleSequence sch = new ScheduleSequence(tempQueue);
 		ArrayList<job> tempqSolution = sch.getSolution();
 		
-		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );
+		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );*/
 	}
 	
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {

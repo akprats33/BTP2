@@ -149,7 +149,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 			Object obj= getData();
 			update.setContentObject((Serializable) obj);
 //			log.info("value is "+obj);
-			log.info("ZoneData "+ getName()+" updated"+ " value: "+obj);
+			log.info("ZoneData "+ getName()+" updated"+ " UpdateMessageID: "+UpdateMessageID);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

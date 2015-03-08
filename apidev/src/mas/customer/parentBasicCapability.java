@@ -1,6 +1,7 @@
 package mas.customer;
 
 import jade.core.AID;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -8,10 +9,13 @@ import java.util.Set;
 import mas.customer.goal.GenerateJobGoal;
 import mas.customer.goal.RegisterAgentToBlackboardGoal;
 import mas.customer.goal.dispatchJobGoal;
+import mas.customer.plan.ConfirmOrder;
 import mas.customer.plan.DispatchJobPlan;
 import mas.customer.plan.RegisterCustomerAgentToBlackboardPlan;
 import mas.customer.plan.jobGeneratorPlan;
+import mas.globalScheduling.plan.Negotiate;
 import mas.util.ID;
+import mas.util.MessageIds;
 import bdi4jade.belief.Belief;
 import bdi4jade.belief.TransientBelief;
 import bdi4jade.core.BeliefBase;
@@ -60,6 +64,11 @@ public class parentBasicCapability extends Capability {
 		
 		plans.add(new SimplePlan(dispatchJobGoal.class,
 				DispatchJobPlan.class));
+		
+
+		plans.add(new SimplePlan
+				(MessageTemplate.MatchConversationId(
+				MessageIds.msgGSAjobsUnderNegaotiation),ConfirmOrder.class));
 		
 		return plans;
 	}	
