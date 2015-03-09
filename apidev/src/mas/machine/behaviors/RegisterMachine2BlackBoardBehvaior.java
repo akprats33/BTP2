@@ -1,5 +1,8 @@
 package mas.machine.behaviors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mas.blackboard.nameZoneData.NamedZoneData;
 import mas.machine.Simulator;
 import mas.util.AgentUtil;
@@ -16,15 +19,18 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 
 	private static final long serialVersionUID = 1L;
+	private Logger log;
 
 	@Override
 	public void action() {
 		
+		log = LogManager.getLogger();
 		/**
 		 * first find blackboard and store it's AID
 		 */
 		AID bb_aid = AgentUtil.findBlackboardAgent(myAgent);
 		Simulator.blackboardAgent = bb_aid;
+		log.info("blackboard is : " + Simulator.blackboardAgent);
 
 		/**
 		 *  Now create zones on blackboard where data of machine will be kept for
@@ -96,5 +102,8 @@ public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 		lSchedulingSubForm.AddSubscriptionReq(lMaintenanceTarget, lMaintenanceParams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, lMaintenanceSubForm);
+		
+		// Add givemeJobBehavior to agent
+		myAgent.addBehaviour(new GiveMeJobBehavior());
 	}
 }

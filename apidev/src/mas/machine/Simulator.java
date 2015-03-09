@@ -6,16 +6,20 @@ import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.util.leap.Serializable;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.EnumSet;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.OperationType;
 import mas.machine.behaviors.AcceptJobBehavior;
+import mas.machine.behaviors.GiveMeJobBehavior;
 import mas.machine.behaviors.ParameterShifterBehavaior;
 import mas.machine.behaviors.RegisterMachine2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
@@ -181,7 +185,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		processDimensionShifter.getDataStore().put(simulatorStoreName, Simulator.this);
 		machineParameterShifter = new ParameterShifterBehavaior();
 		machineParameterShifter.getDataStore().put(simulatorStoreName, Simulator.this);
-
+		
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
 		functionality.addSubBehaviour(processDimensionShifter);

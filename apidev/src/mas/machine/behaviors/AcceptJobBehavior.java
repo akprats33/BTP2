@@ -30,8 +30,9 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 		machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 		if(machineSimulator.getStatus() != MachineStatus.FAILED) {
 			try {
-//				log.info("Job accepter running");
+				
 				ACLMessage msg = myAgent.receive(jobMsgTemplate);
+				log.info("Job accepter running " + msg);
 				if (msg != null) {
 					this.jobToProcess = (job) msg.getContentObject();
 					

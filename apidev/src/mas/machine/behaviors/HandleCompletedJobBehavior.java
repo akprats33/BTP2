@@ -27,6 +27,7 @@ public class HandleCompletedJobBehavior extends Behaviour{
 	public void action() {
 		switch(step) {
 		case 0:
+			myAgent.addBehaviour(new GiveMeJobBehavior());
 			/**
 			 * update zonedata for completed jobs from machine
 			 */
