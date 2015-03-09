@@ -80,14 +80,15 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
 		averageProcessingTime = sTracker.getAvgProcessingTime();
 
-		double avgWaitingTime = averageProcessingTime*averageQueueSize;
+		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
 
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
+		j.setStartTime(avgWaitingTime);
 
 		log.info(j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
-				this.j);
+				this.j );
 
 		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
 	}

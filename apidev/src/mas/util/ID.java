@@ -88,7 +88,7 @@ public class ID implements Serializable{
 			// jobs under negotiation
 			public static final String GSAjobsUnderNegaotiation = "GSA_jobsUnderNegaotiation"; 
 
-			// job which are confirmed and advertised for machine
+			// job which are confirmed after bidding and sent to winner-machine
 			public static final String jobForLSA = "GSA_job-for-machine";
 
 			// advertise job for bids from LSA

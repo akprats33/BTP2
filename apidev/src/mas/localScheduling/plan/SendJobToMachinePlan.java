@@ -7,6 +7,9 @@ import jade.lang.acl.ACLMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -24,12 +27,13 @@ import bdi4jade.plan.PlanInstance.EndState;
  * this picks a job from the queue and sends it to the machine for processing
  */
 
-public class SendJobPlan extends OneShotBehaviour implements PlanBody {
+public class SendJobToMachinePlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<job> jobQueue;
 	private BeliefBase bfBase;
 	private AID blackboard;
+	private Logger log;
 
 	@Override
 	public EndState getEndState() {
@@ -49,13 +53,17 @@ public class SendJobPlan extends OneShotBehaviour implements PlanBody {
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
+
+		log = LogManager.getLogger();
 	}
 
 	@Override
 	public void action() {
 
-		if(jobQueue.size() != 0){
+		log.info("sent job to machine outside : " + jobQueue.get(0) );
+		if(jobQueue.size() != 0) {
 
+			log.info("sent job to machine : " + jobQueue.get(0) );
 			ZoneDataUpdate jobForMachineUpdate = new ZoneDataUpdate(
 					ID.LocalScheduler.ZoneData.jobForMachine,
 					jobQueue.get(0));

@@ -35,7 +35,7 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 				if (msg != null) {
 					this.jobToProcess = (job) msg.getContentObject();
 					
-					log.info(" Job No : '" + jobToProcess.getJobNo()+ "'accepted" );
+					log.info(" Job No : '" + jobToProcess.getJobNo() + "'accepted" );
 					
 					AddJobBehavior addjob = new AddJobBehavior(this.jobToProcess);
 					addjob.setDataStore(this.getDataStore());

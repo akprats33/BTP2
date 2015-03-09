@@ -30,7 +30,7 @@ public class MessageIds {
 	public static final String msgGSAjobsUnderNegaotiation = "GSA_jobsUnderNegaotiation"; 
 
 	// job which are confirmed and advertised for machine
-	public static final String msgjobForLSA = "GSA_job-for-machine";
+	public static final String msgjobForLSA = "GSA_job_for_machine";
 
 	// advertise job for bids from LSA
 	public static final String msgaskBidForJobFromLSA = "GSA_ask-for-bid";

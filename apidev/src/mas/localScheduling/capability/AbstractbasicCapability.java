@@ -2,27 +2,18 @@ package mas.localScheduling.capability;
 
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import mas.customer.goal.RegisterAgentToBlackboardGoal;
 import mas.job.job;
-import mas.localScheduling.goal.EnqueueJobGoal;
-import mas.localScheduling.goal.ReceiveCompletedJobGoal;
 import mas.localScheduling.goal.RegisterLSAgentServiceGoal;
 import mas.localScheduling.goal.RegisterLSAgentToBlackboardGoal;
-import mas.localScheduling.goal.SendBidGoal;
-import mas.localScheduling.goal.SendJobGoal;
-import mas.localScheduling.goal.SendWaitingTimeGoal;
 import mas.localScheduling.plan.EnqueueJobPlan;
 import mas.localScheduling.plan.ReceiveCompletedJobPlan;
 import mas.localScheduling.plan.RegisterLSAgentServicePlan;
 import mas.localScheduling.plan.RegisterLSAgentToBlackboardPlan;
 import mas.localScheduling.plan.SendBidPlan;
-import mas.localScheduling.plan.SendJobPlan;
-import mas.localScheduling.plan.SendJobToMachine;
+import mas.localScheduling.plan.SendJobToMachinePlan;
 import mas.localScheduling.plan.SendWaitingTimePlan;
 import mas.localScheduling.plan.StatsTracker;
 import mas.util.ID;
@@ -101,7 +92,7 @@ public class AbstractbasicCapability extends Capability {
 				SendBidPlan.class));
 
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskJobFromLSA),
-				SendJobPlan.class));
+				SendJobToMachinePlan.class));
 
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgGetWaitingTime),
 				SendWaitingTimePlan.class));
@@ -113,8 +104,7 @@ public class AbstractbasicCapability extends Capability {
 				RegisterLSAgentServicePlan.class));
 
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgjobForLSA),
-				SendJobToMachine.class));
-
+				SendJobToMachinePlan.class));
 
 		return plans;
 	}	
