@@ -43,7 +43,7 @@ import bdi4jade.util.plan.SimplePlan;
 public class AbstractbasicCapability extends Capability {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public AbstractbasicCapability(){
 		super(new BeliefBase(getBeliefs()), new PlanLibrary(getPlans()));
 	}
@@ -54,8 +54,8 @@ public class AbstractbasicCapability extends Capability {
 		AID temp_bb_AID=new AID(ID.Blackboard.LocalName,false);
 		Belief<AID> bboard = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.blackboardAgent, temp_bb_AID);
-		
-		
+
+
 
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);
@@ -69,8 +69,14 @@ public class AbstractbasicCapability extends Capability {
 		Belief<StatsTracker> dtrack = new TransientBelief<StatsTracker>(
 				ID.LocalScheduler.BeliefBaseConst.dataTracker);
 
+		StatsTracker stats = new StatsTracker();
+		dtrack.setValue(stats);
+
 		Belief<ArrayList<job> > jobSet = new TransientBelief<ArrayList<job> >(
 				ID.LocalScheduler.BeliefBaseConst.jobQueue);
+		
+		ArrayList<job> jobList = new ArrayList<job>();
+		jobSet.setValue(jobList);
 
 		beliefs.add(bboard);
 		beliefs.add(jobSet);
@@ -90,26 +96,26 @@ public class AbstractbasicCapability extends Capability {
 
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgfinishedJob),
 				ReceiveCompletedJobPlan.class));
-		
+
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskBidForJobFromLSA),
 				SendBidPlan.class));
-		
+
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskJobFromLSA),
 				SendJobPlan.class));
-		
+
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgGetWaitingTime),
 				SendWaitingTimePlan.class));
-		
+
 		plans.add(new SimplePlan(RegisterLSAgentToBlackboardGoal.class,
 				RegisterLSAgentToBlackboardPlan.class));
-		
+
 		plans.add(new SimplePlan(RegisterLSAgentServiceGoal.class,
 				RegisterLSAgentServicePlan.class));
-		
+
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgjobForLSA),
 				SendJobToMachine.class));
-		
-		
+
+
 		return plans;
 	}	
 
@@ -117,7 +123,7 @@ public class AbstractbasicCapability extends Capability {
 	protected void setup() {
 		myAgent.addGoal(new RegisterLSAgentServiceGoal());
 		myAgent.addGoal(new RegisterLSAgentToBlackboardGoal());
-	/*	myAgent.addGoal(new SendBidGoal());
+		/*	myAgent.addGoal(new SendBidGoal());
 		myAgent.addGoal(new SendJobGoal());
 		myAgent.addGoal(new SendWaitingTimeGoal());
 		myAgent.addGoal(new EnqueueJobGoal());

@@ -2,7 +2,6 @@ package mas.localScheduling.plan;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -56,7 +55,7 @@ public class StatsTracker {
 		return cumulatedQueueSize.divide(divisor, 2, RoundingMode.HALF_UP);
 	}
 
-	public double geUtilization(){
+	public double geUtilization() {
 		double busyTime = 0, makeSpan = 0, utilization = 0;
 		job lastOne = null;
 

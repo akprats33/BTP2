@@ -61,11 +61,11 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		jobQueue = (ArrayList<job>) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
 				getValue();
-		
+
 		sTracker = (StatsTracker) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker).
 				getValue();
-		
+
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
@@ -73,30 +73,22 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public void action() {		
-//		sTracker.addSize( jobQueue.size() );
-		
+		log.info(jobQueue.size());
+		sTracker.addSize( jobQueue.size() );
+
 		// get average queue size and waiting time in the queue
-//		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
-//		averageProcessingTime = sTracker.getAvgProcessingTime();
-	
-		
-//		double avgWaitingTime = averageProcessingTime*averageQueueSize;
-		
-		//////////remove/////////
-		 Random randomGenerator = new Random();
-		j.setWaitingTime(randomGenerator.nextDouble());
-		/////////remove//////////
-//		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
+		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
+		averageProcessingTime = sTracker.getAvgProcessingTime();
+
+		double avgWaitingTime = averageProcessingTime*averageQueueSize;
+
+		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
 
 		log.info(j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j);
-		
 
 		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
-		
-		
-		//		myAgent.addBehaviour(new CalculateWaitTimeBehavior(JobQueue.size(),GlobalSchedulingAID, j));
 	}
 }
