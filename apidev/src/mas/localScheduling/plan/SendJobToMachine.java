@@ -7,22 +7,20 @@ import jade.core.behaviours.OneShotBehaviour;
 
 public class SendJobToMachine extends OneShotBehaviour implements PlanBody{
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public EndState getEndState() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void init(PlanInstance arg0) {
-		// TODO Auto-generated method stub
-		
+	public void init(PlanInstance pInstance) {
+
 	}
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-		
-	}
 
+	}
 }

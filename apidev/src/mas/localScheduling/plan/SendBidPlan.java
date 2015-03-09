@@ -49,11 +49,11 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
-		
+
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
-		
+
 		msg = ((MessageGoal)pInstance.getGoal()).getMessage();
 		try {
 			jobToBidFor = (job)msg.getContentObject();
@@ -66,56 +66,57 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	public void action() {
 		try{
 			setBid(jobToBidFor);
-			
+
 			ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
 					ID.LocalScheduler.ZoneData.bidForJob,
 					jobToBidFor);
-		
-			
+
+
 			AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);
-			
-//			log.info("Sending bid for job :" + jobToBidFor);
+
+			//			log.info("Sending bid for job :" + jobToBidFor);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
 	private void setBid(job j){
-		Random r=new Random();	
-		j.setBidByLSA(r.nextDouble());
-		
-		
-		/*jobQueue = (ArrayList<job>) bfBase.
-						getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
-						getValue();
-		
-		long tim = System.currentTimeMillis() / 1000 ;
-		
+		//		Random r = new Random();	
+		//		j.setBidByLSA(r.nextDouble());
+
+		jobQueue = (ArrayList<job>) bfBase.
+				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
+				getValue();
+
 		ArrayList<job> tempQueue = new  ArrayList<job>();
 		tempQueue.addAll(jobQueue);
-		
 		tempQueue.add(j);
-		
+
 		ScheduleSequence sch = new ScheduleSequence(tempQueue);
 		ArrayList<job> tempqSolution = sch.getSolution();
-		
-		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );*/
+
+//		log.info(tempQueue + "");
+//		log.info(jobQueue + "");
+//		log.info(tempqSolution + "");
+
+		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );
 	}
-	
+
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {
 		double finishTime = 0.0;
 		double cost = 0.0;
 		int l = sequence.size();
 
 		for (int i = 0; i < l; i++) {
-			
+
 			finishTime = sequence.get(i).getProcessingTime() +
-						sequence.get(i).getStartTime().getTime();
+					(sequence.get(i).getStartTime().getTime() +
+							System.currentTimeMillis());
 
 			double tardiness = 0.0;
 
 			if (finishTime > sequence.get(i).getDuedate().getTime())
-				tardiness = finishTime- sequence.get(i).getDuedate().getTime();
+				tardiness = finishTime - sequence.get(i).getDuedate().getTime();
 			else
 				tardiness = 0.0;
 
