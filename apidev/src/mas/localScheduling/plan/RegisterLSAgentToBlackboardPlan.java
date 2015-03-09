@@ -52,7 +52,7 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 				MsgID(MessageIds.msgWaitingTime).
 				appendValue(true).
 				build();
-		
+
 		NamedZoneData ZoneDataName4 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.jobForMachine).
 				MsgID(MessageIds.msgjobForMachine).
@@ -73,12 +73,13 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 				ID.GlobalScheduler.ZoneData.GetWaitingTime , ID.GlobalScheduler.ZoneData.jobForLSA,
 				ID.GlobalScheduler.ZoneData.GSAConfirmedOrder };
 		gSchedulingSubform.AddSubscriptionReq(gSchedulingTarget, gSchedulingParams);
-		
+
 		AgentUtil.subscribeToParam(myAgent, bb_aid, gSchedulingSubform);
 
 		// subscription form for simulator
 		SubscriptionForm simulatorSubform = new SubscriptionForm();
-		String[] simulatorParams = { ID.Machine.ZoneData.finishedJob };
+		String[] simulatorParams = { ID.Machine.ZoneData.finishedJob,
+				ID.Machine.ZoneData.askJobFromLSA };
 		simulatorSubform.AddSubscriptionReq(simulatorTarget, simulatorParams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, simulatorSubform);

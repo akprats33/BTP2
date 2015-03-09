@@ -59,9 +59,15 @@ public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 				MsgID(MessageIds.msgmachineFailures).
 				appendValue(false).
 				build();
+		
+		NamedZoneData ZoneDataName6 =
+				new NamedZoneData.Builder(ID.Machine.ZoneData.askJobFromLSA).
+				MsgID(MessageIds.msgaskJobFromLSA).
+				appendValue(false).
+				build();
 
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1, ZoneDataName2,
-				ZoneDataName3, ZoneDataName4, ZoneDataName5};
+				ZoneDataName3, ZoneDataName4, ZoneDataName5, ZoneDataName6};
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 

@@ -124,8 +124,10 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 				ACLMessage BestBid = ChooseBid(LSAbids);
 				job JobForBidWinner = (job) (BestBid.getContentObject());
 				JobForBidWinner.setBidWinnerLSA(BestBid.getSender());
+				
 				ZoneDataUpdate NegotiationUpdate = new ZoneDataUpdate(
 						ID.GlobalScheduler.ZoneData.jobForLSA, JobForBidWinner);
+				
 				AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate,
 						myAgent);
 
