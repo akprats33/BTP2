@@ -56,6 +56,7 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 	public void action() {
 		String AgentType = AgentUtil.GetAgentService(Agent, myAgent);
 		
+		
 				
 				BeliefSet<ZoneSpace> ws=(BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType);
 				
@@ -69,23 +70,17 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 
 						if(zs.getName().equalsIgnoreCase(Agent.getLocalName())){
 							NamedZoneData nzd = new NamedZoneData.Builder(info.getName()).build();
+
 							
 							((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).removeValue(zs);
 
 							if(zs.findZoneData(nzd)!=null){
 							
-
-//								if((zs.findZoneData(nzd)).getAppendValues()){
 									zs.findZoneData(nzd).addItem(info.getValue());
-								/*}
-								else{
-									zs.findZoneData(nzd).RemoveAllnAdd(info.getValue());
-								}*/
-												
-								((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).addValue(zs);
-								
-							
-																
+
+									((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).addValue(zs);
+									
+//									log.info(nzd.getName()+" updated");
 							}
 							else{
 								log.info("couldn't find zone for "+nzd.getName());

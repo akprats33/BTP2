@@ -62,7 +62,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 				MsgID(MessageIds.msgjobForLSA).
 				build();
 
-		NamedZoneData[] ZoneDataNames={ZoneDataName2,
+		NamedZoneData[] ZoneDataNames={ZoneDataName1, ZoneDataName2,
 				ZoneDataName3,ZoneDataName4,
 				ZoneDataName5 };
 		try {
@@ -81,10 +81,11 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 		AID target = new AID(ID.Customer.LocalName, AID.ISLOCALNAME);
 		String[] params = {ID.Customer.ZoneData.customerConfirmedJobs,ID.Customer.ZoneData.newWorkOrderFromCustomer,
 				ID.Customer.ZoneData.customerJobsUnderNegotiation};
-
 		subform.AddSubscriptionReq(target, params);
-
-
+		
+		AID target_LSA=new AID(ID.LocalScheduler.LocalName,AID.ISLOCALNAME);
+		String[] LSAparams={ID.LocalScheduler.ZoneData.WaitingTime, ID.LocalScheduler.ZoneData.bidForJob};
+		subform.AddSubscriptionReq(target_LSA, LSAparams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, subform);
 

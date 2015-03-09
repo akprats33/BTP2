@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -81,7 +82,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 					ID.Maintenance.ZoneData.prevMaintData,
 					maintenanceData);
 
-			maintenanceStartData.send(this.bba ,maintenanceStartData, myAgent);
+			AgentUtil.sendZoneDataUpdate(this.bba ,maintenanceStartData, myAgent);
 			
 			log.info("sending maintenance job data");
 			break;

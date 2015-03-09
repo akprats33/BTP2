@@ -21,6 +21,7 @@ import java.util.Set;
 
 
 
+
 import mas.globalScheduling.goal.GetNoOfMachinesGoal;
 import mas.globalScheduling.goal.RegisterAgentGoal;
 import mas.globalScheduling.goal.RegisterServiceGoal;
@@ -76,19 +77,15 @@ public abstract class AbstractGSCapability  extends Capability {
 		
 		plans.add(new SimplePlan(
 				MessageTemplate.MatchConversationId(MessageIds.msgcustomerConfirmedJobs),
-				TakeOrder.class));
+				TakeOrderAndRaiseBid.class));
 		
 		plans.add(new SimplePlan
 				(MessageTemplate.MatchConversationId(
 				MessageIds.msgcustomerJobsUnderNegotiation),Negotiate.class));
 		
-		plans.add(new SimplePlan(
-				MessageTemplate.MatchConversationId(
-				MessageIds.msgnewWorkOrderFromCustomer),AskForWaitingTime.class));
 		
-//		plans.add(new SimplePlan(AskWaitingTimeGoal.class,AskForWaitingTime.class));
-		
-		
+//		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgWaitingTime, )))
+	
 		return plans;
 	}	
 	

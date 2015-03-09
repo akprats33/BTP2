@@ -2,9 +2,12 @@ package mas.customer.plan;
 
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
@@ -53,7 +56,7 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 		
 //		log.info("Job dispatching custoemr " + jobToDispatch );
 
-		jobOrderZoneDataUpdate.send(this.bba,jobOrderZoneDataUpdate, myAgent);
+		AgentUtil.sendZoneDataUpdate(this.bba,jobOrderZoneDataUpdate, myAgent);
 	}
 
 	@Override

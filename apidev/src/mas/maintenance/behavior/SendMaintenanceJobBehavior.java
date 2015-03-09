@@ -3,6 +3,7 @@ package mas.maintenance.behavior;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 
@@ -25,7 +26,7 @@ public class SendMaintenanceJobBehavior extends Behaviour{
 				ID.Maintenance.ZoneData.preventiveMaintJob,
 				this.maintJob);
 
-		maintenanceJob.send(this.bbAgent ,maintenanceJob, myAgent);
+		AgentUtil.sendZoneDataUpdate(this.bbAgent ,maintenanceJob, myAgent);
 		step = 1;
 	}
 

@@ -33,6 +33,7 @@ public class AgentStarter {
 		agents.put(ID.GlobalScheduler.LocalName, new GlobalSchedulingAgent());
 		agents.put(ID.Machine.LocalName, new Simulator());
 		agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
+//		agents.put(ID.LocalScheduler.LocalName+"Other", new LocalSchedulingAgent());
 	};
 
 	public static void main(String[] args) {
@@ -47,7 +48,7 @@ public class AgentStarter {
 		//		log.info(log.isInfoEnabled());
 
 		List<String> params = new ArrayList<String>();
-		params.add("-gui");
+//		params.add("-gui");
 		//		params.add("-detect-main:false");
 
 		log.info("parameters for console :" +params);

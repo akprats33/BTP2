@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
@@ -83,7 +84,7 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 						ID.Maintenance.ZoneData.correctiveMaintdata,
 						correctiveMaintData);
 
-				correctiveRepairUpdate.send(blackboard ,correctiveRepairUpdate, myAgent);
+				AgentUtil.sendZoneDataUpdate(blackboard ,correctiveRepairUpdate, myAgent);
 
 				step = 2;
 			}

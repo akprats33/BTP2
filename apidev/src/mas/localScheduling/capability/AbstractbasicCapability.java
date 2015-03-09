@@ -2,9 +2,11 @@ package mas.localScheduling.capability;
 
 import jade.core.AID;
 import jade.lang.acl.MessageTemplate;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
 import mas.customer.goal.RegisterAgentToBlackboardGoal;
 import mas.job.job;
 import mas.localScheduling.goal.EnqueueJobGoal;
@@ -20,6 +22,7 @@ import mas.localScheduling.plan.RegisterLSAgentServicePlan;
 import mas.localScheduling.plan.RegisterLSAgentToBlackboardPlan;
 import mas.localScheduling.plan.SendBidPlan;
 import mas.localScheduling.plan.SendJobPlan;
+import mas.localScheduling.plan.SendJobToMachine;
 import mas.localScheduling.plan.SendWaitingTimePlan;
 import mas.localScheduling.plan.StatsTracker;
 import mas.util.ID;
@@ -48,8 +51,11 @@ public class AbstractbasicCapability extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
+		AID temp_bb_AID=new AID(ID.Blackboard.LocalName,false);
 		Belief<AID> bboard = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
+				ID.LocalScheduler.BeliefBaseConst.blackboardAgent, temp_bb_AID);
+		
+		
 
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);
@@ -79,21 +85,6 @@ public class AbstractbasicCapability extends Capability {
 	public static Set<Plan> getPlans() {
 		Set<Plan> plans = new HashSet<Plan>();
 
-//		plans.add(new SimplePlan(EnqueueJobGoal.class,
-//				EnqueueJobPlan.class));
-//
-//		plans.add(new SimplePlan(ReceiveCompletedJobGoal.class,
-//				ReceiveCompletedJobPlan.class));
-//		
-//		plans.add(new SimplePlan(SendBidGoal.class,
-//				SendBidPlan.class));
-//		
-//		plans.add(new SimplePlan(SendJobGoal.class,
-//				SendJobPlan.class));
-//		
-//		plans.add(new SimplePlan(SendWaitingTimeGoal.class,
-//				SendWaitingTimePlan.class));
-		
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgbidResultJob),
 				EnqueueJobPlan.class));
 
@@ -115,6 +106,10 @@ public class AbstractbasicCapability extends Capability {
 		plans.add(new SimplePlan(RegisterLSAgentServiceGoal.class,
 				RegisterLSAgentServicePlan.class));
 		
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgjobForLSA),
+				SendJobToMachine.class));
+		
+		
 		return plans;
 	}	
 
@@ -122,10 +117,10 @@ public class AbstractbasicCapability extends Capability {
 	protected void setup() {
 		myAgent.addGoal(new RegisterLSAgentServiceGoal());
 		myAgent.addGoal(new RegisterLSAgentToBlackboardGoal());
-		myAgent.addGoal(new SendBidGoal());
+	/*	myAgent.addGoal(new SendBidGoal());
 		myAgent.addGoal(new SendJobGoal());
 		myAgent.addGoal(new SendWaitingTimeGoal());
 		myAgent.addGoal(new EnqueueJobGoal());
-		myAgent.addGoal(new ReceiveCompletedJobGoal());
+		myAgent.addGoal(new ReceiveCompletedJobGoal());*/
 	}
 }

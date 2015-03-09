@@ -2,9 +2,11 @@ package mas.machine.behaviors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import jade.core.behaviours.Behaviour;
 import mas.job.job;
 import mas.machine.Simulator;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 
@@ -32,7 +34,7 @@ public class HandleCompletedJobBehavior extends Behaviour{
 					ID.Machine.ZoneData.myHealth,
 					comingJob);
 
-			completedJobUpdate.send(Simulator.blackboardAgent ,
+			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					completedJobUpdate, myAgent);
 
 			log.info("Job no: '"+comingJob.getJobNo() + 

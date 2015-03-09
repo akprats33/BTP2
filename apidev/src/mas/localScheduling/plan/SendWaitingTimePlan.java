@@ -6,8 +6,13 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
@@ -35,6 +40,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private double averageProcessingTime;
 	private double averageQueueSize;
 	private AID blackboard;
+	private Logger log;
 
 	@Override
 	public EndState getEndState() {
@@ -44,7 +50,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	@Override
 	public void init(PlanInstance pInstance) {
 		bfBase = pInstance.getBeliefBase();
-
+		log=LogManager.getLogger();
 		try {
 			msg = ((MessageGoal)pInstance.getGoal()).getMessage();
 			j = (job)(msg.getContentObject());
@@ -67,21 +73,29 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public void action() {		
-		sTracker.addSize( jobQueue.size() );
+//		sTracker.addSize( jobQueue.size() );
 		
 		// get average queue size and waiting time in the queue
-		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
-		averageProcessingTime = sTracker.getAvgProcessingTime();
-
-		double avgWaitingTime = averageProcessingTime*averageQueueSize;
-		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
-
+//		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
+//		averageProcessingTime = sTracker.getAvgProcessingTime();
+	
 		
+//		double avgWaitingTime = averageProcessingTime*averageQueueSize;
+		
+		//////////remove/////////
+		 Random randomGenerator = new Random();
+		j.setWaitingTime(randomGenerator.nextDouble());
+		/////////remove//////////
+//		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
+
+		log.info(j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j);
+		
 
-		waitingTimeUpdate.send(blackboard ,waitingTimeUpdate, myAgent);
+		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
+		
 		
 		//		myAgent.addBehaviour(new CalculateWaitTimeBehavior(JobQueue.size(),GlobalSchedulingAID, j));
 	}

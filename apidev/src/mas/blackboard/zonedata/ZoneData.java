@@ -137,21 +137,25 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	}
 	public void sendUpdate(){
 		
+		
 		ACLMessage update=new ACLMessage(ACLMessage.INFORM);		
 		update.setConversationId(UpdateMessageID);
 		
 		for(AID reciever : getSubscribers()){
 			update.addReceiver(reciever);
-			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" with ID "+UpdateMessageID);
+//			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" with ID "+UpdateMessageID);
 		}
 		try {
 			Object obj= getData();
 			update.setContentObject((Serializable) obj);
-			log.info("value is "+obj);
+//			log.info("value is "+obj);
+			log.info("ZoneData "+ getName()+" updated"+ " UpdateMessageID: "+UpdateMessageID);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		log.info(update);
 		bb.send(update);
+		
 		
 	}
 
