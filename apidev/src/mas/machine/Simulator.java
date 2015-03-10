@@ -179,7 +179,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		functionality = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
 		functionality.getDataStore().put(simulatorStoreName, Simulator.this);
 
-		acceptIncomingJobs = new AcceptJobBehavior();
+		acceptIncomingJobs = new AcceptJobBehavior(Simulator.this);
 		reportHealth = new ReportHealthBehavior(this, healthReportTimeMillis);
 		processDimensionShifter = new ShiftInProcessBahavior(true, true);
 		processDimensionShifter.getDataStore().put(simulatorStoreName, Simulator.this);

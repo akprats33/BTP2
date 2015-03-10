@@ -1,9 +1,7 @@
 package mas.machine.behaviors;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
@@ -11,10 +9,8 @@ import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -43,15 +39,19 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 		log = LogManager.getLogger();
 		pmDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.msgprevMaintData);
-		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
-
+		machineSimulator = null;
 	}
 
 	@Override
 	public void action() {
 		switch(step) {
 		case 0 :
-			
+
+			if(machineSimulator == null) { 
+				machineSimulator = (Simulator) getDataStore().
+						get(Simulator.simulatorStoreName);
+			}
+
 			ZoneDataUpdate maintenanceStartUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.maintenanceStart,
 					comingJob);
@@ -69,7 +69,7 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 				// parse the received data and perform maintenance of the machine
 				log.info("Maintenenace data arrived");
 				token = new StringTokenizer(maintenanceDataMsg.getContent());
-				
+
 				remainingMaintenanceTime = Integer.parseInt(token.nextToken());
 
 				componentsToRepair = new ArrayList<Integer>();
@@ -84,23 +84,23 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 				block();
 			}
 			break;
-			
+
 		case 2:
-			
+
 			if(remainingMaintenanceTime >= 0) {
 				remainingMaintenanceTime = remainingMaintenanceTime - Simulator.TIME_STEP;
 				block(Simulator.TIME_STEP);
 			} else if(remainingMaintenanceTime < 0) {
 				step = 3;
 			}
-			
+
 			break;
-			
+
 		case 3:
 			/**
 			 * perform the maintenance for the machine now
 			 */
-			
+
 			machineSimulator.repair(componentsToRepair);
 			step = 4;
 			break;

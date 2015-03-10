@@ -16,7 +16,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class JobGenerator extends JobGeneratorIFace{
-		
+
+	// processing time is input as seconds. Convert it into milliseconds
+	private int timeUnitConversion = 1000;
 	private String jobFilePath;
 	private ArrayList<String> jobIdList;
 	private ArrayList<Long> jobProcessingTimes;
@@ -24,8 +26,8 @@ public class JobGenerator extends JobGeneratorIFace{
 	private ArrayList<Integer> jobQuantity;
 	private ArrayList<ArrayList<jobDimension> > jobDimensions;
 	private ArrayList<ArrayList<jobAttribute> > jobAttributes;
-	int countJob = 0;
-	
+	int countJob = 1;
+
 	public JobGenerator() {
 		this.jobIdList = new ArrayList<String>();
 		this.jobProcessingTimes = new ArrayList<Long>();
@@ -34,111 +36,113 @@ public class JobGenerator extends JobGeneratorIFace{
 		this.jobCPNs = new ArrayList<Double>();
 		this.jobDueDates = new ArrayList<Double>();
 		this.jobAttributes = new ArrayList<ArrayList<jobAttribute> >();
-		
-//		URL location = JobGenerator.class.getProtectionDomain().getCodeSource().getLocation();
-//		this.jobFilePath = location.toExternalForm();
+
 		this.jobFilePath = System.getProperty("user.dir");
-//      System.out.println(this.jobFilePath);
+		//      System.out.println(this.jobFilePath);
 	}
-	
+
 	@Override
 	public void readFile() {
-			XSSFWorkbook wb;
-			XSSFSheet sheet = null;
-			try{
-				FileInputStream file=new FileInputStream(this.jobFilePath +
-														"\\jobdata.xlsx");	
-				wb = new XSSFWorkbook(file);
-				sheet = wb.getSheetAt(0);
-			}catch(IOException e){
-				e.printStackTrace();
+		XSSFWorkbook wb;
+		XSSFSheet sheet = null;
+		try{
+			FileInputStream file=new FileInputStream(this.jobFilePath +
+					"\\jobdata.xlsx");	
+			wb = new XSSFWorkbook(file);
+			sheet = wb.getSheetAt(0);
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
+		Iterator<Row> rows = sheet.rowIterator();
+		XSSFRow row = (XSSFRow) rows.next();
+		//			int row_count = 0;
+		while( rows.hasNext() ) {
+
+			row = (XSSFRow) rows.next();
+			Iterator<Cell> cells = row.cellIterator();
+
+			int count = 0; 
+			while(cells.hasNext()) {
+				XSSFCell cell = (XSSFCell) cells.next();
+
+				switch(count){
+				case 0:
+					jobIdList.add(cell.getNumericCellValue()+"");
+					break;
+				case 1:
+					jobProcessingTimes.
+					add((long) cell.getNumericCellValue()*timeUnitConversion);
+					break;
+				case 2:
+					jobQuantity.add((int) cell.getNumericCellValue());
+					//			            		  System.out.println("q="+ quantity[row_count]);
+					break;
+				case 3:
+					String s = cell.getStringCellValue();
+					String temp[] = s.split(",");
+					//			            		  System.out.println("length="+temp.length);
+					ArrayList<jobDimension> tempDimList = new ArrayList<jobDimension>();
+					jobDimension tempDim = new jobDimension();
+					for(int i=0; i < temp.length; i++){
+						tempDim.setTargetDimension(Double.parseDouble(temp[i]));
+						tempDimList.add(tempDim );
+					}
+					jobDimensions.add(tempDimList);
+					break;
+				case 4:
+					String Attr=cell.getStringCellValue();
+					String tempAttr[]=Attr.split(",");
+
+					ArrayList<jobAttribute> tempAttrList = new ArrayList<jobAttribute>();
+					jobAttribute tempAttribute = new jobAttribute();
+
+					for(int i=0; i < tempAttr.length; i++){
+						tempAttribute.setTitle(tempAttr[i]);
+						tempAttrList.add(tempAttribute );
+					}
+					jobAttributes.add(tempAttrList);
+					break;
+
+				case 5:
+					jobCPNs.add(cell.getNumericCellValue());
+					//			            		  System.out.println("hello");
+					break;
+				case 6:
+					jobDueDates.
+					add(cell.getNumericCellValue()*timeUnitConversion);
+					//			            		  System.out.println("Due date " + dDate[row_count]);
+					break;
+				}
+				count++;
 			}
-	            
-	        Iterator<Row> rows = sheet.rowIterator();
-	        XSSFRow row = (XSSFRow) rows.next();
-//			int row_count = 0;
-	        while( rows.hasNext() ) {
-	        		
-		            row = (XSSFRow) rows.next();
-		            Iterator<Cell> cells = row.cellIterator();
-		            
-		            int count = 0; 
-		            while(cells.hasNext()) {
-		            	  XSSFCell cell = (XSSFCell) cells.next();
-		            	  
-		            	  switch(count){
-			            	  case 0:
-			            		  jobIdList.add(cell.getNumericCellValue()+"");
-			            		  break;
-			            	  case 1:
-			            		  jobProcessingTimes.add((long) cell.getNumericCellValue());
-			            		  break;
-			            	  case 2:
-			            		  jobQuantity.add((int) cell.getNumericCellValue());
-//			            		  System.out.println("q="+ quantity[row_count]);
-			            		  break;
-			            	  case 3:
-			            		  String s = cell.getStringCellValue();
-			            		  String temp[] = s.split(",");
-//			            		  System.out.println("length="+temp.length);
-			            		  ArrayList<jobDimension> tempDimList = new ArrayList<jobDimension>();
-			            		  jobDimension tempDim = new jobDimension();
-			            		  for(int i=0; i < temp.length; i++){
-			            			  tempDim.setTargetDimension(Double.parseDouble(temp[i]));
-			            			  tempDimList.add(tempDim );
-			            		  }
-			            		  jobDimensions.add(tempDimList);
-			            		  break;
-			            	  case 4:
-			            		  String Attr=cell.getStringCellValue();
-			            		  String tempAttr[]=Attr.split(",");
-			            		  
-			            		  ArrayList<jobAttribute> tempAttrList = new ArrayList<jobAttribute>();
-			            		  jobAttribute tempAttribute = new jobAttribute();
-			            		  
-			            		  for(int i=0; i < tempAttr.length; i++){
-			            			  tempAttribute.setTitle(tempAttr[i]);
-			            			  tempAttrList.add(tempAttribute );
-			            		  }
-			            		  jobAttributes.add(tempAttrList);
-			            		  break;
-			            		  
-			            	  case 5:
-			            		  jobCPNs.add(cell.getNumericCellValue());
-//			            		  System.out.println("hello");
-			            		  break;
-			            	  case 6:
-			            		  jobDueDates.add(cell.getNumericCellValue());
-//			            		  System.out.println("Due date " + dDate[row_count]);
-			            		  break;
-		            	  	}
-		            	  count++;
-		            }
-//		            row_count++;
-	        	}
-			}  //End of ReadFile
-		/**
-		 * Generate and return the next job to be dispatched
-		 */
+			//		            row_count++;
+		}
+	}  //End of ReadFile
+	/**
+	 * Generate and return the next job to be dispatched
+	 */
 	@Override
 	public Object getNextJob() {
 		int index = runif(1,jobQuantity)[0];
-		
+
 		long due = (long) (jobDueDates.get(index) + System.currentTimeMillis()/1000);
 		long generationTime = System.currentTimeMillis();
-		
+
 		job j = new job.Builder(jobIdList.get(index))
-				.jobCPN(jobCPNs.get(index))
-				.jobDueDateTime(due)
-				.jobGenTime(generationTime)
-				.jobProcTime(jobProcessingTimes.get(index))
-				.jobDimensions(jobDimensions.get(index))
-				.jobAttrbitues(jobAttributes.get(index))
-				.build() ;
-		
+		.jobCPN(jobCPNs.get(index))
+		.jobDueDateTime(due)
+		.jobGenTime(generationTime)
+		.jobProcTime(jobProcessingTimes.get(index))
+		.jobDimensions(jobDimensions.get(index))
+		.jobAttrbitues(jobAttributes.get(index))
+		.build() ;
+
+		j.setJobNo(countJob++);
+
 		return j;
 	}
-	
+
 	/**
 	 * Generate random number(between 0 and 1) following discrete distribution of weights 
 	 * @param numSamples
@@ -158,12 +162,12 @@ public class JobGenerator extends JobGeneratorIFace{
 		}
 		for(i = 0;i < size; i++) {
 			discreteProbabilities[i] = weights.get(i)/sum;
-//			System.out.print("discreteProbabilities["+i+"]="+temp[i]+"/"+sum +":"+weights[i]);
+			//			System.out.print("discreteProbabilities["+i+"]="+temp[i]+"/"+sum +":"+weights[i]);
 		}
 
 		EnumeratedIntegerDistribution distribution = 
-		    new EnumeratedIntegerDistribution(numsToGenerate, discreteProbabilities);
-		
+				new EnumeratedIntegerDistribution(numsToGenerate, discreteProbabilities);
+
 		return distribution.sample(numSamples);
 	}
 }

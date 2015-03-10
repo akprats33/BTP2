@@ -60,7 +60,7 @@ public class SendJobToMachinePlan extends Behaviour implements PlanBody {
 			if(jobQueue.size() > 0) {
 				log.info("Now gonna give the machine the job : " + jobQueue.get(0));
 				ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
-						ID.LocalScheduler.ZoneData.bidForJob,
+						ID.LocalScheduler.ZoneData.jobForMachine,
 						jobQueue.get(0));
 
 				jobQueue.remove(0);

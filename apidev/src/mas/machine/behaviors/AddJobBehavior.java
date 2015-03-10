@@ -3,6 +3,8 @@ package mas.machine.behaviors;
 import jade.core.behaviours.Behaviour;
 
 import java.util.Date;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import mas.job.job;
 import mas.machine.MachineStatus;
@@ -21,13 +23,13 @@ public class AddJobBehavior extends Behaviour {
 	private Logger log;
 	private int step = 0;
 	private double processingTime;
-	private Simulator machineSimulator;
+	private Simulator machineSimulator = null;
+	private ScheduledThreadPoolExecutor executor;
 
 	public AddJobBehavior(job comingJob) {
 		this.comingJob = comingJob;
 		this.IsJobComplete = false;
 		log = LogManager.getLogger();
-		this.machineSimulator = (Simulator) getParent().getDataStore().get(Simulator.simulatorStoreName);
 	}
 
 	public void action() {
@@ -39,7 +41,10 @@ public class AddJobBehavior extends Behaviour {
 
 				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 				//						"processing time : " + comingJob.getProcessingTime());
-
+				if(this.machineSimulator == null) {
+					this.machineSimulator = (Simulator) getDataStore().
+							get(Simulator.simulatorStoreName);
+				}
 				double newProcessingTime =
 						Methods.normalRandom(comingJob.getProcessingTime(),
 								comingJob.getProcessingTime()*machineSimulator.getPercentProcessingTimeVariation())+
@@ -53,15 +58,17 @@ public class AddJobBehavior extends Behaviour {
 				processingTime = comingJob.getProcessingTime();
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
-						"processing time : "+comingJob.getProcessingTime());
+						"processing time : " + comingJob.getProcessingTime());
 
-				machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
 				//				log.info("Simulator is " + sim);
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
-				comingJob.setStartTime(new Date(System.currentTimeMillis()));
+				comingJob.setStartTime(System.currentTimeMillis());
 
 				if( processingTime > 0 ) {
+					executor = new ScheduledThreadPoolExecutor(1);
+					executor.scheduleAtFixedRate(new timeProcessing(), 0,
+							Simulator.TIME_STEP, TimeUnit.MILLISECONDS);
 					step = 1;
 				}
 			}
@@ -84,26 +91,16 @@ public class AddJobBehavior extends Behaviour {
 			break;
 
 		case 1:
-			if( processingTime > 0 &&
-					machineSimulator.getStatus() != MachineStatus.FAILED ) {
-
-				processingTime = processingTime - Simulator.TIME_STEP; 
-				machineSimulator.AgeComponents(Simulator.TIME_STEP);
-				block(Simulator.TIME_STEP); 
-
-			} else if( processingTime <= 0) {
-				step = 2;
-			} else if(machineSimulator.getStatus() == MachineStatus.FAILED) {
-				block(Simulator.TIME_STEP); 
-			}
-
+				block(100);
 			break;
 
 		case 2:
 			if( processingTime <= 0) {
 				IsJobComplete = true;
 				log.info("Job No:" + comingJob.getJobNo() + " completed");
-				myAgent.addBehaviour(new ProcessJobBehavior(comingJob));
+				ProcessJobBehavior process = new ProcessJobBehavior(comingJob);
+				process.setDataStore(getDataStore());
+				myAgent.addBehaviour(process);
 				machineSimulator.setStatus(MachineStatus.IDLE);
 			}
 
@@ -114,5 +111,28 @@ public class AddJobBehavior extends Behaviour {
 	@Override
 	public boolean done() {
 		return (IsJobComplete);
+	}
+
+	class timeProcessing implements Runnable {
+
+		@Override
+		public void run() {
+			
+			/**
+			 * If machine is failed it won't do anything.
+			 * Executor will just keep scheduling this task
+			 * 
+			 */
+			if( processingTime > 0 &&
+					machineSimulator.getStatus() != MachineStatus.FAILED ) {
+
+				processingTime = processingTime - Simulator.TIME_STEP; 
+				machineSimulator.AgeComponents(Simulator.TIME_STEP);
+			} else if( processingTime <= 0 &&
+					machineSimulator.getStatus() != MachineStatus.FAILED ) {
+				step = 2;
+				executor.shutdown();
+			} 
+		}
 	}
 }

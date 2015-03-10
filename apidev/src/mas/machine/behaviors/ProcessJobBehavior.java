@@ -20,13 +20,18 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 
 	public ProcessJobBehavior(job processJob) {
 		this.comingJob = processJob;
-		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
+		machineSimulator = null;
 	}
 
 	@Override
 	public void action() {
 
 		log = LogManager.getLogger();
+
+		if(machineSimulator == null) {
+			machineSimulator = (Simulator) getDataStore().
+					get(Simulator.simulatorStoreName);
+		}
 
 		// Assign dimensions to the job
 		ArrayList<jobDimension> jDimensions = comingJob.getDimensions();
@@ -54,16 +59,16 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 				new BinomialDistribution(1, machineSimulator.getFractionDefective());
 
 		boolean conforming;
-		
+
 		for(AttIndex = 0; AttIndex < numAttributes; AttIndex++) {
 
 			conforming = (bernoulli.sample()==1)? Boolean.TRUE :Boolean.FALSE;
 			jAttributes.get(AttIndex).setConforming(conforming);
 		}
 		comingJob.setAttributes(jAttributes);
-//		log.info("Dimensions and attributes assigned");
+		//		log.info("Dimensions and attributes assigned");
 		comingJob.setCompletionTime(System.currentTimeMillis());
-		
+
 		// send completed job to blackboard in handleCompletedJobBehavior
 		myAgent.addBehaviour(new HandleCompletedJobBehavior(comingJob));
 	}

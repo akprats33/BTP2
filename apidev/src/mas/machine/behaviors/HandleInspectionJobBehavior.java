@@ -29,39 +29,42 @@ public class HandleInspectionJobBehavior extends Behaviour{
 	private String inspectionData;
 	private StringTokenizer token;
 	private Simulator machineSimulator;
-	
+
 	public HandleInspectionJobBehavior(job comingJob) {
-		
+
 		this.comingJob = comingJob;
 		this.IsJobComplete = false;
 		log = LogManager.getLogger();
 		InspectionDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.msginspectionJobData);
-		
-		machineSimulator = (Simulator) getDataStore().get(Simulator.simulatorStoreName);
+		machineSimulator = null;
 	}
 
 	@Override
 	public void action() {
 		switch(step){
 		case 0:
+			if(machineSimulator == null) {
+				machineSimulator = (Simulator) getDataStore().
+						get(Simulator.simulatorStoreName);
+			}
 			ZoneDataUpdate inspectionZoneUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.inspectionStart,
 					comingJob);
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					inspectionZoneUpdate, myAgent);
-			
+
 			log.info("recieving inspection data for machine");
 			machineSimulator.setStatus(MachineStatus.UNDER_MAINTENANCE);
 			step = 1;
 			break;
-			
+
 		case 1:
 			inspectioneDataMsg = myAgent.receive(InspectionDataMsgTemplate);
-			
+
 			if(inspectioneDataMsg != null) {
-				
+
 				inspectionData = inspectioneDataMsg.getContent();
 				token = new StringTokenizer(inspectionData);
 				long procTime = Long.parseLong(token.nextToken());	

@@ -17,7 +17,7 @@ public class GiveMeJobBehavior extends OneShotBehaviour{
 	public void action() {
 		
 		log = LogManager.getLogger();
-		log.info("asking for job from LSA : " + Simulator.blackboardAgent);
+		log.info("asking for job from LSA : ");
 		
 		ZoneDataUpdate giveJobIndicator = new ZoneDataUpdate(
 				ID.Machine.ZoneData.askJobFromLSA, "1");
