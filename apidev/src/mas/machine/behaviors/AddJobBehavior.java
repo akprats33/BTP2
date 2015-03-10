@@ -91,7 +91,9 @@ public class AddJobBehavior extends Behaviour {
 			break;
 
 		case 1:
-				block(100);
+			// block for some time in order to avoid too much CPU usage
+			// this won't affect working of the behavior however
+			block(10);
 			break;
 
 		case 2:
@@ -117,7 +119,7 @@ public class AddJobBehavior extends Behaviour {
 
 		@Override
 		public void run() {
-			
+
 			/**
 			 * If machine is failed it won't do anything.
 			 * Executor will just keep scheduling this task

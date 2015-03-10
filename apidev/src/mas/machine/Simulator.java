@@ -45,7 +45,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private transient EnumSet<OperationType> supportedOperations;
 	
 	// time step in milliseconds
-	public transient static int TIME_STEP = 30;
+	public transient static int TIME_STEP = 100;
 	
 	// ID of this simulator
 	public transient String ID_Simulator;

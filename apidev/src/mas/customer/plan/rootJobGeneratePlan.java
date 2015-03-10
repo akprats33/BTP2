@@ -23,7 +23,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	private JobGeneratorIFace jGen;
 	private BeliefBase bfBase;
 	private Logger log;
-	
+
 	@Override
 	public EndState getEndState() {
 		return EndState.SUCCESSFUL;
@@ -41,33 +41,29 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	@Override
 	public void action() {
 		this.jGen.readFile();
-//		log.info("Job file loaded");
+		//		log.info("Job file loaded");
 		bfBase.updateBelief(ID.Customer.BeliefBaseConst.JOB_GENERATOR, jGen);
 		myAgent.addBehaviour(new TickerBehaviour(myAgent, 1000) {
-			
+
 			private static final long serialVersionUID = 1L;
 
-			int NoOfJobs=0;
 			@Override
 			protected void onTick() {
 				bfBase.updateBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB, jGen.getNextJob());
 				planInstance.dispatchSubgoal(new dispatchJobGoal());
 				reset(getInterArrivalTimeMillis());
-				log.info("NoOfJobs :"+NoOfJobs);
-				NoOfJobs++;
 			}
 		});
 	}
-	
+
 	/**
 	 * this method returns the inter-arrival time between two jobs 
 	 * which by default is exponential distribution
 	 * @return
 	 */
-	
+
 	public long getInterArrivalTimeMillis(){
-//		return (long) Math.max(1, exp.sample()*1000);
-		return (long) 100000;
+		return (long) Math.max(1, exp.sample()*1000);
 	}
 
 	@Override
