@@ -18,7 +18,6 @@ import bdi4jade.plan.PlanInstance.EndState;
 public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
-	private int step;
 
 	@Override
 	public EndState getEndState() {
@@ -27,7 +26,6 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 
 	@Override
 	public void init(PlanInstance planInstance) {
-		step = 0;
 	}
 
 	@Override
@@ -53,8 +51,9 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 		SubscriptionForm subform = new SubscriptionForm();
 		AID target = new AID(ID.Maintenance.LocalName, AID.ISLOCALNAME);
 
-		String[] params = {ID.Machine.ZoneData.myHealth,
-				ID.Machine.ZoneData.finishedJob};
+		String[] params = { ID.Machine.ZoneData.myHealth,
+				ID.Machine.ZoneData.machineFailures, ID.Machine.ZoneData.maintenanceStart,
+				ID.Machine.ZoneData.inspectionStart };
 
 		subform.AddSubscriptionReq(target, params);
 

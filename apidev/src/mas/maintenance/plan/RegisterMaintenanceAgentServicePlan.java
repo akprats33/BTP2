@@ -18,7 +18,7 @@ public class RegisterMaintenanceAgentServicePlan extends OneShotBehaviour implem
 
 	@Override
 	public EndState getEndState() {
-		return null;
+		return EndState.SUCCESSFUL;
 	}
 
 	@Override

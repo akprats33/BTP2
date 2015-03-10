@@ -6,16 +6,20 @@ import jade.core.ProfileImpl;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.PlatformController;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import mas.blackboard.blackboard;
 import mas.customer.CustomerAgent;
 import mas.globalScheduling.GlobalSchedulingAgent;
 import mas.localScheduling.LocalSchedulingAgent;
 import mas.machine.Simulator;
+import mas.maintenance.agent.LocalMaintenanceAgent;
 import mas.util.ID;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +37,8 @@ public class AgentStarter {
 		agents.put(ID.GlobalScheduler.LocalName, new GlobalSchedulingAgent());
 		agents.put(ID.Machine.LocalName, new Simulator());
 		agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
-		agents.put(ID.LocalScheduler.LocalName+"Other", new LocalSchedulingAgent());
+		agents.put(ID.LocalScheduler.LocalName + "Other", new LocalSchedulingAgent());
+		agents.put(ID.Maintenance.LocalName, new LocalMaintenanceAgent());
 	};
 
 	public static void main(String[] args) {

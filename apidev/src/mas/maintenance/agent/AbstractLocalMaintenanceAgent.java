@@ -1,9 +1,8 @@
-package mas.localScheduling;
+package mas.maintenance.agent;
 
 import bdi4jade.core.BDIAgent;
 
-public class AbstractlocalSchedulingAgent extends BDIAgent{
-
+public class AbstractLocalMaintenanceAgent extends BDIAgent{
 	/**
 	 * 
 	 */

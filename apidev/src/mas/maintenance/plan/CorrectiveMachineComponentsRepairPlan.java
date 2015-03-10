@@ -46,12 +46,8 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 		private static final long serialVersionUID = 1L;
 		private int step = 0;
 
-		//		MessageTemplate machineCurrentHealth = MessageTemplate.
-		//				MatchConversationId(MessageIds.machineState);
 		MessageTemplate machineFailureMSG = MessageTemplate.
 				MatchConversationId(MessageIds.msgmachineFailures);
-		//		MessageTemplate mt3 = MessageTemplate.
-		//				MatchConversationId(MessageIds.failEnd);
 
 		@Override
 		public void action() {
