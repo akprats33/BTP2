@@ -13,13 +13,13 @@ import mas.util.ZoneDataUpdate;
 public class HandleCompletedJobBehavior extends Behaviour{
 
 	private static final long serialVersionUID = 1L;
-	private job comingJob;
+	private job completedJob;
 	private Logger log;
 	private int step = 0;
 
 	public HandleCompletedJobBehavior(job comingJob) {
 
-		this.comingJob = comingJob;
+		this.completedJob = comingJob;
 		this.log = LogManager.getLogger();
 	}
 
@@ -29,18 +29,18 @@ public class HandleCompletedJobBehavior extends Behaviour{
 		case 0:
 			myAgent.addBehaviour(new GiveMeJobBehavior());
 			/**
-			 * update zonedata for completed jobs from machine
+			 * update zone-data for completed jobs from machine
 			 */
 			ZoneDataUpdate completedJobUpdate = new ZoneDataUpdate(
-					ID.Machine.ZoneData.myHealth,
-					comingJob);
+					ID.Machine.ZoneData.finishedJob,
+					completedJob);
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					completedJobUpdate, myAgent);
 
-			log.info("Job no: '"+comingJob.getJobNo() + 
-					"' --> completion : " + comingJob.getCompletionTime() + 
-					"Starting time : " + comingJob.getStartTime());
+			log.info("Job no: '"+ completedJob.getJobNo() + 
+					"' --> completion : " + completedJob.getCompletionTime() + 
+					"Starting time : " + completedJob.getStartTime());
 			log.info("sending completed job to blackboard");
 
 			step = 1;

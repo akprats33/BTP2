@@ -189,7 +189,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
 		functionality.addSubBehaviour(processDimensionShifter);
-		functionality.addSubBehaviour(machineParameterShifter);
+//		functionality.addSubBehaviour(machineParameterShifter);
 
 		addBehaviour(functionality);
 

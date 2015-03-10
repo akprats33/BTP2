@@ -64,7 +64,6 @@ public class SubscribeAgentBehvr extends Behaviour {
 				BeliefSet<ZoneSpace> ws=(BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType);
 				
 				if(ws==null){ //Check if workspace is created for AgentType
-					
 				}
 				else{
 					

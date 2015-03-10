@@ -1,16 +1,12 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.Behaviour;
-
-import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Methods;
 import mas.machine.Simulator;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -60,7 +56,6 @@ public class AddJobBehavior extends Behaviour {
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 						"processing time : " + comingJob.getProcessingTime());
 
-				//				log.info("Simulator is " + sim);
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
 				comingJob.setStartTime(System.currentTimeMillis());
@@ -93,7 +88,7 @@ public class AddJobBehavior extends Behaviour {
 		case 1:
 			// block for some time in order to avoid too much CPU usage
 			// this won't affect working of the behavior however
-			block(10);
+			block(15);
 			break;
 
 		case 2:
