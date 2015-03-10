@@ -30,7 +30,7 @@ public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 		 */
 		AID bb_aid = AgentUtil.findBlackboardAgent(myAgent);
 		Simulator.blackboardAgent = bb_aid;
-		log.info("blackboard is : " + Simulator.blackboardAgent);
+//		log.info("blackboard is : " + Simulator.blackboardAgent);
 
 		/**
 		 *  Now create zones on blackboard where data of machine will be kept for

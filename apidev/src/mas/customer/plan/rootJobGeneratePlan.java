@@ -17,7 +17,8 @@ import jade.core.behaviours.TickerBehaviour;
 public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 
 	private static final long serialVersionUID = 1L;
-	public double rate = 1;
+	public static double rate = 1;
+	public static int initialDelay = 5000;
 	private PlanInstance planInstance;
 	private ExponentialDistribution exp;
 	private JobGeneratorIFace jGen;
@@ -43,7 +44,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 		this.jGen.readFile();
 		//		log.info("Job file loaded");
 		bfBase.updateBelief(ID.Customer.BeliefBaseConst.JOB_GENERATOR, jGen);
-		myAgent.addBehaviour(new TickerBehaviour(myAgent, 1000) {
+		myAgent.addBehaviour(new TickerBehaviour(myAgent, initialDelay) {
 
 			private static final long serialVersionUID = 1L;
 

@@ -73,7 +73,6 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public void action() {		
-		log.info(jobQueue.size());
 		sTracker.addSize( jobQueue.size() );
 
 		// get average queue size and waiting time in the queue
@@ -85,7 +84,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
 		j.setStartTime(avgWaitingTime);
 
-		log.info(j.getWaitingTime());
+		log.info("waiting time is : " + j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j );
