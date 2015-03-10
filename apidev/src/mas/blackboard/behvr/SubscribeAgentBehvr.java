@@ -1,5 +1,6 @@
 package mas.blackboard.behvr;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -13,6 +14,7 @@ import mas.blackboard.zonedata.ZoneData;
 import mas.blackboard.zonespace.ZoneSpace;
 import mas.util.AgentUtil;
 import mas.util.SubscriptionForm;
+import bdi4jade.belief.Belief;
 import bdi4jade.belief.BeliefSet;
 import bdi4jade.core.BeliefBase;
 import jade.core.AID;
@@ -61,46 +63,57 @@ public class SubscribeAgentBehvr extends Behaviour {
 				}
 						
 			case 2:
-				BeliefSet<ZoneSpace> ws=(BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType);
+				
+				Belief<HashMap<String,ZoneSpace>> ws=(Belief<HashMap<String,ZoneSpace>>)BBbeliefBase.getBelief(AgentType);
 				
 				if(ws==null){ //Check if workspace is created for AgentType
 				}
 				else{
 					
-					Iterator<ZoneSpace> it=ws.iterator();
-					while(it.hasNext()){ //starts searching for ZoneSpace
+//					Iterator<ZoneSpace> it=ws.iterator();
+//					while(it.hasNext()){ //starts searching for ZoneSpace
 						
 						
-						ZoneSpace zs=it.next();
 						
-						if(zs.getName().equalsIgnoreCase(tempSubscription.Agent.getLocalName())){
+						HashMap<String, ZoneSpace> ZoneSpaceHashMap=(HashMap<String, ZoneSpace>)ws.getValue();
+							
+						ZoneSpace zs=ZoneSpaceHashMap.get(tempSubscription.Agent.getLocalName());
+						
+						if(zs!=null){
 							for (String parameter : tempSubscription.parameters) {
 
+								
 								nzd=new NamedZoneData.Builder(parameter).build();
-								((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).removeValue(zs);
+//								((Belief<HashMap<String, ZoneSpace>>)BBbeliefBase.getBelief(AgentType)).getValue().remove(key);
 //								log.info("finding zone data: "+nzd.getName());
 								if(zs.findZoneData(nzd)!=null){ 
 									zs.findZoneData(nzd).subscribe(subscriber); //Throws null pointer exception if ZoneData doesnn't exists
-									((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).addValue(zs);								
-									Iterator<ZoneSpace> izd=((Set<ZoneSpace>)((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).getValue()).iterator();
+//									((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).addValue(zs);								
+//									Iterator<ZoneSpace> izd=((Set<ZoneSpace>)((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).getValue()).iterator();
 
 									try {
 										Thread.sleep(0); //without this sendupdate() from zoneData was not working. Don't know why.
 									} catch (InterruptedException e) {
 										e.printStackTrace();
 									}
-									step++;									
+																	
 								}
 								else{
 									log.error("Couldn't find zone "+nzd.getName());
 								}
 
+								
+								
 							}
+							
+							ZoneSpaceHashMap.put(tempSubscription.Agent.getLocalName(), zs);
+							
+							((Belief<HashMap<String, ZoneSpace>>)BBbeliefBase.getBelief(AgentType)).setValue(ZoneSpaceHashMap);
 							
 						}
 						
-						
-					}
+				step++;	
+//					}
 				}
 		}
 				

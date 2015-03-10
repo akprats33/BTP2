@@ -33,7 +33,7 @@ public class AgentStarter {
 		agents.put(ID.GlobalScheduler.LocalName, new GlobalSchedulingAgent());
 		agents.put(ID.Machine.LocalName, new Simulator());
 		agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
-//		agents.put(ID.LocalScheduler.LocalName+"Other", new LocalSchedulingAgent());
+		agents.put(ID.LocalScheduler.LocalName+"Other", new LocalSchedulingAgent());
 	};
 
 	public static void main(String[] args) {

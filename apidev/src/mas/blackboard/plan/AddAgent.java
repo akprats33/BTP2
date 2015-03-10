@@ -1,5 +1,7 @@
 package mas.blackboard.plan;
 
+import java.util.HashMap;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +19,9 @@ import mas.blackboard.workspace.WorkspaceBeliefSet;
 import mas.blackboard.zonedata.ZoneData;
 import mas.blackboard.zonespace.ZoneSpace;
 import mas.util.AgentUtil;
+import bdi4jade.belief.Belief;
 import bdi4jade.belief.BeliefSet;
+import bdi4jade.belief.TransientBelief;
 import bdi4jade.core.BDIAgent;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.message.MessageGoal;
@@ -63,21 +67,30 @@ public class AddAgent extends OneShotBehaviour implements PlanBody{
 	public void action() {		  
 		AgentType=AgentUtil.GetAgentService(AgentToReg,myAgent);
 		log.info("Adding Agent :"+AgentToReg.getLocalName());
-		BeliefSet<ZoneSpace> wspace;
+		Belief<HashMap<String,ZoneSpace>> wspace;
+		
+		
+		
 		if(!belief.hasBelief(AgentType)){
-			wspace=new WorkspaceBeliefSet(AgentType);			
+			HashMap<String,ZoneSpace> wspace_hashMap=new HashMap<String,ZoneSpace>();
+			wspace=new TransientBelief<HashMap<String,ZoneSpace>>(AgentType, wspace_hashMap);		
 			belief.addBelief(wspace);			
 		}
 		else{
-			wspace=(BeliefSet<ZoneSpace>)belief.getBelief(AgentType);
+			wspace=(Belief<HashMap<String,ZoneSpace>>)belief.getBelief(AgentType);
 		}
 		NamedZoneSpace nz=new NamedZoneSpace(AgentToReg);
 		ZoneSpace zs=new ZoneSpace(nz,myAgent);
-		for(int i=0;i<ZoneDataNameArray.length;i++){
-//			NamedZoneData nzd=new NamedZoneData.Builder(ZoneDataNameArray[i].getName()).;			
+		
+		for(int i=0;i<ZoneDataNameArray.length;i++){			
 			zs.createZoneData(ZoneDataNameArray[i]);
 		}
-		wspace.addValue(zs);
+		
+		
+		HashMap<String,ZoneSpace> ZoneSpaceHashMap=wspace.getValue();
+		ZoneSpaceHashMap.put(nz.getLocalName(), zs);
+		wspace.setValue(ZoneSpaceHashMap);
+//		log.info((wspace.getValue()));
 		((BDIAgent)myAgent).getRootCapability().getBeliefBase().addOrUpdateBelief(wspace); //update belief base
 		log.info(AgentType +" type Agent added");
 //		log.info(((BDIAgent)myAgent).getRootCapability().getBeliefBase());

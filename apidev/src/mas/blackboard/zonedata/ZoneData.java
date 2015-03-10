@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 public class ZoneData implements ZoneDataIFace, Serializable{
 	protected NamedZoneData name;
 	private LinkedList<Object> data;
-	private Set<AID> subscribers;
+	private ArrayList<AID> subscribers;
 	private Logger log;
 	private String UpdateMessageID;
 	private Agent bb; //needed for sending update message
@@ -33,7 +33,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		log=LogManager.getLogger();
 		this.name = name2;
 		this.data = new LinkedList<Object>();
-		this.subscribers=new HashSet<AID>();
+		this.subscribers=new ArrayList<AID>();
 		this.UpdateMessageID=UpdateMsgID; //ID of message to be used while sending update of data
 		this.bb=blackboard;
 		this.appendValues=appendValues;
@@ -122,7 +122,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		return UpdateMessageID;
 	}
 	
-	public Set<AID> getSubscribers(){
+	public ArrayList<AID> getSubscribers(){
 		return subscribers;
 	}
 	
@@ -142,6 +142,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		update.setConversationId(UpdateMessageID);
 		
 		for(AID reciever : getSubscribers()){
+			log.info("adding reciever "+reciever);
 			update.addReceiver(reciever);
 //			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" with ID "+UpdateMessageID);
 		}
@@ -153,7 +154,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		log.info(update);
+		log.info(update);
 		bb.send(update);
 		
 		

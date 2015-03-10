@@ -8,6 +8,7 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import mas.blackboard.zonedata.ZoneData;
 import mas.blackboard.zonespace.ZoneSpace;
 import mas.util.AgentUtil;
 import mas.util.ZoneDataUpdate;
+import bdi4jade.belief.Belief;
 import bdi4jade.belief.BeliefSet;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.message.MessageGoal;
@@ -58,40 +60,35 @@ public class UpdateParam extends OneShotBehaviour implements PlanBody {
 		
 		
 				
-				BeliefSet<ZoneSpace> ws=(BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType);
+				Belief<HashMap<String,ZoneSpace>> ws=(Belief<HashMap<String,ZoneSpace>>)BBBeliefBase.getBelief(AgentType);
 				
 				if(ws==null){
 					log.error("Could not find workspace for "+AgentType);
 				}
 				else{					
-					Iterator<ZoneSpace> it=ws.iterator();
-					while(it.hasNext()){
-						ZoneSpace zs=it.next();
+					
+					HashMap<String,ZoneSpace> ZoneSpaceHashMap=ws.getValue();
+					ZoneSpace zs=ZoneSpaceHashMap.get(Agent.getLocalName());
 
-						if(zs.getName().equalsIgnoreCase(Agent.getLocalName())){
+						if(zs!=null){
 							NamedZoneData nzd = new NamedZoneData.Builder(info.getName()).build();
-
-							
-							((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).removeValue(zs);
 
 							if(zs.findZoneData(nzd)!=null){
 							
-									zs.findZoneData(nzd).addItem(info.getValue());
+								zs.findZoneData(nzd).addItem(info.getValue());
 
-									((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).addValue(zs);
-									
-//									log.info(nzd.getName()+" updated");
 							}
 							else{
 								log.info("couldn't find zone for "+nzd.getName());
 							}
-
+							ZoneSpaceHashMap.put(Agent.getLocalName(), zs);
 							
+							((Belief<HashMap<String,ZoneSpace>>)BBBeliefBase.getBelief(AgentType)).setValue(ZoneSpaceHashMap);
 							
 						}
 						
 						
-					}
+//					}
 				}
 //				System.out.println(((BeliefSet<ZoneSpace>)BBBeliefBase.getBelief(AgentType)).getValue().iterator().next().findZoneData(new NamedZoneData(info.getName())));
 	}
