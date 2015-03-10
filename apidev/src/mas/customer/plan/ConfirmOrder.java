@@ -25,25 +25,23 @@ public class ConfirmOrder extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public EndState getEndState() {
-		// TODO Auto-generated method stub
-		return null;
+		return EndState.SUCCESSFUL;
 	}
 
 	@Override
-	public void init(PlanInstance arg0) {
+	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
-		bfBase = arg0.getBeliefBase();
+		bfBase = pInstance.getBeliefBase();
 		this.bba = (AID) bfBase
 				.getBelief(ID.Customer.BeliefBaseConst.blackboardAgent)
 				.getValue();
-		
+
 		try {
-			this.ConfirmedJob=(job)((MessageGoal)(arg0.getGoal())).getMessage().getContentObject();
+			this.ConfirmedJob = (job)((MessageGoal)(pInstance.getGoal())).
+					getMessage().getContentObject();
 		} catch (UnreadableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	@Override
@@ -52,7 +50,5 @@ public class ConfirmOrder extends OneShotBehaviour implements PlanBody{
 				ID.Customer.ZoneData.customerConfirmedJobs,
 				ConfirmedJob);
 		AgentUtil.sendZoneDataUpdate(bba, ConfirmedOrderZoneDataUpdate, myAgent);
-		
 	}
-
 }

@@ -56,7 +56,7 @@ public class EnqueueJobPlan extends OneShotBehaviour implements PlanBody {
 	@Override
 	public void action() {
 
-		log.info("Adding the job to queue : " + comingJob);
+		log.info("Adding the job to queue of machine : " + comingJob);
 		jobQueue.add(comingJob);
 		/**
 		 * update the belief base

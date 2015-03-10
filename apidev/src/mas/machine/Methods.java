@@ -15,19 +15,20 @@ import org.apache.commons.math3.random.RandomGenerator;
 public class Methods implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
-
+	private static RandomGenerator jdkRndGenerator = new JDKRandomGenerator();
+	private static GaussianRandomGenerator gaussianGen = new GaussianRandomGenerator(jdkRndGenerator);
+	
 	/**
 	 * @param mean
 	 * @param sd
 	 * @param arraySize
 	 * @return random number array following a normal distribution with mean and sd
 	 */
+	
 	public static double[] normalRandom(double mean, double sd, int arraySize) {
-		RandomGenerator rg = new JDKRandomGenerator();
-		GaussianRandomGenerator g= new GaussianRandomGenerator(rg);
-		double[] a=new double[arraySize];
-		for(int i=0;i<arraySize;i++){
-			a[i]=mean+g.nextNormalizedDouble()*sd;
+		double[] a = new double[arraySize];
+		for(int i = 0; i < arraySize; i++){
+			a[i] = mean + gaussianGen.nextNormalizedDouble()*sd;
 		}
 		return a;
 	}
@@ -38,9 +39,7 @@ public class Methods implements Serializable {
 	 * @return a random number with mean 'mean' and standard deviation 'sd'
 	 */
 	public static double normalRandom(double mean, double sd) {				
-		RandomGenerator rg = new JDKRandomGenerator();
-		GaussianRandomGenerator g= new GaussianRandomGenerator(rg);
-		double a=mean+g.nextNormalizedDouble()*sd;
+		double a = mean + gaussianGen.nextNormalizedDouble()*sd;
 		return a;
 	}
 
@@ -51,11 +50,12 @@ public class Methods implements Serializable {
 	 * @return random number array following exponential distribution
 	 */
 	public static double[] rexp(double rate,int sizeArray) {
-		ExponentialDistribution g=new ExponentialDistribution(rate);
+		ExponentialDistribution g = new ExponentialDistribution(rate);
+		
 		int i=0;
-		double[] arr=new double[sizeArray];
-		while(i<sizeArray){
-			arr[i]=g.sample();
+		double[] arr = new double[sizeArray];
+		while(i < sizeArray){
+			arr[i] = g.sample();
 			i++;
 		}
 		return arr;
@@ -70,14 +70,14 @@ public class Methods implements Serializable {
 		
 		int[] numsToGenerate = new int[] {0 ,1  , 2  ,  3,  4 ,  5,    6,  7 ,  8 , 9 };
 
-		int[] temp=weights;
-		double sum=0.0;
-		double[] discreteProbabilities=new double[numsToGenerate.length];
+		int[] temp = weights;
+		double sum = 0.0;
+		double[] discreteProbabilities = new double[numsToGenerate.length];
 		int i;
-		for(i=0;i<numsToGenerate.length;i++) {
+		for(i=0;i < numsToGenerate.length; i++) {
 
-			discreteProbabilities[i]=temp[i];
-			sum+=temp[i];
+			discreteProbabilities[i] = temp[i];
+			sum += temp[i];
 		}
 		for(i=0;i<numsToGenerate.length;i++) {
 			discreteProbabilities[i]=discreteProbabilities[i]/sum;

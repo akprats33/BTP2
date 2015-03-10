@@ -1,11 +1,9 @@
 package mas.customer.plan;
 
 import jade.core.AID;
-import jade.core.behaviours.Behaviour;
-
+import jade.core.behaviours.OneShotBehaviour;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -15,7 +13,7 @@ import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
-public class DispatchJobPlan extends Behaviour implements PlanBody{
+public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 
 	private static final long serialVersionUID = 1L;
 	private BeliefBase bfBase;
@@ -57,10 +55,5 @@ public class DispatchJobPlan extends Behaviour implements PlanBody{
 //		log.info("Job dispatching custoemr " + jobToDispatch );
 
 		AgentUtil.sendZoneDataUpdate(this.bba,jobOrderZoneDataUpdate, myAgent);
-	}
-
-	@Override
-	public boolean done() {
-		return true;
 	}
 }

@@ -1,9 +1,7 @@
 package mas.localScheduling.algorithm;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
-
 import mas.customer.JobGenerator;
 import mas.job.job;
 
@@ -16,6 +14,10 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 	 *  @Email  anandprajapati389@gmail.com
 	 */ 
 
+	/**
+	 * depth of tree starts from zero
+	 * Level of tree with depth of 0 is ignored
+	 */
 	ArrayList<job> best = new ArrayList<job>();		// best solution stored in this ArrayList when algo runs
 	Double lowBound = Double.MAX_VALUE;			// Upper bound for solutions
 	public Node rootNode;
@@ -28,20 +30,19 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 		 * Store the position of all the jobs in the initial sequence so that 
 		 * we can compare regret factor of jobs after sequencing
 		 */
-		for(int i= 0; i < s.size() ;i++){
+		for(int i= 0; i < s.size() ;i++) {
 			s.get(i).setPosition(i);
 		}
 
 		this.rootNode = new Node(s);
 	}
 
-	public class Node 
-	{
+	public class Node {
 		ArrayList<job> state;		//sequence of jobs
 		Node[] child;				//  child nodes at any point
 		Node parent;				// parent node
 		int depth;					// depth of node in tree
-		int rank;					// to differentiate between different child at same level 
+		int rank;					// to differentiate between different children at same level 
 		double penalty;				// penalty of node
 
 		public Node(ArrayList<job> s) {
@@ -50,25 +51,31 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			penalty = 0;
 			this.state = new ArrayList<job>(s);
 			int n = state.size();
-			child = new Node [n];		// i'th child will be equal to that of its parent and one job kept at last
+			// i'th child will be equal to that of its parent and one job kept at last
+			child = new Node [n];		
 
-			for( int i=0 ; i < n ; i++)
-			{
+			for( int i=0 ; i < n ; i++) {
 				child[i]= null;
 			}
 		}
 
-		Node getChildNode(int index)				// giving child of any node at a position index starting zero from left in the solution tree 
-		{
+		/**
+		 *  giving child of any node at a position index starting zero from left in the solution tree
+		 * @param index
+		 * @return child at the index
+		 */
+		Node getChildNode(int index) {
 			if (child[index] == null)
 				child[index] = new Node(this.state);
 
 			child[index].state = new ArrayList<job>(this.state);
-			child[index].rank = index;				// rank becomes equal to node's position from left in the solution tree
+			// rank is equal to node's position from left in the solution tree
+			child[index].rank = index;				
 			child[index].depth = this.depth + 1;
 			child[index].parent = this;
 
-			Collections.swap(child[index].state,				// job at rank's position is kept fixed (with suitable offset in this case)
+			// job at rank's position is kept fixed (with suitable offset in this case)
+			Collections.swap(child[index].state,				
 					child[index].depth-1,
 					child[index].depth + index -1);
 
@@ -83,7 +90,7 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			long makeSpan = 0;
 			long startingTime = 0;
 			/**
-			 * Calculate penalty of job by putting all jobs up to index 'depth-1'
+			 * Calculate penalty of job by putting all jobs up to index 'depth - 1'
 			 * before it and based on lateness and regret multiplier
 			 * find its penalty
 			 */
@@ -98,7 +105,6 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			/**
 			 * Penalty will be calculated by using a multiplier which in turn depends on regret factor.
 			 * First update start and processing times of the job and then the regret factor.
-			 * 
 			 */
 			startingTime = makeSpan - this.state.get(this.depth-1).getProcessingTime();
 			int elements = this.depth;
@@ -145,14 +151,16 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 		 * 
 		 */
 		Collections.reverse(this.best);
-		//		this.best.add(0,fixedJob);
+		this.best.add(0,fixedJob);
 		return this.best;
 	}
 
 	private void RecursiveSolver(Node node)
 	{
 		int size = node.state.size();
-		if( node.depth == size){
+		// Base case when we hit the leaf
+		if( node.depth == size) {
+			// check if this node is the best node
 			double val = node.penalty;
 			//			System.out.println("Hit " + val + "d " + node.depth);
 			if(val < this.lowBound) {
@@ -162,6 +170,7 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			return ;
 		}
 
+		// if penalty of node exceeds lower bound, don't expans this node
 		if(node.penalty > lowBound)
 			return;
 

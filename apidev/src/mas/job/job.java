@@ -325,5 +325,13 @@ public class job implements Serializable{
 		this.WinnerLSA=winner_LSA;
 	}
 
+	public double getProfit() {
+		return profit;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
 }
 

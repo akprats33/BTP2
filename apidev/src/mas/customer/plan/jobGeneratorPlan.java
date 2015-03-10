@@ -7,12 +7,13 @@ public class jobGeneratorPlan extends rootJobGeneratePlan{
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * return inter-arrival time between jobs in mililiseconds
+	 * used by tootJobGeneratePlan to reset tick interval
+	 */
 	@Override
 	public long getInterArrivalTimeMillis() {
-	
-		return super.getInterArrivalTimeMillis(); //return inter-arrival time between jobs in mililiseconds
-		//used by tootJobGeneratePlan to reset tick interval
-		
+		return super.getInterArrivalTimeMillis(); 
 	}
 
 	@Override
