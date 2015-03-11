@@ -51,7 +51,7 @@ public class RegisterMaintenanceAgentToBlackboardPlan extends OneShotBehaviour i
 		SubscriptionForm subform = new SubscriptionForm();
 		
 		String suffix=myAgent.getLocalName().split("#")[1];
-		AID target = new AID(ID.Maintenance.LocalName+"#"+suffix, AID.ISLOCALNAME);
+		AID target = new AID(ID.Machine.LocalName+"#"+suffix, AID.ISLOCALNAME);
 
 		String[] params = { ID.Machine.ZoneData.myHealth,
 				ID.Machine.ZoneData.machineFailures, ID.Machine.ZoneData.maintenanceStart,
