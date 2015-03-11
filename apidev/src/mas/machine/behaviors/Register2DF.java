@@ -26,7 +26,7 @@ public class Register2DF extends OneShotBehaviour{
 		dfd.addServices(sd);
 		try {
 			DFService.register(myAgent, dfd);
-			log.info("Machine simualtor registered with DF");
+			log.info(myAgent.getLocalName()+" registered with DF");
 
 		} catch (FIPAException fe) {
 			fe.printStackTrace();

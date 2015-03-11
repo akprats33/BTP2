@@ -100,6 +100,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 //		log.info(tempqSolution + "");
 
 		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );
+		j.setLSABidder(myAgent.getAID());
 	}
 
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {

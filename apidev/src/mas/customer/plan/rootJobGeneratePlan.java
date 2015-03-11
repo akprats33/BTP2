@@ -17,7 +17,7 @@ import jade.core.behaviours.TickerBehaviour;
 public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 
 	private static final long serialVersionUID = 1L;
-	public static double rate = 0.20;
+	public static double rate = 0.002;
 	public static int initialDelay = 5000;
 	private PlanInstance planInstance;
 	private ExponentialDistribution exp;

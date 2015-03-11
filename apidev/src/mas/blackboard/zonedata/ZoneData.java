@@ -23,7 +23,7 @@ import org.apache.logging.log4j.Logger;
 public class ZoneData implements ZoneDataIFace, Serializable{
 	protected NamedZoneData name;
 	private LinkedList<Object> data;
-	private ArrayList<AID> subscribers;
+	private HashSet<AID> subscribers;
 	private Logger log;
 	private String UpdateMessageID;
 	private Agent bb; //needed for sending update message
@@ -33,7 +33,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		log=LogManager.getLogger();
 		this.name = name2;
 		this.data = new LinkedList<Object>();
-		this.subscribers=new ArrayList<AID>();
+		this.subscribers=new HashSet<AID>();
 		this.UpdateMessageID=UpdateMsgID; //ID of message to be used while sending update of data
 		this.bb=blackboard;
 		this.appendValues=appendValues;
@@ -107,7 +107,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	@Override
 	public void subscribe(AID agent) {
 		subscribers.add(agent);
-		log.info(agent.getLocalName()+" subscribed for "+name+" "+subscribers);
+		log.info(agent.getLocalName()+" subscribed for "+name);
 		
 		
 	}
@@ -122,7 +122,7 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		return UpdateMessageID;
 	}
 	
-	public ArrayList<AID> getSubscribers(){
+	public HashSet<AID> getSubscribers(){
 		return subscribers;
 	}
 	
@@ -140,9 +140,9 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 		
 		ACLMessage update=new ACLMessage(ACLMessage.INFORM);		
 		update.setConversationId(UpdateMessageID);
-		
+	
 		for(AID reciever : getSubscribers()){
-			log.info("adding reciever "+reciever);
+			log.info("adding reciever "+reciever.getLocalName());
 			update.addReceiver(reciever);
 //			log.info("sent update of "+name.getName()+" to "+reciever.getLocalName()+" with ID "+UpdateMessageID);
 		}

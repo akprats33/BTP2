@@ -39,6 +39,14 @@ public class AgentStarter {
 //		agents.put(ID.LocalScheduler.LocalName, new LocalSchedulingAgent());
 //		agents.put(ID.LocalScheduler.LocalName + "Other", new LocalSchedulingAgent());
 		agents.put(ID.Maintenance.LocalName, new LocalMaintenanceAgent());
+		agents.put(ID.Customer.LocalName, new CustomerAgent());
+		agents.put(ID.GlobalScheduler.LocalName, new GlobalSchedulingAgent());
+		agents.put(ID.Machine.LocalName+"#1", new Simulator());
+		agents.put(ID.Machine.LocalName+"#2", new Simulator());
+		agents.put(ID.LocalScheduler.LocalName+"#1", new LocalSchedulingAgent());
+		agents.put(ID.LocalScheduler.LocalName+"#2", new LocalSchedulingAgent());
+		agents.put(ID.Maintenance.LocalName+"#1", new LocalSchedulingAgent());
+		agents.put(ID.Maintenance.LocalName+"#2", new LocalSchedulingAgent());
 	};
 
 	public static void main(String[] args) {
