@@ -31,6 +31,14 @@ public class machineHealthCheckPlan extends CyclicBehaviour implements PlanBody 
 	private MessageTemplate machineHealth;
 	
 	@Override
+	public void init(PlanInstance pInstance) {
+		log = LogManager.getLogger();
+		bfBase = pInstance.getBeliefBase();
+		myMachine = null;
+		machineHealth = MessageTemplate.MatchConversationId(MessageIds.msgmyHealth);
+	}
+	
+	@Override
 	public void action() {
 		
 		switch(step){
@@ -61,11 +69,4 @@ public class machineHealthCheckPlan extends CyclicBehaviour implements PlanBody 
 		return EndState.SUCCESSFUL;
 	}
 
-	@Override
-	public void init(PlanInstance pInstance) {
-		log = LogManager.getLogger();
-		bfBase = pInstance.getBeliefBase();
-		myMachine = null;
-		machineHealth = MessageTemplate.MatchConversationId(MessageIds.msgmyHealth);
-	}
 }
