@@ -1,6 +1,8 @@
 package mas.machine.component;
 
-public interface IComponent {
+import jade.util.leap.Serializable;
+
+public interface IComponent extends Serializable{
 
 	public double getEta();
 	public double getBeta();

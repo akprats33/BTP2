@@ -80,8 +80,8 @@ public class RootMaintenanceBasicCapability extends Capability{
 	protected void setup() {
 		myAgent.addGoal(new RegisterMaintenanceAgentServiceGoal());
 		myAgent.addGoal(new RegisterMaintenanceAgentToBlackboardGoal());
-//		myAgent.addGoal(new machineHealthCheckGoal());
-//		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal());
-//		myAgent.addGoal(new MaintenanceStartSendInfoGoal());
+		myAgent.addGoal(new machineHealthCheckGoal());
+		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal());
+		myAgent.addGoal(new MaintenanceStartSendInfoGoal());
 	}
 }

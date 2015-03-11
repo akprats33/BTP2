@@ -1,12 +1,8 @@
 package mas.machine.component;
 
-import jade.util.leap.Serializable;
-
 import java.util.Random;
-
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
-
 import org.apache.commons.math3.distribution.WeibullDistribution;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +21,7 @@ import org.apache.logging.log4j.Logger;
  *
  */
 
-public class Component implements IComponent, Serializable {
+public class Component implements IComponent {
 
 	private static final long serialVersionUID = 1L;
 	private String ComponentID;

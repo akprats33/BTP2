@@ -5,6 +5,7 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.util.leap.Serializable;
 
 import java.beans.PropertyChangeListener;
@@ -14,12 +15,8 @@ import java.util.EnumSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import mas.job.OperationType;
 import mas.machine.behaviors.AcceptJobBehavior;
-import mas.machine.behaviors.GiveMeJobBehavior;
 import mas.machine.behaviors.ParameterShifterBehavaior;
 import mas.machine.behaviors.RegisterMachine2BlackBoardBehvaior;
 import mas.machine.behaviors.GetRootCauseDataBehavior;
@@ -27,12 +24,14 @@ import mas.machine.behaviors.LoadMachineComponentBehavior;
 import mas.machine.behaviors.LoadMachineParameterBehavior;
 import mas.machine.behaviors.LoadSimulatorParamsBehavior;
 import mas.machine.behaviors.Register2DF;
-import mas.machine.behaviors.ReportHealthBehavior;
 import mas.machine.behaviors.ShiftInProcessBahavior;
 import mas.machine.component.Component;
 import mas.machine.component.IComponent;
 import mas.machine.parametrer.Parameter;
 import mas.machine.parametrer.RootCause;
+import mas.util.AgentUtil;
+import mas.util.ID;
+import mas.util.ZoneDataUpdate;
 
 public class Simulator extends Agent implements IMachine,Serializable {
 
@@ -59,13 +58,13 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	public transient static long healthReportTimeMillis = 200;
 
 	// list of components of machine
-	private ArrayList<IComponent> myComponents;
+	private transient ArrayList<IComponent> myComponents;
 
 	//starting time of this machine agent 
-	private long epochTime;
+	private transient long epochTime;
 
 	// status of this machine i.e. working/failed etc.
-	private MachineStatus status;
+	private transient MachineStatus status;
 
 	// property change support for status of simulator
 	protected transient PropertyChangeSupport statusChangeSupport;
@@ -74,42 +73,42 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private transient double percentProcessingTimeVariation = 0.10;		
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	private transient double meanLoadingTime = 1000.0;					
-	private transient double sdLoadingTime = 1.0;
+	private transient  double meanLoadingTime = 1000.0;					
+	private  transient double sdLoadingTime = 1.0;
 
 	// parameters of loading time normal distribution ( in Milliseconds)
-	private transient double meanUnloadingTime = 1000.0;				
-	private transient double sdUnloadingTime = 1.0;
+	private  transient double meanUnloadingTime = 1000.0;				
+	private  transient double sdUnloadingTime = 1.0;
 
 	// fraction defective for attributes of jobs
-	private transient double fractionDefective = 0.10;
+	private transient  double fractionDefective = 0.10;
 
 	// parameters of process
-	private transient double mean_shift = 0;					
-	private transient double sd_shift = 1;
+	private  transient double mean_shift = 0;					
+	private  transient double sd_shift = 1;
 
 	// parameters of normal distribution causing shift in process mean
-	private transient double mean_shiftInMean = 0;				
-	private transient double sd_shiftInMean = 1;
+	private  transient double mean_shiftInMean = 0;				
+	private  transient double sd_shiftInMean = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
-	private transient double mean_shiftInSd = 0;				
-	private transient double sd_shiftInSd = 1;
+	private  transient double mean_shiftInSd = 0;				
+	private  transient double sd_shiftInSd = 1;
 
 	//rate of process mean shifting (per hour)
-	private transient double rateProcessShift = 0.01;				
+	private  transient double rateProcessShift = 0.01;				
 
 	// parameters of process parameters
-	private transient double mean_shiftParam = 0;					
-	private transient double sd_shiftparam = 1;
+	private  transient double mean_shiftParam = 0;					
+	private  transient double sd_shiftparam = 1;
 
 	// parameters of normal distribution causing shift in process parameters
-	private transient double mean_shiftInMeanParam = 0;				
-	private transient double sd_shiftInMeanParam = 1;
+	private transient  double mean_shiftInMeanParam = 0;				
+	private transient  double sd_shiftInMeanParam = 1;
 
 	// parameters of normal distribution causing shift in process standard deviation
-	private transient double mean_shiftInSdParam = 0;				
-	private transient double sd_shiftInSdparam = 1;
+	private transient  double mean_shiftInSdParam = 0;				
+	private transient  double sd_shiftInSdparam = 1;
 
 	// machine parameters
 	private transient ArrayList<Parameter> machineParameters ;
@@ -117,10 +116,10 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	// root causes for machine parameters which will make a shift in parameter's generative process
 	private transient ArrayList<ArrayList<RootCause>> mParameterRootcauses; 
 	
-	private transient Logger log;
+//	private transient Logger log;
 
 	private void init() {
-		log = LogManager.getLogger();
+//		log = LogManager.getLogger();
 		statusChangeSupport = new PropertyChangeSupport(this);
 		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
@@ -200,6 +199,28 @@ public class Simulator extends Agent implements IMachine,Serializable {
 				new SimulatorStatusListener(Simulator.this) );
 	}
 
+	class ReportHealthBehavior extends TickerBehaviour{
+
+		private static final long serialVersionUID = 1L;
+
+		public ReportHealthBehavior(Agent a, long period) {
+			super(a, period);
+		}
+
+		@Override
+		protected void onTick() {
+
+			ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
+					ID.Machine.ZoneData.myHealth,
+					Simulator.this);
+
+			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
+					machineHealthUpdate, myAgent);
+			
+			System.out.println("Sending machine's health " + Simulator.blackboardAgent);
+		}
+	}
+	
 	@Override
 	protected void takeDown() {
 		super.takeDown();
