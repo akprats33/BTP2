@@ -97,10 +97,10 @@ public class JobGenerator extends JobGeneratorIFace{
 			            		  String tempAttr[]=Attr.split(",");
 			            		  
 			            		  ArrayList<jobAttribute> tempAttrList = new ArrayList<jobAttribute>();
-			            		  jobAttribute tempAttribute = new jobAttribute();
+			            		 
 			            		  
 			            		  for(int i=0; i < tempAttr.length; i++){
-			            			  tempAttribute.setTitle(tempAttr[i]);
+			            			  jobAttribute tempAttribute = new jobAttribute(tempAttr[i]);
 			            			  tempAttrList.add(tempAttribute );
 			            		  }
 			            		  jobAttributes.add(tempAttrList);

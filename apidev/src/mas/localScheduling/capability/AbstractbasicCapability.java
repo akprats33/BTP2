@@ -50,9 +50,8 @@ public class AbstractbasicCapability extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
-		AID temp_bb_AID=new AID(ID.Blackboard.LocalName,false);
 		Belief<AID> bboard = new TransientBelief<AID>(
-				ID.LocalScheduler.BeliefBaseConst.blackboardAgent, temp_bb_AID);
+				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
 
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);

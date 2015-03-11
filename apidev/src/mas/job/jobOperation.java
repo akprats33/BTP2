@@ -1,8 +1,8 @@
 package mas.job;
 
 import java.io.Serializable;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class jobOperation implements operationInterface,Serializable {
 	
@@ -32,13 +32,43 @@ public class jobOperation implements operationInterface,Serializable {
 	}
 
 	@Override
-	public java.util.Date getLocalDueDate() {
+	public Date getLocalDueDate() {
 		return localDueDate;
 	}
 
 	@Override
-	public java.util.Date getGlobalDueDate() {
+	public Date getGlobalDueDate() {
 		return globalDueDate;
+	}
+
+	public ArrayList<jobAttribute> getjAttributes() {
+		return jAttributes;
+	}
+
+	public void setjAttributes(ArrayList<jobAttribute> jAttributes) {
+		this.jAttributes = jAttributes;
+	}
+	
+	public void addjAttrubute(jobAttribute jatt) {
+		if(this.jAttributes == null) 
+			this.jAttributes = new ArrayList<jobAttribute>();
+			
+		this.jAttributes.add(jatt);
+	}
+
+	public ArrayList<jobDimension> getjDims() {
+		return jDims;
+	}
+
+	public void setjDims(ArrayList<jobDimension> jDims) {
+		this.jDims = jDims;
+	}
+	
+	public void addjDim(jobDimension jdim) {
+		if(this.jDims == null) 
+			this.jDims = new ArrayList<jobDimension>();
+			
+		this.jDims.add(jdim);
 	}
 
 }

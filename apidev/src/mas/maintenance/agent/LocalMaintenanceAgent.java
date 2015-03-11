@@ -1,6 +1,9 @@
 package mas.maintenance.agent;
 
+import jade.core.AID;
 import mas.localScheduling.capability.LocalSchedulingBasicCapability;
+import mas.util.AgentUtil;
+import mas.util.ID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +26,10 @@ public class LocalMaintenanceAgent extends AbstractLocalMaintenanceAgent {
 		// Add capability to agent 
 		Capability bCap = new MaitenanceBasicCapability();
 		addCapability(bCap);
+		
+		AID bba = AgentUtil.findBlackboardAgent(this);
+		bCap.getBeliefBase().updateBelief(
+				ID.Maintenance.BeliefBaseConst.blackboardAgent, bba);
 
 	}
-
 }

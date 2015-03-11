@@ -1,8 +1,10 @@
 package mas.maintenance.agent;
 
 import jade.core.AID;
+
 import java.util.HashSet;
 import java.util.Set;
+
 import mas.maintenance.goal.CorrectiveMachineComponentsRepairGoal;
 import mas.maintenance.goal.MaintenanceStartSendInfoGoal;
 import mas.maintenance.goal.RegisterMaintenanceAgentServiceGoal;
@@ -16,15 +18,21 @@ import mas.maintenance.plan.machineHealthCheckPlan;
 import mas.util.ID;
 import bdi4jade.belief.Belief;
 import bdi4jade.belief.TransientBelief;
+import bdi4jade.core.BeliefBase;
 import bdi4jade.core.Capability;
+import bdi4jade.core.PlanLibrary;
 import bdi4jade.plan.Plan;
 import bdi4jade.util.plan.SimplePlan;
 
 public class RootMaintenanceBasicCapability extends Capability{
 
 	private static final long serialVersionUID = 1L;
+	
+	public RootMaintenanceBasicCapability() {
+		super(new BeliefBase(getBeliefs()), new PlanLibrary(getPlans()));
+	}
 
-	public Set<Belief<?>> getBeliefs() {
+	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
 		Belief<AID> bboard = new TransientBelief<AID>(
@@ -47,9 +55,15 @@ public class RootMaintenanceBasicCapability extends Capability{
 		return beliefs;
 	}
 
-	public Set<Plan> getPlans() {
+	public static Set<Plan> getPlans() {
 		Set<Plan> plans = new HashSet<Plan>();
 
+		plans.add(new SimplePlan(RegisterMaintenanceAgentServiceGoal.class,
+				RegisterMaintenanceAgentServicePlan.class));
+
+		plans.add(new SimplePlan(RegisterMaintenanceAgentToBlackboardGoal.class,
+				RegisterMaintenanceAgentToBlackboardPlan.class));
+		
 		plans.add(new SimplePlan(machineHealthCheckGoal.class,
 				machineHealthCheckPlan.class));
 
@@ -59,12 +73,6 @@ public class RootMaintenanceBasicCapability extends Capability{
 		plans.add(new SimplePlan(MaintenanceStartSendInfoGoal.class,
 				MaintenanceStartSendInfoPlan.class));
 
-		plans.add(new SimplePlan(RegisterMaintenanceAgentServiceGoal.class,
-				RegisterMaintenanceAgentServicePlan.class));
-
-		plans.add(new SimplePlan(RegisterMaintenanceAgentToBlackboardGoal.class,
-				RegisterMaintenanceAgentToBlackboardPlan.class));
-
 		return plans;
 	}	
 
@@ -72,9 +80,8 @@ public class RootMaintenanceBasicCapability extends Capability{
 	protected void setup() {
 		myAgent.addGoal(new RegisterMaintenanceAgentServiceGoal());
 		myAgent.addGoal(new RegisterMaintenanceAgentToBlackboardGoal());
-
-		myAgent.addGoal(new machineHealthCheckGoal());
-		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal());
-		myAgent.addGoal(new MaintenanceStartSendInfoGoal());
+//		myAgent.addGoal(new machineHealthCheckGoal());
+//		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal());
+//		myAgent.addGoal(new MaintenanceStartSendInfoGoal());
 	}
 }

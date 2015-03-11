@@ -26,6 +26,10 @@ public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 		// Add capability to agent 
 		Capability bCap = new LocalSchedulingBasicCapability();
 		addCapability(bCap);
+		
+		AID bba = AgentUtil.findBlackboardAgent(this);
+		bCap.getBeliefBase().updateBelief(
+				ID.LocalScheduler.BeliefBaseConst.blackboardAgent, bba);
 
 	}
 }

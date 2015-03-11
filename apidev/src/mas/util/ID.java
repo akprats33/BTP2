@@ -130,8 +130,8 @@ public class ID implements Serializable{
 	}
 
 	public class Machine{
-		public static final String Service="machine-service";
-		public static final String LocalName ="machine-simulator";
+		public static final String Service="machine_service";
+		public static final String LocalName ="machine_simulator";
 
 		public class ZoneData{
 			
