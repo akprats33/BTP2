@@ -7,12 +7,10 @@ import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.util.leap.Serializable;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.EnumSet;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import mas.job.OperationType;
@@ -39,13 +37,13 @@ public class Simulator extends Agent implements IMachine,Serializable {
 
 	// machine's status property (used in decoding the failure event of machine
 	public transient static String machineStatusProperty = "_machineStatusProperty";
-	
+
 	// machine's type i.e. ability to perform number of operations
-	private transient EnumSet<OperationType> supportedOperations;
-	
+	private EnumSet<OperationType> supportedOperations;
+
 	// time step in milliseconds
 	public transient static int TIME_STEP = 100;
-	
+
 	// ID of this simulator
 	public transient String ID_Simulator;
 
@@ -54,17 +52,17 @@ public class Simulator extends Agent implements IMachine,Serializable {
 
 	// name of data store used in behavior's to update this object
 	public transient static String simulatorStoreName = "simulatorStoreName";
-	
-	public transient static long healthReportTimeMillis = 200;
+
+	public transient static long healthReportTimeMillis = 5000;
 
 	// list of components of machine
-	private transient ArrayList<IComponent> myComponents;
+	private ArrayList<IComponent> myComponents;
 
 	//starting time of this machine agent 
-	private transient long epochTime;
+	private long epochTime;
 
 	// status of this machine i.e. working/failed etc.
-	private transient MachineStatus status;
+	private MachineStatus status;
 
 	// property change support for status of simulator
 	protected transient PropertyChangeSupport statusChangeSupport;
@@ -112,27 +110,27 @@ public class Simulator extends Agent implements IMachine,Serializable {
 
 	// machine parameters
 	private transient ArrayList<Parameter> machineParameters ;
-	
+
 	// root causes for machine parameters which will make a shift in parameter's generative process
 	private transient ArrayList<ArrayList<RootCause>> mParameterRootcauses; 
-	
-//	private transient Logger log;
+
+	//	private transient Logger log;
 
 	private void init() {
-//		log = LogManager.getLogger();
+		//		log = LogManager.getLogger();
 		statusChangeSupport = new PropertyChangeSupport(this);
 		epochTime = System.currentTimeMillis();
 		myComponents = new ArrayList<IComponent>();
 		machineParameters = new ArrayList<Parameter>();
 		mParameterRootcauses = new ArrayList<ArrayList<RootCause> >();
-		
+
 		this.supportedOperations = EnumSet.of( OperationType.Operation_1,
-					OperationType.Operation_2, OperationType.Operation_3 );
-		
+				OperationType.Operation_2, OperationType.Operation_3 );
+
 	}
 
 	private transient SequentialBehaviour loadData;
-	
+
 	private transient Behaviour loadSimulatorParams;
 	private transient Behaviour loadComponentData;
 	private transient Behaviour loadMachineParams;
@@ -143,13 +141,13 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	private transient Behaviour reportHealth;
 	private transient Behaviour processDimensionShifter;
 	private transient Behaviour machineParameterShifter;
-	
+
 	private transient ParallelBehaviour functionality ;
 
 	@Override
 	protected void setup() {
 		super.setup();
-		
+
 		/**
 		 * initialize the variables and setup machine's class i.e. type
 		 */
@@ -174,7 +172,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		loadData.addSubBehaviour(registerMachineOnBB);
 
 		addBehaviour(loadData);
-		
+
 		functionality = new ParallelBehaviour(this, ParallelBehaviour.WHEN_ALL);
 		functionality.getDataStore().put(simulatorStoreName, Simulator.this);
 
@@ -184,11 +182,11 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		processDimensionShifter.getDataStore().put(simulatorStoreName, Simulator.this);
 		machineParameterShifter = new ParameterShifterBehavaior();
 		machineParameterShifter.getDataStore().put(simulatorStoreName, Simulator.this);
-		
+
 		functionality.addSubBehaviour(acceptIncomingJobs);
 		functionality.addSubBehaviour(reportHealth);
 		functionality.addSubBehaviour(processDimensionShifter);
-//		functionality.addSubBehaviour(machineParameterShifter);
+		//		functionality.addSubBehaviour(machineParameterShifter);
 
 		addBehaviour(functionality);
 
@@ -199,7 +197,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 				new SimulatorStatusListener(Simulator.this) );
 	}
 
-	class ReportHealthBehavior extends TickerBehaviour{
+	class ReportHealthBehavior extends TickerBehaviour {
 
 		private static final long serialVersionUID = 1L;
 
@@ -216,11 +214,11 @@ public class Simulator extends Agent implements IMachine,Serializable {
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					machineHealthUpdate, myAgent);
-			
-			System.out.println("Sending machine's health " + Simulator.blackboardAgent);
+
+			//			System.out.println("Sending machine's health " + Simulator.blackboardAgent);
 		}
 	}
-	
+
 	@Override
 	protected void takeDown() {
 		super.takeDown();
@@ -468,7 +466,7 @@ public class Simulator extends Agent implements IMachine,Serializable {
 	public void addmParameterRootCause(ArrayList<RootCause> rootcause) {
 		this.mParameterRootcauses.add(rootcause);
 	}
-	
+
 	public EnumSet<OperationType> getSupportedOperations() {
 		return supportedOperations;
 	}

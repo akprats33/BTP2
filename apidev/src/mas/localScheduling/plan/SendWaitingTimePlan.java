@@ -44,13 +44,13 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 	@Override
 	public EndState getEndState() {
-		return null;
+		return EndState.SUCCESSFUL;
 	}
 
 	@Override
 	public void init(PlanInstance pInstance) {
 		bfBase = pInstance.getBeliefBase();
-		log=LogManager.getLogger();
+		log = LogManager.getLogger();
 		try {
 			msg = ((MessageGoal)pInstance.getGoal()).getMessage();
 			j = (job)(msg.getContentObject());
@@ -82,7 +82,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
 //		log.info("waiting time is : " + avgWaitingTime);
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
-		j.setStartTime(avgWaitingTime);
+		j.setStartTime(avgWaitingTime + System.nanoTime()/1000000);
 
 		log.info("waiting time is : " + j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
