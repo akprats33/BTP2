@@ -80,7 +80,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		averageProcessingTime = sTracker.getAvgProcessingTime();
 
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
-
+		log.info("waiting time is : " + avgWaitingTime);
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
 		j.setStartTime(avgWaitingTime);
 
