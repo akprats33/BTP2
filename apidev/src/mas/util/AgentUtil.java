@@ -94,7 +94,7 @@ public class AgentUtil {
 			msg.setConversationId(MessageIds.RegisterMe);
 			
 			for(int i = 0; i <zones.length ; i++) 
-			log.info( sender.getLocalName()+":" + zones[i].getName());
+//			log.info( sender.getLocalName()+":" + zones[i].getName());
 			try {
 				msg.setContentObject(zones);
 			} catch (IOException e1) {
