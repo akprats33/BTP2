@@ -66,7 +66,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 		case 0:
 			
 			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
-//			log.info(MachineCount);
+			log.info(MachineCount);
 			
 			if(MachineCount!=0){
 				ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
@@ -81,12 +81,12 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 //			log.info("step="+step);
 			
 			try{
-
+				
 				ACLMessage reply = myAgent.receive(mt);
 				if (reply != null) {
 					WaitingTime[repliesCnt]=reply;
 					repliesCnt++;
-//					log.info("repliesCnt = "+repliesCnt);
+					log.info("got waiting time from "+ reply.getSender().getLocalName());
 
 					if (repliesCnt == MachineCount) {				
 						step = 2; 

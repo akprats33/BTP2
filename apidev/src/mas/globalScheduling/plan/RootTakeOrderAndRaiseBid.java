@@ -124,7 +124,7 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 				ACLMessage BestBid = ChooseBid(LSAbids);
 				job JobForBidWinner = (job) (BestBid.getContentObject());
 				JobForBidWinner.setBidWinnerLSA(JobForBidWinner.getLSABidder());
-				
+				log.info(JobForBidWinner.getLSABidder().getLocalName()+" won bid with "+JobForBidWinner.getBidByLSA());
 				ZoneDataUpdate NegotiationUpdate = new ZoneDataUpdate(
 						ID.GlobalScheduler.ZoneData.jobForLSA, JobForBidWinner);
 				
@@ -147,6 +147,8 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 		ACLMessage MinBid = LSA_bids[0];
 		for (int i = 0; i < LSA_bids.length; i++) {
 			try {
+				log.info(((job) (LSA_bids[i].getContentObject())).getLSABidder().getLocalName() +" sent bid= "+ ((job) (LSA_bids[i].getContentObject())).getBidByLSA());
+				
 				if (((job) (LSA_bids[i].getContentObject())).getBidByLSA() < ((job) (MinBid
 						.getContentObject())).getBidByLSA()) {
 					MinBid = LSA_bids[i];

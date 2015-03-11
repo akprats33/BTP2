@@ -52,7 +52,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 			protected void onTick() {
 				bfBase.updateBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB, jGen.getNextJob());
 				planInstance.dispatchSubgoal(new dispatchJobGoal());
-				reset(getInterArrivalTimeMillis());
+				reset(getInterArrivalTimeMillis());			
 			}
 		});
 	}
@@ -65,6 +65,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 
 	public long getInterArrivalTimeMillis(){
 		return (long) Math.max(1, exp.sample()*1000);
+//		return (long) 1000000;
 	}
 
 	@Override

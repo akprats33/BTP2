@@ -99,7 +99,12 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 //		log.info(jobQueue + "");
 //		log.info(tempqSolution + "");
 
-		j.setBidByLSA(getPenaltyLocalDD(tempqSolution) - getPenaltyLocalDD(jobQueue) );
+		double PenaltyBefore=getPenaltyLocalDD(tempqSolution);
+		log.info(getPenaltyLocalDD(tempqSolution));
+		double PenaltyAfter=getPenaltyLocalDD(jobQueue);
+		log.info(getPenaltyLocalDD(jobQueue));
+		log.info(PenaltyAfter - PenaltyBefore);
+		j.setBidByLSA(PenaltyAfter - PenaltyBefore );
 		j.setLSABidder(myAgent.getAID());
 	}
 
@@ -114,13 +119,18 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 					(sequence.get(i).getStartTime().getTime() +
 							System.currentTimeMillis());
 
+//			log.info(sequence.get(i).getStartTime().getTime());
+//			log.info(sequence.get(i).getDuedate().getTime());
 			double tardiness = 0.0;
 
-			if (finishTime > sequence.get(i).getDuedate().getTime())
+			if (finishTime > sequence.get(i).getDuedate().getTime()){
 				tardiness = finishTime - sequence.get(i).getDuedate().getTime();
-			else
+			}
+			else{
 				tardiness = 0.0;
+			}
 
+			log.info(tardiness);
 			cost += tardiness * sequence.get(i).getPenalty() + sequence.get(i).getCost();
 		}
 		return cost;
