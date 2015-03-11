@@ -81,7 +81,11 @@ public class RegisterMachine2BlackBoardBehvaior extends OneShotBehaviour{
 		 * subscribe to zonedata's of local scheduling agents
 		 */
 		SubscriptionForm lSchedulingSubForm = new SubscriptionForm();
-		AID lSchedulingTarget = new AID(ID.LocalScheduler.LocalName, AID.ISLOCALNAME);
+		String suffix=myAgent.getLocalName().split("#")[1];
+		
+	
+		AID lSchedulingTarget = new AID(ID.LocalScheduler.LocalName+"#"+suffix, AID.ISLOCALNAME);
+			
 
 		String[] lSchedulingParams = {ID.LocalScheduler.ZoneData.jobForMachine };
 

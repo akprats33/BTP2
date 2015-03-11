@@ -55,12 +55,14 @@ public class EnqueueJobPlan extends OneShotBehaviour implements PlanBody {
 
 	@Override
 	public void action() {
-
-		log.info("Adding the job to queue of machine : " + comingJob);
-		jobQueue.add(comingJob);
-		/**
-		 * update the belief base
-		 */
-		bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue, jobQueue);	
+//		log.info(comingJob.getBidWinnerLSA());
+		if(comingJob.getBidWinnerLSA().equals(myAgent.getAID())){
+			log.info("Adding the job to queue of machine of " + myAgent.getLocalName());
+			jobQueue.add(comingJob);
+			/**
+			 * update the belief base
+			 */
+			bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue, jobQueue);	
+		}
 	}
 }

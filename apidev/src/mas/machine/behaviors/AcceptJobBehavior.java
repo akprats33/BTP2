@@ -40,7 +40,7 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 
 					log.info(" Job No : '" + jobToProcess.getJobNo() +
 							"'accepted with expected starting time : " +
-							jobToProcess.getStartTime());
+							jobToProcess.getStartTime()+jobToProcess.getBidWinnerLSA());
 
 					AddJobBehavior addjob = new AddJobBehavior(this.jobToProcess);
 					addjob.setDataStore(getDataStore());

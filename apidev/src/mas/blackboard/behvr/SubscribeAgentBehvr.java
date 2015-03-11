@@ -92,11 +92,11 @@ public class SubscribeAgentBehvr extends Behaviour {
 //									Iterator<ZoneSpace> izd=((Set<ZoneSpace>)((BeliefSet<ZoneSpace>)BBbeliefBase.getBelief(AgentType)).getValue()).iterator();
 
 									try {
-										Thread.sleep(0); //without this sendupdate() from zoneData was not working. Don't know why.
+										Thread.sleep(1); //without this sendupdate() from zoneData was not working. Don't know why.
 									} catch (InterruptedException e) {
 										e.printStackTrace();
 									}
-																	
+									step++;									
 								}
 								else{
 									log.error("Couldn't find zone "+nzd.getName());
@@ -112,7 +112,7 @@ public class SubscribeAgentBehvr extends Behaviour {
 							
 						}
 						
-				step++;	
+				
 //					}
 				}
 		}

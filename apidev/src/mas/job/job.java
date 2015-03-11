@@ -55,6 +55,7 @@ public class job implements Serializable{
 	private double delTime;
 	private double delStatus;
 	private AID WinnerLSA;
+	private AID LSABidder;
 
 	public int getPosition() {
 		return position;
@@ -317,7 +318,7 @@ public class job implements Serializable{
 		BidByLSA = bidByLSA;
 	}
 	
-	public AID getBidWinnerLSA(){
+	public AID getBidWinnerLSA(){ //LSA which won bid
 		return WinnerLSA;
 	}
 	
@@ -331,6 +332,15 @@ public class job implements Serializable{
 
 	public void setProfit(double profit) {
 		this.profit = profit;
+	}
+ 
+	public void setLSABidder(AID LSA) { //LSA which is sending bid proposal (bid winners hasn't been announced yet)
+		this.LSABidder=LSA; 
+		
+	}
+	
+	public AID getLSABidder(){
+		return this.LSABidder;
 	}
 
 }

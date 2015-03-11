@@ -6,6 +6,9 @@ import jade.lang.acl.ACLMessage;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mas.blackboard.nameZoneData.NamedZoneData;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -19,6 +22,7 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 
 	private static final long serialVersionUID = 1L;
 	private int step;
+	private Logger log=LogManager.getLogger();
 
 	@Override
 	public EndState getEndState() {
@@ -65,9 +69,14 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 
 		AID gSchedulingTarget = new AID(ID.GlobalScheduler.LocalName, AID.ISLOCALNAME);
-		AID simulatorTarget = new AID(ID.Machine.LocalName, AID.ISLOCALNAME);
+		
+		String suffix=myAgent.getLocalName().split("#")[1];
+
+		AID simulatorTarget = new AID(ID.Machine.LocalName+"#"+suffix, AID.ISLOCALNAME);
+
 
 		// subscription form for global scheduling agent
+		log.info(myAgent.getLocalName()+" subscribing "+simulatorTarget.getLocalName());
 		SubscriptionForm gSchedulingSubform = new SubscriptionForm();
 		String[] gSchedulingParams = { ID.GlobalScheduler.ZoneData.askBidForJobFromLSA,
 				ID.GlobalScheduler.ZoneData.GetWaitingTime , ID.GlobalScheduler.ZoneData.jobForLSA,
