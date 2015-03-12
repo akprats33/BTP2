@@ -66,7 +66,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 		case 0:
 			
 			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
-			log.info(MachineCount);
+//			log.info(MachineCount);
 			
 			if(MachineCount!=0){
 				ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);

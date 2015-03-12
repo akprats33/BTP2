@@ -1,12 +1,16 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.Behaviour;
+
+import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Methods;
 import mas.machine.Simulator;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,8 +53,8 @@ public class AddJobBehavior extends Behaviour {
 										Methods.getunloadingTime(machineSimulator.getMeanUnloadingTime(),
 												machineSimulator.getSdUnloadingTime());
 
-				comingJob.setProcessingTime((long)newProcessingTime) ;
-
+				comingJob.setProcessingTime((long)(newProcessingTime)) ;//converting processing time to milliseconds
+				log.info(comingJob.getProcessingTime());
 				processingTime = comingJob.getProcessingTime();
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
@@ -59,7 +63,8 @@ public class AddJobBehavior extends Behaviour {
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
 				comingJob.setStartTime(System.currentTimeMillis());
-
+				
+				
 				if( processingTime > 0 ) {
 					executor = new ScheduledThreadPoolExecutor(1);
 					executor.scheduleAtFixedRate(new timeProcessing(), 0,

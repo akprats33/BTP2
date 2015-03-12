@@ -17,7 +17,7 @@ public class job implements Serializable{
 	private String jobID;
 	private double CPN;
 	private double Cost;
-	private double Penalty;
+	private double penaltyRate;
 	private Date startTime;
 	private Date duedate;
 	private long processingTime;
@@ -58,11 +58,11 @@ public class job implements Serializable{
 	private AID LSABidder;
 
 	public int getPosition() {
-		return position;
+		return this.position;
 	}
 
 	public double getSlack() {
-		return slack;
+		return this.slack;
 	}
 
 	public void setSlack(double slack) {
@@ -70,7 +70,7 @@ public class job implements Serializable{
 	}
 
 	public double getRegret() {
-		return regret;
+		return this.regret;
 	}
 
 	public void setRegret(double regret) {
@@ -144,7 +144,7 @@ public class job implements Serializable{
 		jobNo = builder.jobNo;
 		CPN = builder.CPN;
 		Cost = builder.Cost;
-		Penalty = builder.Penalty;
+		penaltyRate = builder.Penalty;
 		processingTime = builder.procTime;
 		duedate = builder.dDate;
 		generationTime = builder.genTime;
@@ -180,7 +180,7 @@ public class job implements Serializable{
 	}
 
 	public int getJobNo() {
-		return jobNo;
+		return this.jobNo;
 	}
 
 	public void setJobNo(int jobNo) {
@@ -195,28 +195,31 @@ public class job implements Serializable{
 		CPN = cPN;
 	}
 
-	public double getPenalty() {
-		return Penalty;
+	public double getPenaltyRate() {
+		return this.penaltyRate;
 	}
 
 	public void setPenalty(double penalty) {
-		Penalty = penalty;
+		penaltyRate = penalty;
 	}
 
 	public Date getStartTime() {
-		return startTime;
+//		System.out.println("####"+this.startTime);
+		return this.startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+/*	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
-	}
+	}*/
 	
-	public void setStartTime(long startTime) {
-		this.startTime = new Date(startTime);
+	public void setStartTime(long startTimeMS) {
+		this.startTime = new Date(startTimeMS);
+//		System.out.println(new Date(startTime)+"***"+this.startTime);
+	
 	}
 
 	public long getProcessingTime() {
-		return processingTime;
+		return this.processingTime;
 	}
 
 	public void setProcessingTime(long processingTime) {
@@ -284,7 +287,7 @@ public class job implements Serializable{
 	}
 
 	public Date getDuedate() {
-		return duedate;
+		return this.duedate;
 	}
 
 	public void setDuedate(Date duedate) {
@@ -296,7 +299,7 @@ public class job implements Serializable{
 	}
 
 	public ArrayList<jobDimension> getDimensions() {
-		return dimensions;
+		return this.dimensions;
 	}
 
 	public void setDimensions(ArrayList<jobDimension> dimensions) {
@@ -304,14 +307,14 @@ public class job implements Serializable{
 	}
 	
 	public double getCost() {
-		return Cost;
+		return this.Cost;
 	}
 
 	public void setCost(double cost) {
 		Cost = cost;
 	}
 	public double getBidByLSA() {
-		return BidByLSA;
+		return this.BidByLSA;
 	}
 
 	public void setBidByLSA(double bidByLSA) {
@@ -319,7 +322,7 @@ public class job implements Serializable{
 	}
 	
 	public AID getBidWinnerLSA(){ //LSA which won bid
-		return WinnerLSA;
+		return this.WinnerLSA;
 	}
 	
 	public void setBidWinnerLSA(AID winner_LSA){

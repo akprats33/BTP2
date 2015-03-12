@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import mas.job.job;
@@ -99,40 +100,42 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 //		log.info(jobQueue + "");
 //		log.info(tempqSolution + "");
 
-		double PenaltyBefore=getPenaltyLocalDD(tempqSolution);
-		log.info(getPenaltyLocalDD(tempqSolution));
-		double PenaltyAfter=getPenaltyLocalDD(jobQueue);
-		log.info(getPenaltyLocalDD(jobQueue));
-		log.info(PenaltyAfter - PenaltyBefore);
+		double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
+		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
+		double PenaltyBefore=getPenaltyLocalDD(jobQueue);
+		log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
+		log.info("incremental penalty="+(PenaltyAfter - PenaltyBefore));
 		j.setBidByLSA(PenaltyAfter - PenaltyBefore );
 		j.setLSABidder(myAgent.getAID());
 	}
 
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {
-		double finishTime = 0.0;
+		long finishTime = 0;
 		double cost = 0.0;
 		int l = sequence.size();
 
 		for (int i = 0; i < l; i++) {
 
-			finishTime = sequence.get(i).getProcessingTime() +
-					(sequence.get(i).getStartTime().getTime() +
-							System.currentTimeMillis());
-
-//			log.info(sequence.get(i).getStartTime().getTime());
-//			log.info(sequence.get(i).getDuedate().getTime());
+			
+			finishTime = sequence.get(i).getProcessingTime()*1000 +
+					sequence.get(i).getStartTime().getTime();
+			//getProcessingTime gives in time in seconds
+			
 			double tardiness = 0.0;
-
+			
 			if (finishTime > sequence.get(i).getDuedate().getTime()){
+				
 				tardiness = finishTime - sequence.get(i).getDuedate().getTime();
 			}
 			else{
 				tardiness = 0.0;
 			}
 
-			log.info(tardiness);
-			cost += tardiness * sequence.get(i).getPenalty() + sequence.get(i).getCost();
+
+			cost += tardiness * sequence.get(i).getPenaltyRate() ;/*+ sequence.get(i).getCost();*/
+
 		}
+
 		return cost;
 	}
 }	

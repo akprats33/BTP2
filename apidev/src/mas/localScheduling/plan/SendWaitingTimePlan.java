@@ -82,9 +82,10 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
 //		log.info("waiting time is : " + avgWaitingTime);
 		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
-		j.setStartTime(avgWaitingTime + System.nanoTime()/1000000);
-
-		log.info("waiting time is : " + j.getWaitingTime());
+		j.setStartTime(avgWaitingTime + System.currentTimeMillis());
+		
+		log.info("waiting time is : " + j.getWaitingTime()/*+" start time : "+j.getStartTime()*/);
+//		log.info(j.getStartTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j );

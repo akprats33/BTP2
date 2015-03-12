@@ -18,7 +18,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class JobGenerator extends JobGeneratorIFace{
 
 	// processing time is input as seconds. Convert it into milliseconds
-	private int timeUnitConversion = 1000;
+	private int timeUnitConversion = 1;
 	private String jobFilePath;
 	private ArrayList<String> jobIdList;
 	private ArrayList<Long> jobProcessingTimes;
@@ -26,7 +26,9 @@ public class JobGenerator extends JobGeneratorIFace{
 	private ArrayList<Integer> jobQuantity;
 	private ArrayList<ArrayList<jobDimension> > jobDimensions;
 	private ArrayList<ArrayList<jobAttribute> > jobAttributes;
+	private double penaltyRate;
 	int countJob = 1;
+	private double costRate;
 
 	public JobGenerator() {
 		this.jobIdList = new ArrayList<String>();
@@ -36,8 +38,9 @@ public class JobGenerator extends JobGeneratorIFace{
 		this.jobCPNs = new ArrayList<Double>();
 		this.jobDueDates = new ArrayList<Double>();
 		this.jobAttributes = new ArrayList<ArrayList<jobAttribute> >();
-
+		this.penaltyRate=0;
 		this.jobFilePath = System.getProperty("user.dir");
+		this.costRate=0;
 		//      System.out.println(this.jobFilePath);
 	}
 
@@ -112,6 +115,15 @@ public class JobGenerator extends JobGeneratorIFace{
 					add(cell.getNumericCellValue()*timeUnitConversion);
 					//			            		  System.out.println("Due date " + dDate[row_count]);
 					break;
+				
+				case 7:
+					penaltyRate=cell.getNumericCellValue(); //penalty per unit time.
+					//1Unit of time is defined by user in excel sheet OR in machine simulator code
+					break;
+					
+				case 8:
+					costRate=cell.getNumericCellValue(); //cost of processing job per unit time
+					//1Unit of time is defined by user in excel sheet OR in machine simulator code
 				}
 				count++;
 			}
@@ -125,7 +137,7 @@ public class JobGenerator extends JobGeneratorIFace{
 	public Object getNextJob() {
 		int index = runif(1,jobQuantity)[0];
 
-		long due = (long) (jobDueDates.get(index) + System.currentTimeMillis()/1000);
+		long due = (long) (jobDueDates.get(index)*1000 + System.currentTimeMillis());
 		long generationTime = System.currentTimeMillis();
 
 		job j = new job.Builder(jobIdList.get(index))
@@ -135,6 +147,8 @@ public class JobGenerator extends JobGeneratorIFace{
 		.jobProcTime(jobProcessingTimes.get(index))
 		.jobDimensions(jobDimensions.get(index))
 		.jobAttrbitues(jobAttributes.get(index))
+		.jobPenalty(penaltyRate)
+		.jobCost(costRate)
 		.build() ;
 
 		j.setJobNo(countJob++);
