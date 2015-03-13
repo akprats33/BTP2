@@ -68,6 +68,7 @@ public class ProcessJobBehavior extends OneShotBehaviour{
 		comingJob.setAttributes(jAttributes);
 		//		log.info("Dimensions and attributes assigned");
 		comingJob.setCompletionTime(System.currentTimeMillis());
+		log.info("processed for "+ (comingJob.getStartTime().getTime()-comingJob.getCompletionTime().getTime()));
 
 		// send completed job to blackboard in handleCompletedJobBehavior
 		myAgent.addBehaviour(new HandleCompletedJobBehavior(comingJob));

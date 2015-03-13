@@ -40,6 +40,8 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private BeliefBase bfBase;
 	private Logger log;
 	private AID blackboard;
+	private double bidNo;
+	private Random r;
 
 	@Override
 	public EndState getEndState() {
@@ -50,7 +52,9 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
-
+		
+		r=new Random();
+		
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
@@ -101,11 +105,14 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 //		log.info(tempqSolution + "");
 
 		double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
-		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
+//		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
 		double PenaltyBefore=getPenaltyLocalDD(jobQueue);
-		log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
-		log.info("incremental penalty="+(PenaltyAfter - PenaltyBefore));
-		j.setBidByLSA(PenaltyAfter - PenaltyBefore );
+		log.info(myAgent.getLocalName()+" job Q size="+jobQueue.size());
+//		log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
+		log.info(myAgent.getLocalName()+" incremental penalty="+(PenaltyAfter - PenaltyBefore));
+		
+		bidNo=r.nextInt(10)+PenaltyAfter-PenaltyBefore;
+		j.setBidByLSA(bidNo);
 		j.setLSABidder(myAgent.getAID());
 	}
 
@@ -117,7 +124,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		for (int i = 0; i < l; i++) {
 
 			
-			finishTime = sequence.get(i).getProcessingTime()*1000 +
+			finishTime = finishTime+ sequence.get(i).getProcessingTime()*1000 +
 					sequence.get(i).getStartTime().getTime();
 			//getProcessingTime gives in time in seconds
 			
@@ -125,7 +132,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 			
 			if (finishTime > sequence.get(i).getDuedate().getTime()){
 				
-				tardiness = finishTime - sequence.get(i).getDuedate().getTime();
+				tardiness = ((double)finishTime - (double)sequence.get(i).getDuedate().getTime())/1000.0;
 			}
 			else{
 				tardiness = 0.0;

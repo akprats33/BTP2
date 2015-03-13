@@ -22,7 +22,7 @@ public class AddJobBehavior extends Behaviour {
 	private String maintJobID = "0";
 	private Logger log;
 	private int step = 0;
-	private double processingTime;
+	private static double processingTime;//job processing time in milliseconds
 	private Simulator machineSimulator = null;
 	private ScheduledThreadPoolExecutor executor;
 
@@ -54,8 +54,8 @@ public class AddJobBehavior extends Behaviour {
 												machineSimulator.getSdUnloadingTime());
 
 				comingJob.setProcessingTime((long)(newProcessingTime)) ;//converting processing time to milliseconds
-				log.info(comingJob.getProcessingTime());
-				processingTime = comingJob.getProcessingTime();
+//				log.info(comingJob.getProcessingTime());
+				processingTime = comingJob.getProcessingTime()*1000; //conversion to milliseconds
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 						"processing time : " + comingJob.getProcessingTime());
@@ -93,7 +93,7 @@ public class AddJobBehavior extends Behaviour {
 		case 1:
 			// block for some time in order to avoid too much CPU usage
 			// this won't affect working of the behavior however
-			block(15);
+			block(10);
 			break;
 
 		case 2:
@@ -129,6 +129,7 @@ public class AddJobBehavior extends Behaviour {
 					machineSimulator.getStatus() != MachineStatus.FAILED ) {
 
 				processingTime = processingTime - Simulator.TIME_STEP; 
+//				log.info("processingTime="+processingTime);
 				machineSimulator.AgeComponents(Simulator.TIME_STEP);
 			} else if( processingTime <= 0 &&
 					machineSimulator.getStatus() != MachineStatus.FAILED ) {
