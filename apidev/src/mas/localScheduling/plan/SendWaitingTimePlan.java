@@ -4,13 +4,9 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
-
 import java.util.ArrayList;
-import java.util.Random;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -81,11 +77,10 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
 //		log.info("waiting time is : " + avgWaitingTime);
-		j.setWaitingTime(avgWaitingTime + j.getProcessingTime());
+		j.setWaitingTime(avgWaitingTime + j.getCurrentOperationProcessTime());
 		j.setStartTime(avgWaitingTime + System.currentTimeMillis());
-		
-		log.info("waiting time is : " + j.getWaitingTime()/*+" start time : "+j.getStartTime()*/);
-//		log.info(j.getStartTime());
+
+		log.info("waiting time is : " + j.getWaitingTime());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j );

@@ -4,9 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import mas.job.OperationType;
 import mas.job.job;
 import mas.job.jobAttribute;
 import mas.job.jobDimension;
+import mas.job.jobOperation;
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,73 +17,121 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class JobGenerator extends JobGeneratorIFace{
+public class JobGenerator extends JobGeneratorIFace {
 
 	// processing time is input as seconds. Convert it into milliseconds
-	private int timeUnitConversion = 1;
+	private int timeUnitConversion = 1000;
+
+	private EnumeratedIntegerDistribution distribution;
+	private int NumJobs;
+	private ArrayList<XSSFSheet> sheets;
+
 	private String jobFilePath;
 	private ArrayList<String> jobIdList;
-	private ArrayList<Long> jobProcessingTimes;
-	private ArrayList<Double> jobCPNs, jobDueDates;
+	private ArrayList<jobOperation> jobOperations;
+	private ArrayList<Double> jobCPNs;
+	private ArrayList<Long> jobDueDates;
 	private ArrayList<Integer> jobQuantity;
-	private ArrayList<ArrayList<jobDimension> > jobDimensions;
-	private ArrayList<ArrayList<jobAttribute> > jobAttributes;
-	private double penaltyRate;
+	private ArrayList<Double> jobPenalties;
 	int countJob = 1;
-	private double costRate;
 
 	public JobGenerator() {
 		this.jobIdList = new ArrayList<String>();
-		this.jobProcessingTimes = new ArrayList<Long>();
+		this.jobOperations = new ArrayList<jobOperation>();
 		this.jobQuantity = new ArrayList<Integer>();
-		this.jobDimensions = new ArrayList<ArrayList<jobDimension> >();
 		this.jobCPNs = new ArrayList<Double>();
-		this.jobDueDates = new ArrayList<Double>();
-		this.jobAttributes = new ArrayList<ArrayList<jobAttribute> >();
-		this.penaltyRate=0;
+		this.jobDueDates = new ArrayList<Long>();
+		this.jobPenalties = new ArrayList<Double>();
+
+		this.sheets = new ArrayList<XSSFSheet>();
 		this.jobFilePath = System.getProperty("user.dir");
-		this.costRate=0;
-		//      System.out.println(this.jobFilePath);
 	}
 
 	@Override
 	public void readFile() {
 		XSSFWorkbook wb;
-		XSSFSheet sheet = null;
 		try{
 			FileInputStream file=new FileInputStream(this.jobFilePath +
 					"\\jobdata.xlsx");	
 			wb = new XSSFWorkbook(file);
-			sheet = wb.getSheetAt(0);
+			this.NumJobs = wb.getNumberOfSheets();
+
+			XSSFSheet localSheet;
+			for(int i = 0 ; i < NumJobs ; i++) {
+				localSheet = wb.getSheetAt(i);
+				sheets.add(localSheet);
+				readSheet(localSheet);
+			}
+
+			randomGenInit();
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+	}
 
-		Iterator<Row> rows = sheet.rowIterator();
+	private void readSheet(XSSFSheet currSheet) {
+
+		Iterator<Row> rows = currSheet.rowIterator();
 		XSSFRow row = (XSSFRow) rows.next();
-		//			int row_count = 0;
+
+		// first read the second row of job file
+		// skip the first header line
+		row = (XSSFRow) rows.next();
+
+		Iterator<Cell> cells = row.cellIterator();
+
+		int count = 0; 
+		while(cells.hasNext()) {
+			XSSFCell cell = (XSSFCell) cells.next();
+
+			switch(count) {
+			case 0:
+				jobIdList.add(cell.getNumericCellValue() + "");
+				break;
+			case 1:
+				jobQuantity.add((int) cell.getNumericCellValue());
+				break;
+			case 2:
+				jobCPNs.add(cell.getNumericCellValue());
+				break;
+			case 3:
+				jobDueDates.add((long) (cell.getNumericCellValue()*timeUnitConversion));
+				break;
+			case 4:
+				jobPenalties.add(cell.getNumericCellValue());
+				break;
+			}
+			count ++;
+		}
+
+		// Now read operations for the job
+		// Skip the header row for operations
+		row = (XSSFRow) rows.next();
+
 		while( rows.hasNext() ) {
 
 			row = (XSSFRow) rows.next();
-			Iterator<Cell> cells = row.cellIterator();
+			cells = row.cellIterator();
 
-			int count = 0; 
+			jobOperation currOperation = new jobOperation();
+			count = 0; 
 			while(cells.hasNext()) {
 				XSSFCell cell = (XSSFCell) cells.next();
 
-				switch(count){
+				switch(count) {
 				case 0:
-					jobIdList.add(cell.getNumericCellValue()+"");
+					// Operation type for the job
+					currOperation.setJobOperationType(OperationType.Operation_1);
 					break;
+
 				case 1:
-					jobProcessingTimes.
-					add((long) cell.getNumericCellValue()*timeUnitConversion);
+					// Processing time for this operation
+					currOperation.
+					setProcessingTime((long) cell.getNumericCellValue()*timeUnitConversion);
 					break;
+
 				case 2:
-					jobQuantity.add((int) cell.getNumericCellValue());
-					//			            		  System.out.println("q="+ quantity[row_count]);
-					break;
-				case 3:
+					// Dimensions for this operation
 					String s = cell.getStringCellValue();
 					String temp[] = s.split(",");
 					//			            		  System.out.println("length="+temp.length);
@@ -91,9 +141,11 @@ public class JobGenerator extends JobGeneratorIFace{
 						tempDim.setTargetDimension(Double.parseDouble(temp[i]));
 						tempDimList.add(tempDim );
 					}
-					jobDimensions.add(tempDimList);
+					currOperation.setjDims(tempDimList);
 					break;
-				case 4:
+					
+				case 3:
+					// Attributes for this operation
 					String Attr=cell.getStringCellValue();
 					String tempAttr[]=Attr.split(",");
 
@@ -103,52 +155,50 @@ public class JobGenerator extends JobGeneratorIFace{
 						jobAttribute tempAttribute = new jobAttribute(tempAttr[i]);
 						tempAttrList.add(tempAttribute );
 					}
-					jobAttributes.add(tempAttrList);
-					break;
-
-				case 5:
-					jobCPNs.add(cell.getNumericCellValue());
-					//			            		  System.out.println("hello");
-					break;
-				case 6:
-					jobDueDates.
-					add(cell.getNumericCellValue()*timeUnitConversion);
-					//			            		  System.out.println("Due date " + dDate[row_count]);
-					break;
-				
-				case 7:
-					penaltyRate=cell.getNumericCellValue(); //penalty per unit time.
-					//1Unit of time is defined by user in excel sheet OR in machine simulator code
-					break;
+					currOperation.setjAttributes(tempAttrList);
 					
-				case 8:
-					costRate=cell.getNumericCellValue(); //cost of processing job per unit time
-					//1Unit of time is defined by user in excel sheet OR in machine simulator code
+					break;
 				}
 				count++;
 			}
-			//		            row_count++;
+			this.jobOperations.add(currOperation);
 		}
-	}  //End of ReadFile
+	}
+
+	private void randomGenInit() {
+		int size = jobQuantity.size();
+		int[] numsToGenerate = new int[size];
+		double sum = 0.0;
+		double[] discreteProbabilities = new double[size];
+		int i;
+		for(i = 0;i < size; i++) {
+			discreteProbabilities[i] = jobQuantity.get(0);
+			sum += jobQuantity.get(0);
+			numsToGenerate[i] = i;
+		}
+		for(i = 0;i < size; i++) {
+			discreteProbabilities[i] = jobQuantity.get(i)/sum;
+			//			System.out.print("discreteProbabilities["+i+"]="+temp[i]+"/"+sum +":"+weights[i]);
+		}
+
+		distribution = new EnumeratedIntegerDistribution(
+				numsToGenerate, discreteProbabilities);
+	}
+
 	/**
 	 * Generate and return the next job to be dispatched
 	 */
 	@Override
 	public Object getNextJob() {
-		int index = runif(1,jobQuantity)[0];
+		int index = runif();
 
-		long due = (long) (jobDueDates.get(index)*1000 + System.currentTimeMillis());
+		long due = (long) (jobDueDates.get(index) + System.currentTimeMillis());
 		long generationTime = System.currentTimeMillis();
 
 		job j = new job.Builder(jobIdList.get(index))
 		.jobCPN(jobCPNs.get(index))
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
-		.jobProcTime(jobProcessingTimes.get(index))
-		.jobDimensions(jobDimensions.get(index))
-		.jobAttrbitues(jobAttributes.get(index))
-		.jobPenalty(penaltyRate)
-		.jobCost(costRate)
 		.build() ;
 
 		j.setJobNo(countJob++);
@@ -158,30 +208,10 @@ public class JobGenerator extends JobGeneratorIFace{
 
 	/**
 	 * Generate random number(between 0 and 1) following discrete distribution of weights 
-	 * @param numSamples
-	 * @param weights
 	 * @return
 	 */
-	public static int[] runif(int numSamples,ArrayList<Integer> weights) {
-		int size = weights.size();
-		int[] numsToGenerate = new int[size];
-		double sum = 0.0;
-		double[] discreteProbabilities = new double[size];
-		int i;
-		for(i = 0;i < size; i++) {
-			discreteProbabilities[i] = weights.get(0);
-			sum += weights.get(0);
-			numsToGenerate[i] = i;
-		}
-		for(i = 0;i < size; i++) {
-			discreteProbabilities[i] = weights.get(i)/sum;
-			//			System.out.print("discreteProbabilities["+i+"]="+temp[i]+"/"+sum +":"+weights[i]);
-		}
-
-		EnumeratedIntegerDistribution distribution = 
-				new EnumeratedIntegerDistribution(numsToGenerate, discreteProbabilities);
-
-		return distribution.sample(numSamples);
+	public int runif() {
+		return distribution.sample();
 	}
 }
 

@@ -23,20 +23,42 @@ public class StatsTracker {
 
 	private int PERIOD = 15;
 	private final int SIZE_LIMIT = 200;
-	private Queue<job> doneJobs;
+	private Queue<Node> doneJobs;
 	private Queue<BigDecimal> sizeQueue = new LinkedList<BigDecimal>();
 	private BigDecimal cumulatedQueueSize;
 
 	public StatsTracker() {
-		this.doneJobs = new LinkedList<job>();
+		this.doneJobs = new LinkedList<Node>();
 		this.cumulatedQueueSize = BigDecimal.ZERO;
 	}
 
-	public void storeJob(job complete) {
+	private class Node {
+		private job jobDone;
+		private int operationNumber;
+
+		public Node(job j, int n) {
+			this.jobDone = j;
+			this.operationNumber = n;
+		}
+		
+		public long getOperationProcessingTime() {
+			return jobDone.getProcessTime(operationNumber);
+		}
+		
+		public long getOperationCompletionTime() {
+			return jobDone.getCompletionTime(operationNumber);
+		}
+		
+		public long getOperationStartTime() {
+			return jobDone.getStartTime(operationNumber);
+		}
+	}
+
+	public void storeJob(job complete, int n) {
 		if( this.doneJobs.size() >= SIZE_LIMIT){
 			this.doneJobs.remove();
 		}
-		this.doneJobs.add(complete);
+		this.doneJobs.add(new Node(complete,n));
 	}
 
 	public void addSize(double num) {
@@ -63,31 +85,38 @@ public class StatsTracker {
 	 */
 	public double geUtilization() {
 		double busyTime = 0, makeSpan = 0, utilization = 0;
-		job lastOne = null;
+		Node lastOne = null;
 
 		if (doneJobs.size() < SIZE_LIMIT && doneJobs.size() > 0) {
-			Iterator<job> it = doneJobs.iterator();
+			Iterator<Node> it = doneJobs.iterator();
 			while(it.hasNext()){
 				lastOne = it.next();
-				busyTime = busyTime + lastOne.getProcessingTime();
+				busyTime = busyTime + lastOne.getOperationProcessingTime();
 			}
 
-			makeSpan = lastOne.getCompletionTime().getTime() - 
-					doneJobs.peek().getStartTime().getTime();
+			makeSpan = lastOne.getOperationCompletionTime() - 
+					doneJobs.peek().getOperationStartTime();
 		}
 		else if (doneJobs.size() > SIZE_LIMIT) {
 			/**
 			 * take only SIZE_LIMIT number of jobs
 			 */
 			int i = 0;
-			Iterator<job> it = doneJobs.iterator();
+			Iterator<Node> it = doneJobs.iterator();
+			Node currNode = null;
+			long startTime = 0;
 			while(i++ < SIZE_LIMIT && it.hasNext()){
-				busyTime = busyTime + it.next().getProcessingTime();
+				currNode = it.next();
+				if(i == 1) {
+					startTime = currNode.getOperationStartTime();
+				}
+				busyTime = busyTime + currNode.getOperationProcessingTime();
 			}
-			
+			makeSpan = currNode.getOperationCompletionTime() - startTime;
+
 		}
 		if(makeSpan > 0)
-			utilization = busyTime/makeSpan*SIZE_LIMIT;
+			utilization = (busyTime/makeSpan)*100;
 		return utilization;
 	}
 
@@ -96,9 +125,9 @@ public class StatsTracker {
 
 		if (doneJobs.size() <= SIZE_LIMIT && doneJobs.size() > 0) {
 			int size = doneJobs.size();
-			Iterator<job> it = doneJobs.iterator();
-			while(it.hasNext()){
-				procTimes = procTimes + it.next().getProcessingTime();
+			Iterator<Node> it = doneJobs.iterator();
+			while(it.hasNext()) {
+				procTimes = procTimes + it.next().getOperationProcessingTime();
 			}
 			procTimes = procTimes/size;
 		}
@@ -107,11 +136,9 @@ public class StatsTracker {
 			 * take average of processing times of only SIZE_LIMIT number of jobs
 			 */
 			int count = 0;
-			Iterator<job> it = doneJobs.iterator();
-			while(it.hasNext()){
-				procTimes = procTimes + it.next().getProcessingTime();
-				if(++count > SIZE_LIMIT)
-					break;
+			Iterator<Node> it = doneJobs.iterator();
+			while(count++ < SIZE_LIMIT && it.hasNext()){
+				procTimes = procTimes + it.next().getOperationProcessingTime();
 			}
 			procTimes = procTimes/SIZE_LIMIT;
 		}

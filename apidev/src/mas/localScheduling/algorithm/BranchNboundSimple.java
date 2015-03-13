@@ -86,7 +86,7 @@ public class BranchNboundSimple{
 			 * find its penalty
 			 */
 			for (int i = this.depth - 1; i < n ; i++) {
-				makeSpan += this.state.get(i).getProcessingTime();
+				makeSpan += this.state.get(i).getCurrentOperationProcessTime();
 			}
 			
 			/**
@@ -96,7 +96,7 @@ public class BranchNboundSimple{
 			int elements = this.depth;
 			for (int k = 1; k < elements; k++){
 	    		this.state.get(k).setStartTime(this.state.get(k-1).getStartTime().getTime()	+ 
-	    										this.state.get(k-1).getProcessingTime());
+	    										this.state.get(k-1).getCurrentOperationProcessTime());
 			}
 			updateRegret(this);
 //			
@@ -181,7 +181,7 @@ public class BranchNboundSimple{
 		for ( int i = 0; i < elements ; i++){
 					
 			lateness =	node.state.get(i).getStartTime().getTime() +
-						node.state.get(i).getProcessingTime() -
+						node.state.get(i).getCurrentOperationProcessTime() -
 						node.state.get(i).getDuedate().getTime();
 			if(lateness < 0)
 				lateness=0;

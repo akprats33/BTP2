@@ -73,10 +73,10 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 
 					long processingTime = (long) solver.totalMaintenanceTime(t);
 					long duedate = (long) solver.maintenanceJobDueDate(t);
+					
 					this.maintenanceJob = new job.Builder("0").
 							jobGenTime(System.currentTimeMillis()).
-							jobProcTime(processingTime).
-							jobPenalty(0).
+							jobPenalty(1).
 							jobDueDateTime(duedate).
 							build();
 

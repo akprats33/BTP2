@@ -32,7 +32,7 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 	public void action() {
 		
 		sTracker.addSize(jobQueue.size());
-		sTracker.storeJob(j);
+		sTracker.storeJob(j,j.currentOperationNumber);
 				
 		log.info("updating belief for stats tracker :" + sTracker);
 		bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker, sTracker);

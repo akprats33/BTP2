@@ -96,7 +96,7 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			 */
 
 			for (int i = this.depth - 1; i < n ; i++) {
-				makeSpan += this.state.get(i).getProcessingTime();
+				makeSpan += this.state.get(i).getCurrentOperationProcessTime();
 			}
 			/**
 			 * update start time of all jobs.
@@ -106,13 +106,14 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			 * Penalty will be calculated by using a multiplier which in turn depends on regret factor.
 			 * First update start and processing times of the job and then the regret factor.
 			 */
-			startingTime = makeSpan - this.state.get(this.depth-1).getProcessingTime();
+			startingTime = makeSpan - this.state.get(this.depth-1).
+					getCurrentOperationProcessTime();
 			int elements = this.depth;
 			this.state.get(elements-1).setStartTime(startingTime);
 
 			for (int k = elements-2; k >= 0; k--){
 				this.state.get(k).setStartTime(this.state.get(k+1).getStartTime().getTime()	+ 
-						this.state.get(k+1).getProcessingTime());
+						this.state.get(k+1).getCurrentOperationProcessTime());
 			}
 			updateRegret(this);
 			//-------------------------------------------------------
@@ -191,7 +192,7 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 		double lateness;					
 		for ( int i = 0; i < elements ; i++){
 			lateness =	node.state.get(i).getStartTime().getTime() +
-					node.state.get(i).getProcessingTime() -
+					node.state.get(i).getCurrentOperationProcessTime() -
 					node.state.get(i).getDuedate().getTime();
 
 			if(lateness < 0)

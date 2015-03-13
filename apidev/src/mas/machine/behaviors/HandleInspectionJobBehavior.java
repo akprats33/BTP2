@@ -68,7 +68,7 @@ public class HandleInspectionJobBehavior extends Behaviour{
 				inspectionData = inspectioneDataMsg.getContent();
 				token = new StringTokenizer(inspectionData);
 				long procTime = Long.parseLong(token.nextToken());	
-				comingJob.setProcessingTime(procTime);
+				comingJob.setCurrentOperationProcessingTime(procTime);
 				step ++;
 				log.info("Starting inspection of machine");
 			}

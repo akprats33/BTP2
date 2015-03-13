@@ -1,16 +1,12 @@
 package mas.machine.behaviors;
 
 import jade.core.behaviours.Behaviour;
-
-import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import mas.job.job;
 import mas.machine.MachineStatus;
 import mas.machine.Methods;
 import mas.machine.Simulator;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +18,7 @@ public class AddJobBehavior extends Behaviour {
 	private String maintJobID = "0";
 	private Logger log;
 	private int step = 0;
-	private static double processingTime;//job processing time in milliseconds
+	private double processingTime;
 	private Simulator machineSimulator = null;
 	private ScheduledThreadPoolExecutor executor;
 
@@ -39,32 +35,35 @@ public class AddJobBehavior extends Behaviour {
 		case 0:
 			if(! comingJob.getJobID().equals(maintJobID)) {
 
-				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
-				//						"processing time : " + comingJob.getProcessingTime());
 				if(this.machineSimulator == null) {
 					this.machineSimulator = (Simulator) getDataStore().
 							get(Simulator.simulatorStoreName);
 				}
+				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
+				//						"processing time : " + comingJob.getProcessingTime());
+
+				comingJob.setCurrentOperationNumber(
+						comingJob.getCurrentOperationNumber() + 1);
+				
 				double newProcessingTime =
-						Methods.normalRandom(comingJob.getProcessingTime(),
-								comingJob.getProcessingTime()*machineSimulator.getPercentProcessingTimeVariation())+
+						Methods.normalRandom(comingJob.getCurrentOperationProcessTime(),
+								comingJob.getCurrentOperationProcessTime()*machineSimulator.getPercentProcessingTimeVariation())+
 								Methods.getLoadingTime(machineSimulator.getMeanLoadingTime(),
 										machineSimulator.getSdLoadingTime()) +
 										Methods.getunloadingTime(machineSimulator.getMeanUnloadingTime(),
 												machineSimulator.getSdUnloadingTime());
 
-				comingJob.setProcessingTime((long)(newProcessingTime)) ;//converting processing time to milliseconds
-//				log.info(comingJob.getProcessingTime());
-				processingTime = comingJob.getProcessingTime()*1000; //conversion to milliseconds
+				comingJob.setCurrentOperationProcessingTime((long)newProcessingTime) ;
+
+				processingTime = comingJob.getCurrentOperationProcessTime();
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
-						"processing time : " + comingJob.getProcessingTime());
+						"processing time : " + comingJob.getCurrentOperationProcessTime());
 
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
 				comingJob.setStartTime(System.currentTimeMillis());
-				
-				
+
 				if( processingTime > 0 ) {
 					executor = new ScheduledThreadPoolExecutor(1);
 					executor.scheduleAtFixedRate(new timeProcessing(), 0,
@@ -93,7 +92,7 @@ public class AddJobBehavior extends Behaviour {
 		case 1:
 			// block for some time in order to avoid too much CPU usage
 			// this won't affect working of the behavior however
-			block(10);
+			block(15);
 			break;
 
 		case 2:
@@ -129,7 +128,6 @@ public class AddJobBehavior extends Behaviour {
 					machineSimulator.getStatus() != MachineStatus.FAILED ) {
 
 				processingTime = processingTime - Simulator.TIME_STEP; 
-//				log.info("processingTime="+processingTime);
 				machineSimulator.AgeComponents(Simulator.TIME_STEP);
 			} else if( processingTime <= 0 &&
 					machineSimulator.getStatus() != MachineStatus.FAILED ) {

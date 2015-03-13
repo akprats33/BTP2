@@ -8,13 +8,22 @@ public class jobAttribute implements Serializable {
 	private boolean Conforming;
 	
 	public jobAttribute(String name) {
-		this.Name = name;
+		this.setName(name);
 	}
 
-	public void setTitle(String s){
-		this.Name = s;
+	public boolean isConforming() {
+		return Conforming;
 	}
-	public void setConforming(Boolean b){
-		this.Conforming = b;
+
+	public void setConforming(boolean conforming) {
+		Conforming = conforming;
+	}
+
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
 	}
 }
