@@ -84,6 +84,7 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 			// log.info(MachineCount);
 
 			if (MachineCount != 0) {
+//				log.info("due date: "+order.getDuedate());
 				ZoneDataUpdate zdu = new ZoneDataUpdate(
 						ID.GlobalScheduler.ZoneData.askBidForJobFromLSA, order);
 				AgentUtil.sendZoneDataUpdate(blackboard, zdu, myAgent);

@@ -4,14 +4,20 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
+
 import mas.job.job;
 import mas.localScheduling.algorithm.ScheduleSequence;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import bdi4jade.core.BeliefBase;
 import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
@@ -34,8 +40,8 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private BeliefBase bfBase;
 	private Logger log;
 	private AID blackboard;
-
-
+	private double bidNo;
+	private Random r;
 
 	@Override
 	public EndState getEndState() {
@@ -46,10 +52,9 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
-
-
-
-
+		
+		r=new Random();
+		
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
@@ -95,53 +100,64 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		ScheduleSequence sch = new ScheduleSequence(tempQueue);
 		ArrayList<job> tempqSolution = sch.getSolution();
 
-		//		log.info(tempQueue + "");
-		//		log.info(jobQueue + "");
-		//		log.info(tempqSolution + "");
+//		log.info(tempQueue + "");
+//		log.info(jobQueue + "");
+//		log.info(tempqSolution + "");
 
-		double PenaltyBefore=getPenaltyLocalDD(tempqSolution);
-		log.info(getPenaltyLocalDD(tempqSolution));
-		double PenaltyAfter=getPenaltyLocalDD(jobQueue);
-
-		log.info("penalty " + getPenaltyLocalDD(jobQueue));
-		log.info("peantly after " + (PenaltyAfter - PenaltyBefore));
-
-		j.setBidByLSA(PenaltyAfter - PenaltyBefore );
-
+		double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
+//		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
+		double PenaltyBefore=getPenaltyLocalDD(jobQueue);
+		log.info(myAgent.getLocalName()+" job Q size="+jobQueue.size());
+//		log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
+		double incremental_penalty=PenaltyAfter - PenaltyBefore;
+		log.info(myAgent.getLocalName()+" incremental penalty="+incremental_penalty);
+		
+		bidNo=/*r.nextInt(10)+*/PenaltyAfter-PenaltyBefore;
+		j.setBidByLSA(bidNo);
 		j.setLSABidder(myAgent.getAID());
 	}
 
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {
-		double finishTime = 0.0;
+		long finishTime = 0;
+		long cumulativeProcessingTime=0;//sum of processing times of jobs in Q standing ahead 
+		//in milliseconds
+		
 		double cost = 0.0;
 		int l = sequence.size();
 
 		for (int i = 0; i < l; i++) {
-
-
-			finishTime = sequence.get(i).getCurrentOperationProcessTime() +
+			
+			finishTime = cumulativeProcessingTime+ sequence.get(i).getCurrentOperationProcessTime()*1000 +
 					sequence.get(i).getStartTime().getTime();
+			//getProcessingTime gives in time in seconds
 
-			//			log.info(sequence.get(i).getStartTime().getTime());
-			//			log.info(sequence.get(i).getDuedate().getTime());
+//			log.info("difference="+(finishTime-sequence.get(i).getStartTime().getTime()));
+			cumulativeProcessingTime=cumulativeProcessingTime+(long)sequence.get(i).getCurrentOperationProcessTime()*1000;
+
 			double tardiness = 0.0;
-
+			
+//			log.info(myAgent.getLocalName()+ " cpt="+cumulativeProcessingTime +" L="+l+"ft="+new Date(finishTime)+" dd="+sequence.get(i).getDuedate()+" st="+sequence.get(i).getStartTime());
+			
 			if (finishTime > sequence.get(i).getDuedate().getTime()){
-
-				tardiness = finishTime - sequence.get(i).getDuedate().getTime();
+				tardiness = (finishTime - sequence.get(i).getDuedate().getTime())/1000.0;
+//				log.info(myAgent.getLocalName()+ " tardiness="+tardiness+" L="+l+"ft="+new Date(finishTime)+" dd="+sequence.get(i).getDuedate()+" st="+sequence.get(i).getStartTime());
 			}
 			else{
+			/*	log.info("slack: "+new Date(finishTime-sequence.get(i).getDuedate().getTime())+
+						" DueDate: "+sequence.get(i).getDuedate()+
+						" cumulativeProcessingTime="+cumulativeProcessingTime+
+						" start date: "+sequence.get(i).getStartTime().getTime());*/
 				tardiness = 0.0;
 			}
 
-			log.info("tardiness" + tardiness);
-			log.info("-------------- " + sequence.get(i).getCost());
-			cost += tardiness * sequence.get(i).getPenalty() + sequence.get(i).getCost();
+//			log.info("tardiness="+tardiness+" penalty rate="+sequence.get(i).getPenaltyRate());
+			cost += tardiness * sequence.get(i).getPenaltyRate() ;/*+ sequence.get(i).getCost();*/
 
 		}
 
-		log.info("cost is : " + cost);
-		
+
+			log.info(myAgent.getLocalName()+" cost="+cost+" with L="+l);
+			
 		return cost;
 	}
 }	

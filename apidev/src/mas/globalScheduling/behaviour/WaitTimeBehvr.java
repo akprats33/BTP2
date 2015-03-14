@@ -1,5 +1,13 @@
 package mas.globalScheduling.behaviour;
 
+/*
+ * 
+ * NOT USED CURRENTLY 
+ * 
+ * 
+ * */
+
+
 import java.io.IOException;
 
 import org.apache.logging.log4j.LogManager;
@@ -93,6 +101,7 @@ public class WaitTimeBehvr extends Behaviour {
 				
 			}
 			else{
+				log.info(JobToSend.getDuedate());
 				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				AgentUtil.sendZoneDataUpdate(this.bba, NegotiationUpdate, myAgent);
 				/*replyToCust.setContentObject(JobToSend);												

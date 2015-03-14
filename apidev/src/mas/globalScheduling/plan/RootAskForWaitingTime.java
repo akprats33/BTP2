@@ -69,11 +69,12 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 //			log.info(MachineCount);
 			
 			if(MachineCount!=0){
+//				log.info(j.getDuedate());
 				ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GetWaitingTime, j);
 				AgentUtil.sendZoneDataUpdate(blackboard, update, myAgent);
 				WaitingTime=new ACLMessage[MachineCount];
 				step = 1;
-//				log.info("mt="+mt);
+
 			}
 			
 			break;
@@ -109,6 +110,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 								
 				ACLMessage max=ChooseWaitingTimeToSend(WaitingTime);
 				job JobToSend=(job)(max.getContentObject());
+				log.info(JobToSend.getDuedate());
 				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate, myAgent);
 

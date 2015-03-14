@@ -1,5 +1,14 @@
 package mas.globalScheduling.plan;
+/*
+ * 
+ *  This plan is not being used currently 
+ *  
+ *  
+ *  
+ *  */
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import mas.job.job;
 import mas.util.AgentUtil;
@@ -10,6 +19,7 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
@@ -19,6 +29,8 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 
 //	private AID CustomerAgent;
 	private AID bb;
+	private job JobUnderNegotiation;
+	private Logger log=LogManager.getLogger();
 	@Override
 	public EndState getEndState() {
 		return EndState.SUCCESSFUL;
@@ -27,11 +39,18 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 	@Override
 	public void init(PlanInstance PI) {
 		bb=(AID)PI.getBeliefBase().getBelief(ID.Blackboard.LocalName).getValue();
+		try {
+			this.JobUnderNegotiation = (job)((MessageGoal)(PI.getGoal())).
+					getMessage().getContentObject();
+			log.info(JobUnderNegotiation.getDuedate());
+		} catch (UnreadableException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void action() {
-		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, (Object)1); 
+		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobUnderNegotiation); 
 		//Negotiation logic under development
 		AgentUtil.sendZoneDataUpdate(bb, update, myAgent);
 	}

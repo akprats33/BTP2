@@ -80,7 +80,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		j.setWaitingTime(avgWaitingTime + j.getCurrentOperationProcessTime());
 		j.setStartTime(avgWaitingTime + System.currentTimeMillis());
 
-		log.info("waiting time is : " + j.getWaitingTime());
+//		log.info("waiting time is : " + j.getWaitingTime()+ "due date is "+ j.getDuedate());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
 				this.j );

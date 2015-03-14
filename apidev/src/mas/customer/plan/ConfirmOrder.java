@@ -49,6 +49,7 @@ public class ConfirmOrder extends OneShotBehaviour implements PlanBody{
 		ZoneDataUpdate ConfirmedOrderZoneDataUpdate = new ZoneDataUpdate(
 				ID.Customer.ZoneData.customerConfirmedJobs,
 				ConfirmedJob);
+//		log.info("ConfirmedJob dd= "+ConfirmedJob.getDuedate());
 		AgentUtil.sendZoneDataUpdate(bba, ConfirmedOrderZoneDataUpdate, myAgent);
 	}
 }

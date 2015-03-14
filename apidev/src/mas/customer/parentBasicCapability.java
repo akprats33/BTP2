@@ -13,7 +13,7 @@ import mas.customer.plan.ConfirmOrder;
 import mas.customer.plan.DispatchJobPlan;
 import mas.customer.plan.RegisterCustomerAgentToBlackboardPlan;
 import mas.customer.plan.jobGeneratorPlan;
-import mas.globalScheduling.plan.Negotiate;
+//import mas.globalScheduling.plan.Negotiate;
 import mas.util.ID;
 import mas.util.MessageIds;
 import bdi4jade.belief.Belief;
@@ -64,7 +64,6 @@ public class parentBasicCapability extends Capability {
 		
 		plans.add(new SimplePlan(dispatchJobGoal.class,
 				DispatchJobPlan.class));
-		
 
 		plans.add(new SimplePlan
 				(MessageTemplate.MatchConversationId(

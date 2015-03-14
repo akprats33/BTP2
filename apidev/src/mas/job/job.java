@@ -22,7 +22,7 @@ public class job implements Serializable{
 	private String jobID;
 	private double CPN;
 	private double Cost;
-	private double Penalty;
+//	private double Penalty;
 	private double penaltyRate;
 	private Date startTime;
 	private Date duedate;
@@ -99,7 +99,7 @@ public class job implements Serializable{
 		jobNo = builder.jobNo;
 		CPN = builder.CPN;
 		Cost = builder.Cost;
-		Penalty = builder.Penalty;
+		penaltyRate = builder.Penalty;
 		duedate = builder.dDate;
 		generationTime = builder.genTime;
 		this.operations = new ArrayList<jobOperation>();
@@ -237,13 +237,13 @@ public class job implements Serializable{
 		CPN = cPN;
 	}
 
-	public double getPenalty() {
+/*	public double getPenalty() {
 		return Penalty;
-	}
+	}*/
 
-	public void setPenalty(double penalty) {
+/*	public void setPenalty(double penalty) {
 		Penalty = penalty;
-	}
+	}*/
 
 	public Date getStartTime() {
 		return startTime;
