@@ -72,13 +72,20 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		sTracker.addSize( jobQueue.size() );
 
 		// get average queue size and waiting time in the queue
-		averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
+		/*averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
 		averageProcessingTime = sTracker.getAvgProcessingTime();
 
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
-//		log.info("waiting time is : " + avgWaitingTime);
-		j.setWaitingTime(avgWaitingTime + j.getCurrentOperationProcessTime());
-		j.setStartTime(avgWaitingTime + System.currentTimeMillis());
+*///		log.info("waiting time is : " + avgWaitingTime);
+		
+		long WaitingTime=0;
+		
+		for(int i=0;i<jobQueue.size();i++){
+			WaitingTime=WaitingTime+jobQueue.get(i).getCurrentOperationProcessTime()*1000;
+		}
+		
+		j.setWaitingTime(/*avgWaitingTime +*/WaitingTime+ j.getCurrentOperationProcessTime());
+//		j.setStartTime(/*avgWaitingTime +*/ WaitingTime+System.currentTimeMillis()); //why do we need this???
 
 //		log.info("waiting time is : " + j.getWaitingTime()+ "due date is "+ j.getDuedate());
 		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(

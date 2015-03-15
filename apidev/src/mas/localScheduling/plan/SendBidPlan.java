@@ -53,7 +53,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
 		
-		r=new Random();
+//		r=new Random();
 		
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
@@ -100,9 +100,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		ScheduleSequence sch = new ScheduleSequence(tempQueue);
 		ArrayList<job> tempqSolution = sch.getSolution();
 
-//		log.info(tempQueue + "");
-//		log.info(jobQueue + "");
-//		log.info(tempqSolution + "");
+		
 
 		double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
 //		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
@@ -121,6 +119,8 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		long finishTime = 0;
 		long cumulativeProcessingTime=0;//sum of processing times of jobs in Q standing ahead 
 		//in milliseconds
+		
+		sequence=setStartTimes(sequence);
 		
 		double cost = 0.0;
 		int l = sequence.size();
@@ -159,5 +159,15 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 			log.info(myAgent.getLocalName()+" cost="+cost+" with L="+l);
 			
 		return cost;
+	}
+
+	private ArrayList<job> setStartTimes(ArrayList<job> sequence) {
+		long CumulativeWaitingTime=0;
+		for(int i=0;i<sequence.size();i++){
+			sequence.get(i).setStartTime(CumulativeWaitingTime+System.currentTimeMillis());
+			CumulativeWaitingTime=CumulativeWaitingTime+(long)sequence.get(i).getCurrentOperationProcessTime()*1000;
+		}
+		return sequence;
+		
 	}
 }	
