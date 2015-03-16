@@ -97,9 +97,10 @@ public class ID implements Serializable{
 			// advertise job for getting waiting time from LSA's
 			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";
 		}
-		
+
 		public class BeliefBaseConst {
 			public static final String blackboardAgent = "GSA_blackboard-agent";
+			public static final String NoOfMachines = "NoOfMachines";
 		}
 	}
 
@@ -119,7 +120,7 @@ public class ID implements Serializable{
 
 			// update inspection job data for machine here
 			public static final String inspectionJobData = "Maintenance_inspectionData";
-			
+
 			// update inspection job for machine here
 			public static final String inspectionJob = "Maintenance_inspectionJob";
 		}
@@ -138,22 +139,22 @@ public class ID implements Serializable{
 		public static final String LocalName ="machine_simulator";
 
 		public class ZoneData{
-			
+
 			//update new job for the machine
 			public static final String askJobFromLSA = "_askJobFromLSA";
-			
+
 			// update machine's health  here
 			public static final String myHealth ="machine_health";
-			
+
 			// update the finished job here 
 			public static final String finishedJob ="machine_finishedJob";
-			
+
 			// update start of maintenance here
 			public static final String maintenanceStart ="machine_maintenanceStart";
-			
+
 			// update start of inspection here
 			public static final String inspectionStart ="machine_inspectionStart";
-			
+
 			// update machine's failure here i.e. when machine is failed
 			public static final String machineFailures ="machine_machineFailures";
 		}
