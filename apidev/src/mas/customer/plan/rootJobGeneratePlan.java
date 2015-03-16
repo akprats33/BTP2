@@ -63,7 +63,7 @@ public class rootJobGeneratePlan extends Behaviour implements PlanBody{
 	 * @return
 	 */
 
-	public long getInterArrivalTimeMillis(){
+	public long getInterArrivalTimeMillis() {
 //		return (long) Math.max(1, exp.sample()*1000);
 		return (long) 5000;
 	}

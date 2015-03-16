@@ -100,4 +100,10 @@ public class jobOperation implements operationInterface,Serializable {
 			this.jDims.add(jdim);
 	}
 
+	@Override
+	public String toString() {
+		return new StringBuilder().
+				append(jobOperationType.toString()).
+				toString();
+	}
 }

@@ -97,6 +97,10 @@ public class ID implements Serializable{
 			// advertise job for getting waiting time from LSA's
 			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";
 		}
+		
+		public class BeliefBaseConst {
+			public static final String blackboardAgent = "GSA_blackboard-agent";
+		}
 	}
 
 	public class Maintenance {
