@@ -62,7 +62,7 @@ public class AddJobBehavior extends Behaviour {
 
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
-				comingJob.setStartTime(System.currentTimeMillis());
+				comingJob.setJobStartTime(System.currentTimeMillis());
 
 				if( processingTime > 0 ) {
 					executor = new ScheduledThreadPoolExecutor(1);

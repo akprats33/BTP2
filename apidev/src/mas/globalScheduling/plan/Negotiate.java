@@ -42,7 +42,7 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 		try {
 			this.JobUnderNegotiation = (job)((MessageGoal)(PI.getGoal())).
 					getMessage().getContentObject();
-			log.info(JobUnderNegotiation.getDuedate());
+			log.info(JobUnderNegotiation.getJobDuedate());
 		} catch (UnreadableException e) {
 			e.printStackTrace();
 		}

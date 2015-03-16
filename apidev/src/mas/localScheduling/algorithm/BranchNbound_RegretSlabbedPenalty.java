@@ -2,7 +2,6 @@ package mas.localScheduling.algorithm;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import mas.customer.JobGenerator;
 import mas.job.job;
 
 public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
@@ -107,28 +106,33 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 			 * First update start and processing times of the job and then the regret factor.
 			 */
 			startingTime = makeSpan - this.state.get(this.depth-1).
-					getCurrentOperationProcessTime();
+					getCurrentOperationProcessTime() +
+					System.currentTimeMillis();
+
 			int elements = this.depth;
-			this.state.get(elements-1).setStartTime(startingTime);
+			this.state.get(elements-1).setCurrentOperationProcessingTime(startingTime);
 
 			for (int k = elements-2; k >= 0; k--){
-				this.state.get(k).setStartTime(this.state.get(k+1).getStartTime().getTime()	+ 
+				this.state.get(k).setCurrentOperationStartTime(
+						this.state.get(k+1).getCurrentOperationStartTime()	+ 
 						this.state.get(k+1).getCurrentOperationProcessTime());
 			}
 			updateRegret(this);
 			//-------------------------------------------------------
 
 			job j = this.state.get(depth-1);
-			double lateness = (makeSpan - j.getDuedate().getTime())*j.getCPN()*j.getRegretMultiplier();
-			if(lateness < 0) {
+			double latenessPenalty = (makeSpan - j.getCurrentOperationDueDate()) * j.getCPN() * 
+					j.getRegretMultiplier();
+
+			if(latenessPenalty < 0) {
 				//				System.out.println("negative " + lateness + "with "+parent.penalty);
-				lateness = 0;
+				latenessPenalty = 0;
 			}
 			if( this.parent != null)
-				lateness += this.parent.penalty;
+				latenessPenalty += this.parent.penalty;
 
-			this.penalty = lateness;
-			return lateness;
+			this.penalty = latenessPenalty;
+			return latenessPenalty;
 		}
 	}
 
@@ -191,42 +195,15 @@ public class BranchNbound_RegretSlabbedPenalty implements ScheduleSequenceIFace{
 		int elements = node.depth;
 		double lateness;					
 		for ( int i = 0; i < elements ; i++){
-			lateness =	node.state.get(i).getStartTime().getTime() +
+			lateness =	node.state.get(i).getCurrentOperationStartTime() +
 					node.state.get(i).getCurrentOperationProcessTime() -
-					node.state.get(i).getDuedate().getTime();
+					node.state.get(i).getCurrentOperationDueDate();
 
 			if(lateness < 0)
 				lateness = 0;
 
 			node.state.get(i).setRegret(lateness/node.state.get(i).getSlack());
 		}
-	}
-
-	public static void main(String[] args){
-		ArrayList<job> q = new ArrayList<job>();
-
-		JobGenerator jGen = new JobGenerator();
-		jGen.readFile();
-		int j=0;
-		while(j++ < 4){
-			job jj = (job) jGen.getNextJob();
-			jj.slack=1;
-			q.add(jj);
-		}
-
-		for(int i =0 ; i < q.size() ; i++ ) {
-			System.out.println("-->" + q.get(i).getJobID());
-			System.out.println("due date"+ q.get(i).getDuedate());
-		}
-		System.out.println();
-
-		BranchNbound_RegretSlabbedPenalty bnb = new BranchNbound_RegretSlabbedPenalty(q);
-		ArrayList<job> best = bnb.solve();
-
-		for(int i =0 ; i < best.size() ; i++ ) {
-			System.out.print("-->" + best.get(i).getJobID());
-		}
-		System.out.println("Penalty" + bnb.lowBound);
 	}
 
 }

@@ -95,14 +95,14 @@ public class BranchNboundSimple{
 			 */
 			int elements = this.depth;
 			for (int k = 1; k < elements; k++){
-	    		this.state.get(k).setStartTime(this.state.get(k-1).getStartTime().getTime()	+ 
+	    		this.state.get(k).setJobStartTime(this.state.get(k-1).getStartTime().getTime()	+ 
 	    										this.state.get(k-1).getCurrentOperationProcessTime());
 			}
 			updateRegret(this);
 //			
 			job j = this.state.get(depth-1);
 //			System.out.println("multiplier "  + j.getRegretMultiplier());
-			double lateness = (makeSpan - j.getDuedate().getTime())*j.getCPN();
+			double lateness = (makeSpan - j.getJobDuedate().getTime())*j.getCPN();
 			if(lateness < 0){
 //				System.out.println("negative " + lateness + "with "+parent.penalty);
 				lateness = 0;
@@ -182,7 +182,7 @@ public class BranchNboundSimple{
 					
 			lateness =	node.state.get(i).getStartTime().getTime() +
 						node.state.get(i).getCurrentOperationProcessTime() -
-						node.state.get(i).getDuedate().getTime();
+						node.state.get(i).getJobDuedate().getTime();
 			if(lateness < 0)
 				lateness=0;
 			int n = node.state.get(i).getOperations().size();

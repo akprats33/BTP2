@@ -48,7 +48,7 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 	@Override
 	public void action() {
 
-		log.info(jobToDispatch.getDuedate());
+		log.info(jobToDispatch.getJobDuedate());
 		
 		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
 				ID.Customer.ZoneData.newWorkOrderFromCustomer,

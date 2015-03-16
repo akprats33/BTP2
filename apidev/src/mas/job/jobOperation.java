@@ -2,7 +2,6 @@ package mas.job;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class jobOperation implements operationInterface,Serializable {
 
@@ -12,8 +11,7 @@ public class jobOperation implements operationInterface,Serializable {
 	private long CompletionTime;
 
 	private String machineOperated;
-	private Date localDueDate;
-	private Date globalDueDate;
+	private long dueDate;
 
 	private OperationType jobOperationType;
 	private ArrayList<jobDimension> jDims;
@@ -60,16 +58,6 @@ public class jobOperation implements operationInterface,Serializable {
 		this.jobOperationType = jobOperationType;
 	}
 
-	@Override
-	public Date getLocalDueDate() {
-		return localDueDate;
-	}
-
-	@Override
-	public Date getGlobalDueDate() {
-		return globalDueDate;
-	}
-
 	public ArrayList<jobAttribute> getjAttributes() {
 		return jAttributes;
 	}
@@ -106,4 +94,15 @@ public class jobOperation implements operationInterface,Serializable {
 				append(jobOperationType.toString()).
 				toString();
 	}
+
+	@Override
+	public long getDueDate() {
+		return this.dueDate;
+	}
+
+	@Override
+	public void setDueDate(long localDueDate) {
+		this.dueDate = localDueDate;
+	}
+
 }

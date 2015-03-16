@@ -1,7 +1,6 @@
 package mas.job;
 
 import jade.core.AID;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,10 +21,9 @@ public class job implements Serializable{
 	private String jobID;
 	private double CPN;
 	private double Cost;
-//	private double Penalty;
 	private double penaltyRate;
 	private Date startTime;
-	private Date duedate;
+	private Date jobDuedate;
 	private ArrayList<jobOperation> operations;
 	private Date generationTime;
 	private Date completionTime;
@@ -38,16 +36,13 @@ public class job implements Serializable{
 	private int position;
 	private double BidByLSA ;
 
-	private ArrayList<Date> globalDueDate;
-	private ArrayList<Date> localDueDate;
-
 	private double waitingTime;
 	private double profit;
 	private AID WinnerLSA;
 	private AID LSABidder;
 
-	private double delTime;
-	private double delStatus;
+	private double deliveryTime;
+	private double deliveryStatus;
 
 	public static class Builder {
 		//Required parameters
@@ -100,7 +95,7 @@ public class job implements Serializable{
 		CPN = builder.CPN;
 		Cost = builder.Cost;
 		penaltyRate = builder.Penalty;
-		duedate = builder.dDate;
+		jobDuedate = builder.dDate;
 		generationTime = builder.genTime;
 		this.operations = new ArrayList<jobOperation>();
 		operations.addAll(builder.jOperations);
@@ -133,6 +128,22 @@ public class job implements Serializable{
 
 	public void setPenaltyRate(double penaltyRate) {
 		this.penaltyRate = penaltyRate;
+	}
+	
+	public void setCurrentOperationDueDate(long dueDate) {
+		this.operations.get(currentOperationNumber).setDueDate(dueDate);
+	}
+	
+	public long getCurrentOperationDueDate() {
+		return this.operations.get(currentOperationNumber).getDueDate();
+	}
+	
+	public void setCurrentOperationStartTime(long startTime) {
+		this.operations.get(currentOperationNumber).setStartTime(startTime);
+	}
+	
+	public long getCurrentOperationStartTime() {
+		return this.operations.get(currentOperationNumber).getStartTime();
 	}
 
 	public ArrayList<jobDimension> getCurrentOperationDimensions() {
@@ -237,23 +248,15 @@ public class job implements Serializable{
 		CPN = cPN;
 	}
 
-/*	public double getPenalty() {
-		return Penalty;
-	}*/
-
-/*	public void setPenalty(double penalty) {
-		Penalty = penalty;
-	}*/
-
 	public Date getStartTime() {
 		return startTime;
 	}
 	
-	public void setStartTime(Date startTime) {
+	public void setJobStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public void setStartTime(long startTime) {
+	public void setJobStartTime(long startTime) {
 		this.startTime = new Date(startTime);
 	}
 
@@ -297,14 +300,6 @@ public class job implements Serializable{
 		this.acceptance = acceptance;
 	}
 
-	public ArrayList<Date> getGlobalDueDate() {
-		return globalDueDate;
-	}
-
-	public void setGlobalDueDate(ArrayList<Date> globalDueDate) {
-		this.globalDueDate = globalDueDate;
-	}
-
 	public double getWaitingTime() {
 		return waitingTime;
 	}
@@ -317,16 +312,16 @@ public class job implements Serializable{
 		this.jobID = jobID;
 	}
 
-	public Date getDuedate() {
-		return duedate;
+	public Date getJobDuedate() {
+		return jobDuedate;
 	}
 
-	public void setDuedate(Date duedate) {
-		this.duedate = duedate;
+	public void setJobDuedate(Date duedate) {
+		this.jobDuedate = duedate;
 	}
 
-	public void setDuedate(long duedate) {
-		this.duedate.setTime(duedate);
+	public void setJobDuedate(long duedate) {
+		this.jobDuedate.setTime(duedate);
 	}
 
 	public double getCost() {
