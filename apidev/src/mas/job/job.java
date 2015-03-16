@@ -50,12 +50,15 @@ public class job implements Serializable{
 		private String jobID;
 		private double CPN;
 		private double Cost;
-		private double penaltyRate;
+		private double Penalty;
 		private Date dDate;
 		private Date genTime;
-		
+		// Optional parameters - initialized to default values
+		private ArrayList<jobOperation> jOperations;
+
 		public Builder(String jobID) {
 			this.jobID = jobID;
+			this.jOperations = new ArrayList<jobOperation>();
 		}
 
 		public Builder jobCost(double val)
@@ -64,8 +67,8 @@ public class job implements Serializable{
 		public Builder jobCPN(double val)
 		{ CPN = val; return this; }
 
-		public Builder jobPenaltyRate(double val)
-		{ penaltyRate = val; return this; }
+		public Builder jobPenalty(double val)
+		{ Penalty = val; return this; }
 
 		public Builder jobDueDateTime(Date val)
 		{ dDate = val; return this; }
@@ -79,6 +82,9 @@ public class job implements Serializable{
 		public Builder jobGenTime(Long val)
 		{ genTime = new Date(val); return this; }
 
+		public Builder jobOperation(ArrayList<jobOperation> val)
+		{ jOperations.addAll(val); return this; }
+
 		public job build() {
 			return new job(this);
 		}
@@ -88,10 +94,11 @@ public class job implements Serializable{
 		jobNo = builder.jobNo;
 		CPN = builder.CPN;
 		Cost = builder.Cost;
-		penaltyRate = builder.penaltyRate;
+		penaltyRate = builder.Penalty;
 		jobDuedate = builder.dDate;
 		generationTime = builder.genTime;
 		this.operations = new ArrayList<jobOperation>();
+		operations.addAll(builder.jOperations);
 	}
 
 	public double getRegretMultiplier(){
