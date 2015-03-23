@@ -67,10 +67,10 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 		 *  if it is acceptable, then job is simply being sent back to blackboard.
 		 */
 
-		long newDueDate = (long) (j.getJobDuedate().getTime()); //1.1 time of absolute time is wrong 
+		long newDueDate = (long) (j.getJobDuedatebyCust().getTime()); //1.1 time of absolute time is wrong 
 		double newprofit = 0.9 * j.getProfit();
 
-		if(newDueDate < j.getJobDuedate().getTime() ){
+		if(newDueDate < j.getJobDuedatebyCust().getTime() ){
 			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerConfirmedJobs)
 				.value(negotiationJob).setReplyWith(replyWith).Build();
 			
@@ -82,9 +82,9 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 
 			return;
 		}else {
-			j.setJobDuedate(newDueDate);
+			j.setJobDuedatebyCust(newDueDate);
 			j.setProfit(newprofit);
-			log.info("************"+negotiationJob.getJobDuedate());
+			log.info("************"+negotiationJob.getJobDuedatebyCust());
 			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerJobsUnderNegotiation)
 				.value(negotiationJob).setReplyWith(replyWith).Build();
 			

@@ -44,8 +44,8 @@ public class HandleCompletedJobBehavior extends Behaviour{
 			log.info("Job no: '"+ completedJob.getJobNo() + 
 					"Job ID : " + completedJob.getJobID() + 
 					"'\n--> completion : " + completedJob.getCompletionTime() + 
-					"\nStarting time : " + completedJob.getStartTime() + 
-					"\nDue date : " + completedJob.getJobDuedate());
+					"\nStarting time : " + completedJob.getStartTimeByCust() + 
+					"\nDue date : " + completedJob.getJobDuedatebyCust());
 			log.info("sending completed job to blackboard");
 
 			step = 1;

@@ -6,7 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import mas.util.BlackboardId;
 import mas.util.ID;
-import mas.util.MASconstants;
 import mas.util.ParameterSubscription;
 import mas.util.ZoneDataUpdate;
 import bdi4jade.plan.PlanBody;

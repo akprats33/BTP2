@@ -209,6 +209,7 @@ public class JobGenerator extends JobGeneratorIFace {
 
 		job j = new job.Builder(jobIdList.get(index))
 		.jobCPN(jobCPNs.get(index))
+		.jobStartTimeByCust(generationTime)
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
 		.jobOperation(this.jobOperations)

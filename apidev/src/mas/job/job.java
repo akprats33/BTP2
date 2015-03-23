@@ -23,7 +23,7 @@ public class job implements Serializable{
 	private double Cost;
 	private double penaltyRate;
 	private Date startTime;
-	private Date jobDuedate;
+	private Date jobDuedateByCust;
 	private ArrayList<jobOperation> operations;
 	private Date generationTime;
 	private Date completionTime;
@@ -51,7 +51,9 @@ public class job implements Serializable{
 		private double CPN;
 		private double Cost;
 		private double Penalty;
-		private Date dDate;
+		private Date custdDate; //due date mentioned by customer for job 
+		//this will be same as due date of last operation for local due date calculation
+		private Date custStartDate;//start date of job given by customer i.e. start time of 1st operation
 		private Date genTime;
 		// Optional parameters - initialized to default values
 		private ArrayList<jobOperation> jOperations;
@@ -71,11 +73,17 @@ public class job implements Serializable{
 		{ Penalty = val; return this; }
 
 		public Builder jobDueDateTime(Date val)
-		{ dDate = val; return this; }
+		{ custdDate = val; return this; }
 
 		public Builder jobDueDateTime(long val)
-		{ dDate = new Date(val); return this; }
+		{ custdDate = new Date(val); return this; }
 
+		public Builder jobStartTimeByCust(long val)
+		{
+			custStartDate=new Date(val);
+			return this;
+		}
+		
 		public Builder jobGenTime(Date val)
 		{ genTime = val; return this; }
 
@@ -95,10 +103,11 @@ public class job implements Serializable{
 		CPN = builder.CPN;
 		Cost = builder.Cost;
 		penaltyRate = builder.Penalty;
-		jobDuedate = builder.dDate;
+		jobDuedateByCust = builder.custdDate;
 		generationTime = builder.genTime;
 		this.operations = new ArrayList<jobOperation>();
 		operations.addAll(builder.jOperations);
+		startTime=builder.custStartDate;
 	}
 
 	public double getRegretMultiplier(){
@@ -121,7 +130,7 @@ public class job implements Serializable{
 		return (this.jobID == j.jobID) &&
 				(this.jobNo == j.jobNo);
 	}
-	
+
 	public double getPenaltyRate() {
 		return penaltyRate;
 	}
@@ -189,7 +198,6 @@ public class job implements Serializable{
 	}
 	
 	public void setCurrentOperationProcessingTime(long processingTime) {
-		//processing time of job in seconds
 		operations.get(currentOperationNumber).setProcessingTime(processingTime);
 	}
 	
@@ -249,15 +257,15 @@ public class job implements Serializable{
 		CPN = cPN;
 	}
 
-	public Date getStartTime() {
+	public Date getStartTimeByCust() {
 		return startTime;
 	}
 	
-	public void setJobStartTime(Date startTime) {
+	public void setJobStartTimeByCust(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public void setJobStartTime(long startTime) {
+	public void setJobStartTimeByCust(long startTime) {
 		this.startTime = new Date(startTime);
 	}
 
@@ -313,16 +321,16 @@ public class job implements Serializable{
 		this.jobID = jobID;
 	}
 
-	public Date getJobDuedate() {
-		return jobDuedate;
+	public Date getJobDuedatebyCust() {
+		return jobDuedateByCust;
 	}
 
-	public void setJobDuedate(Date duedate) {
-		this.jobDuedate = duedate;
+	public void setJobDuedatebyCust(Date duedate) {
+		this.jobDuedateByCust = duedate;
 	}
 
-	public void setJobDuedate(long duedate) {
-		this.jobDuedate.setTime(duedate);
+	public void setJobDuedatebyCust(long duedate) {
+		this.jobDuedateByCust.setTime(duedate);
 	}
 
 	public double getCost() {

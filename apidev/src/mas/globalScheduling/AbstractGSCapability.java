@@ -62,9 +62,14 @@ public abstract class AbstractGSCapability  extends Capability {
 				new TransientBelief<AID>(ID.Blackboard.LocalName);		
 		BB_AID.setValue(new AID(ID.Blackboard.LocalName,false));
 		
+		Belief<String> DueDateCalcMethod=new TransientBelief<String>(ID.GlobalScheduler.BeliefBaseConst.DueDateCalcMethod);
+		DueDateCalcMethod.setValue(ID.GlobalScheduler.OtherConst.LocalDueDate);
+		
 		BeliefSet<Integer> NoOfMachines=new TransientBeliefSet<Integer>(ID.Blackboard.BeliefBaseConst.NoOfMachines);//no of machines==no of LSA		
+
 		beliefs.add(BB_AID);
 		beliefs.add(NoOfMachines);
+		beliefs.add(DueDateCalcMethod);
 		
 		return beliefs;
 	}

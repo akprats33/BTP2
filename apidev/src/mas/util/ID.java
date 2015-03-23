@@ -103,6 +103,12 @@ public class ID implements Serializable{
 		public class BeliefBaseConst {
 			public static final String blackboardAgent = "GSA_blackboard-agent";
 			public static final String NoOfMachines = "NoOfMachines";
+			public static final String DueDateCalcMethod = "DueDateCalc";
+		}
+		
+		public class OtherConst{
+			public static final String LocalDueDate="Local";
+			public static final String GlobalDueDate = "Global";
 		}
 	}
 

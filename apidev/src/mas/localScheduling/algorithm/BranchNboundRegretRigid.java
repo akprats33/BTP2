@@ -98,10 +98,10 @@ public class BranchNboundRegretRigid{
 			 */
 			startingTime = makeSpan - this.state.get(this.depth-1).getCurrentOperationProcessTime();
 			int elements = this.depth;
-			this.state.get(elements-1).setJobStartTime(startingTime);
+			this.state.get(elements-1).setJobStartTimeByCust(startingTime);
 			
 			for (int k = elements-2; k >= 0; k--){
-	    		this.state.get(k).setJobStartTime(this.state.get(k+1).getStartTime().getTime()	+ 
+	    		this.state.get(k).setJobStartTimeByCust(this.state.get(k+1).getStartTimeByCust().getTime()	+ 
 	    										this.state.get(k+1).getCurrentOperationProcessTime());
 			}
 			updateRegret(this);
@@ -109,7 +109,7 @@ public class BranchNboundRegretRigid{
 //			
 			job j = this.state.get(depth-1);
 //			System.out.println("multiplier "  + j.getRegretMultiplier());
-			double lateness = (makeSpan - j.getJobDuedate().getTime())*j.getCPN();
+			double lateness = (makeSpan - j.getJobDuedatebyCust().getTime())*j.getCPN();
 			if(lateness < 0){
 //				System.out.println("negative " + lateness + "with "+parent.penalty);
 				lateness = 0;
@@ -195,9 +195,9 @@ public class BranchNboundRegretRigid{
 		double lateness;					
 		for ( int i = 0; i < elements ; i++){
 					
-			lateness =	node.state.get(i).getStartTime().getTime() +
+			lateness =	node.state.get(i).getStartTimeByCust().getTime() +
 						node.state.get(i).getCurrentOperationProcessTime() -
-							node.state.get(i).getJobDuedate().getTime();
+							node.state.get(i).getJobDuedatebyCust().getTime();
 			if(lateness < 0)
 				lateness = 0;
 			

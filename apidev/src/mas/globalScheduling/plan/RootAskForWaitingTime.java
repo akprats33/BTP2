@@ -111,7 +111,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 								
 				ACLMessage max=ChooseWaitingTimeToSend(WaitingTime);
 				job JobToSend=(job)(max.getContentObject());
-				log.info(JobToSend.getJobDuedate());
+//				log.info(JobToSend.getJobDuedatebyCust());
 //				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation)
 					.value(JobToSend).setReplyWith(msgReplyID).Build();
