@@ -59,6 +59,8 @@ public class ID implements Serializable{
 			public static final String maintAgent = "LSABeliefBase_maintenanceAgent";
 			public static final String globalSchAgent = "LSABeliefBase_gsAgent";
 			public static final String dataTracker = "LSABeliefBase_data-tracker";
+			public static final String ProcessingCost = "ProcessingCost";
+			public static final String supportedOperations = "supportedOperations";
 		}
 
 		public class ZoneData {

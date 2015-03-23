@@ -31,9 +31,12 @@ public class HandleCompletedJobBehavior extends Behaviour{
 			/**
 			 * update zone-data for completed jobs from machine
 			 */
-			ZoneDataUpdate completedJobUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate completedJobUpdate = new ZoneDataUpdate.Builder(ID.Machine.ZoneData.finishedJob)
+				.value(completedJob).Build();
+			
+			/*ZoneDataUpdate completedJobUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.finishedJob,
-					completedJob);
+					completedJob);*/
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					completedJobUpdate, myAgent);

@@ -42,6 +42,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private AID blackboard;
 	private double bidNo;
 	private Random r;
+	private String replyWith;
 
 	@Override
 	public EndState getEndState() {
@@ -60,6 +61,8 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 				getValue();
 
 		msg = ((MessageGoal)pInstance.getGoal()).getMessage();
+		replyWith=msg.getReplyWith();
+		
 		try {
 			jobToBidFor = (job)msg.getContentObject();
 		} catch (UnreadableException e) {
@@ -72,10 +75,12 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		try{
 			setBid(jobToBidFor);
 
-			ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate bidForJobUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.bidForJob)
+				.value(jobToBidFor).setReplyWith(replyWith).Build();
+			/*ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
 					ID.LocalScheduler.ZoneData.bidForJob,
 					jobToBidFor);
-
+*/
 
 			AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);
 

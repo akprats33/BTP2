@@ -1,11 +1,11 @@
-package mas.globalScheduling.behaviour;
+/*package mas.globalScheduling.behaviour;
 
-/*
+
  * 
  * NOT USED CURRENTLY 
  * 
  * 
- * */
+ * 
 
 
 import java.io.IOException;
@@ -102,11 +102,13 @@ public class WaitTimeBehvr extends Behaviour {
 			}
 			else{
 				log.info(JobToSend.getJobDuedate());
-				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
+				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation)
+					.value(JobToSend).setReplyWith(reply)
+//				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
 				AgentUtil.sendZoneDataUpdate(this.bba, NegotiationUpdate, myAgent);
-				/*replyToCust.setContentObject(JobToSend);												
+				replyToCust.setContentObject(JobToSend);												
 				replyToCust.addReceiver(new AID(CustomerAgent, false));
-				replyToCust.setConversationId(MessageIds.ReplyFromScheduler.toString());*/
+				replyToCust.setConversationId(MessageIds.ReplyFromScheduler.toString());
 			}
 			
 
@@ -126,3 +128,4 @@ public class WaitTimeBehvr extends Behaviour {
 		return (step == 3);
 	}
 }
+*/

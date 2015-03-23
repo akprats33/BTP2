@@ -78,9 +78,12 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 		case 1:
 			
 			String maintenanceData = solver.getPreventiveMaintenanceData();
-			ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate(
+			
+			ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate.Builder(ID.Maintenance.ZoneData.prevMaintData)
+				.value(maintenanceData).Build();
+			/*ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate(
 					ID.Maintenance.ZoneData.prevMaintData,
-					maintenanceData);
+					maintenanceData);*/
 
 			AgentUtil.sendZoneDataUpdate(this.bba ,maintenanceStartData, myAgent);
 			

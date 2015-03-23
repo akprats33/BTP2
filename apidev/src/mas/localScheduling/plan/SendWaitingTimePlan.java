@@ -4,9 +4,12 @@ import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -37,6 +40,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private double averageQueueSize;
 	private AID blackboard;
 	private Logger log;
+	private String replyWith;
 
 	@Override
 	public EndState getEndState() {
@@ -65,6 +69,8 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		this.blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
+		
+		replyWith=msg.getReplyWith();
 	}
 
 	@Override
@@ -88,9 +94,13 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 //		j.setStartTime(/*avgWaitingTime +*/ WaitingTime+System.currentTimeMillis()); //why do we need this???
 
 //		log.info("waiting time is : " + j.getWaitingTime()+ "due date is "+ j.getDuedate());
-		ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
+		ZoneDataUpdate waitingTimeUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.WaitingTime)
+			.value(this.j).setReplyWith(replyWith).Build();
+		
+//		log.info("replyWith = "+replyWith);
+		/*ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
 				ID.LocalScheduler.ZoneData.WaitingTime,
-				this.j );
+				this.j );*/
 
 		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
 	}

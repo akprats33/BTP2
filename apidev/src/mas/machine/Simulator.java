@@ -208,9 +208,11 @@ public class Simulator extends Agent implements IMachine,Serializable {
 		@Override
 		protected void onTick() {
 
-			ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate.Builder(ID.Machine.ZoneData.myHealth)
+				.value(Simulator.this).Build();
+			/*ZoneDataUpdate machineHealthUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.myHealth,
-					Simulator.this);
+					Simulator.this);*/
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					machineHealthUpdate, myAgent);

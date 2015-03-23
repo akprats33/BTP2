@@ -23,6 +23,7 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 	private BeliefBase bfBase;
 	private AID bba;
 	private job negotiationJob;
+	private String replyWith;
 
 	@Override
 	public EndState getEndState() {
@@ -45,6 +46,9 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 		this.bba = (AID) bfBase
 				.getBelief(ID.Customer.BeliefBaseConst.blackboardAgent)
 				.getValue();
+		
+		replyWith=((MessageGoal)(pInstance.getGoal())).
+				getMessage().getReplyWith();
 	}
 
 	@Override
@@ -67,9 +71,12 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 		double newprofit = 0.9 * j.getProfit();
 
 		if(newDueDate < j.getJobDuedate().getTime() ){
-			ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerConfirmedJobs)
+				.value(negotiationJob).setReplyWith(replyWith).Build();
+			
+			/*ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
 					ID.Customer.ZoneData.customerConfirmedJobs,
-					negotiationJob);
+					negotiationJob);*/
 
 			AgentUtil.sendZoneDataUpdate(this.bba,negotiationJobDataUpdate, myAgent);
 
@@ -78,9 +85,12 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 			j.setJobDuedate(newDueDate);
 			j.setProfit(newprofit);
 			log.info("************"+negotiationJob.getJobDuedate());
-			ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerJobsUnderNegotiation)
+				.value(negotiationJob).setReplyWith(replyWith).Build();
+			
+/*			ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
 					ID.Customer.ZoneData.customerJobsUnderNegotiation,
-					negotiationJob);
+					negotiationJob);*/
 
 			AgentUtil.sendZoneDataUpdate(this.bba,negotiationJobDataUpdate, myAgent);
 		}

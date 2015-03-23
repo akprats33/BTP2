@@ -48,9 +48,12 @@ public class HandleInspectionJobBehavior extends Behaviour{
 				machineSimulator = (Simulator) getDataStore().
 						get(Simulator.simulatorStoreName);
 			}
-			ZoneDataUpdate inspectionZoneUpdate = new ZoneDataUpdate(
+			
+			ZoneDataUpdate inspectionZoneUpdate = new ZoneDataUpdate.Builder(ID.Machine.ZoneData.inspectionStart)
+				.value(comingJob).Build();
+			/*ZoneDataUpdate inspectionZoneUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.inspectionStart,
-					comingJob);
+					comingJob);*/
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					inspectionZoneUpdate, myAgent);

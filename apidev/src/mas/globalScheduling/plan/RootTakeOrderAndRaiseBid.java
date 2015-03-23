@@ -69,6 +69,8 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 		msgReplyID = Integer.toString(order.getJobNo());
 
 		mt = MessageTemplate.MatchConversationId(MessageIds.msgbidForJob);
+		mt = MessageTemplate.and(MessageTemplate.MatchConversationId(MessageIds.msgbidForJob)
+				, MessageTemplate.MatchReplyWith(msgReplyID));
 	}
 
 	@Override
@@ -85,8 +87,11 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 
 			if (MachineCount != 0) {
 //				log.info("due date: "+order.getDuedate());
-				ZoneDataUpdate zdu = new ZoneDataUpdate(
-						ID.GlobalScheduler.ZoneData.askBidForJobFromLSA, order);
+				/*ZoneDataUpdate zdu = new ZoneDataUpdate(
+						ID.GlobalScheduler.ZoneData.askBidForJobFromLSA, order);*/
+				ZoneDataUpdate zdu=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.askBidForJobFromLSA)
+					.value(order).setReplyWith(msgReplyID).Build();
+						
 				AgentUtil.sendZoneDataUpdate(blackboard, zdu, myAgent);
 				
 				LSAbids = new ACLMessage[MachineCount];
@@ -126,8 +131,10 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 				job JobForBidWinner = (job) (BestBid.getContentObject());
 				JobForBidWinner.setBidWinnerLSA(JobForBidWinner.getLSABidder());
 				log.info(JobForBidWinner.getLSABidder().getLocalName()+" won bid with "+JobForBidWinner.getBidByLSA());
-				ZoneDataUpdate NegotiationUpdate = new ZoneDataUpdate(
-						ID.GlobalScheduler.ZoneData.jobForLSA, JobForBidWinner);
+				/*ZoneDataUpdate NegotiationUpdate = new ZoneDataUpdate(
+						ID.GlobalScheduler.ZoneData.jobForLSA, JobForBidWinner);*/
+				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.jobForLSA)
+					.value(JobForBidWinner).setReplyWith(msgReplyID).Build();
 				
 				AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate,
 						myAgent);

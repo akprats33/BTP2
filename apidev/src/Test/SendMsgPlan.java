@@ -94,7 +94,9 @@ public class SendMsgPlan extends OneShotBehaviour implements PlanBody{
 		ACLMessage msg4=new ACLMessage(ACLMessage.CFP);
 		msg4.setConversationId(mas.util.MessageIds.UpdateParameter);
 		try {
-			ZoneDataUpdate zdu=new ZoneDataUpdate("JobStatus", (Object)1);
+			ZoneDataUpdate zdu=new ZoneDataUpdate.Builder("JobStatus")
+				.value((Object)1).Build();
+//			ZoneDataUpdate zdu=new ZoneDataUpdate("JobStatus", (Object)1);
 			msg4.setContentObject(zdu);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -106,7 +108,9 @@ public class SendMsgPlan extends OneShotBehaviour implements PlanBody{
 		
 		msg4.setConversationId(mas.util.MessageIds.UpdateParameter);
 		try {
-			ZoneDataUpdate zdu=new ZoneDataUpdate("JobStatus", (Object)2);
+			ZoneDataUpdate zdu=new ZoneDataUpdate.Builder("JobStatus")
+			.value((Object)2).Build();	
+//			ZoneDataUpdate zdu=new ZoneDataUpdate("JobStatus", (Object)2);
 			msg4.setContentObject(zdu);
 		} catch (IOException e) {
 			e.printStackTrace();

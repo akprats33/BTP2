@@ -4,9 +4,12 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+
 import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -27,6 +30,7 @@ public class SendJobToMachinePlan extends Behaviour implements PlanBody {
 	private Logger log;
 	private int step = 0;
 	private long SleepTime = 500;
+	private String replyWith;
 
 	@Override
 	public EndState getEndState() {
@@ -51,6 +55,8 @@ public class SendJobToMachinePlan extends Behaviour implements PlanBody {
 		blackboard = (AID) bfBase.
 				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).
 				getValue();
+		
+		replyWith= msg.getReplyWith();
 	}
 
 	@Override
@@ -59,9 +65,11 @@ public class SendJobToMachinePlan extends Behaviour implements PlanBody {
 			
 			if(jobQueue.size() > 0) {
 				log.info("Sending job to machine "+ myAgent.getLocalName() +" "+ jobQueue.get(0).getJobNo());
-				ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
+				ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.jobForMachine)
+					.value(jobQueue.get(0)).setReplyWith(replyWith).Build();
+			/*	ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
 						ID.LocalScheduler.ZoneData.jobForMachine,
-						jobQueue.get(0));
+						jobQueue.get(0));*/
 
 				jobQueue.remove(0);
 				AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);

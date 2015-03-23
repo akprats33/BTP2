@@ -31,6 +31,7 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 	private AID bb;
 	private job JobUnderNegotiation;
 	private Logger log=LogManager.getLogger();
+	private String replyWith=null;
 	@Override
 	public EndState getEndState() {
 		return EndState.SUCCESSFUL;
@@ -46,11 +47,15 @@ public class Negotiate extends OneShotBehaviour implements PlanBody {
 		} catch (UnreadableException e) {
 			e.printStackTrace();
 		}
+		
+		replyWith=((MessageGoal)PI.getGoal()).getMessage().getReplyWith();
 	}
 
 	@Override
 	public void action() {
-		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobUnderNegotiation); 
+//		ZoneDataUpdate update=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobUnderNegotiation);
+		ZoneDataUpdate update=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation)
+			.value(JobUnderNegotiation).setReplyWith(replyWith).Build();
 		//Negotiation logic under development
 		AgentUtil.sendZoneDataUpdate(bb, update, myAgent);
 	}

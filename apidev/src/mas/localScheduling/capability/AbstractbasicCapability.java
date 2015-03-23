@@ -50,21 +50,29 @@ public class AbstractbasicCapability extends Capability {
 	public static Set<Belief<?>> getBeliefs() {
 		Set<Belief<?>> beliefs = new HashSet<Belief<?>>();
 
+		LSAExcelFileReader fileReader=new LSAExcelFileReader();
+		
 		Belief<AID> bboard = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
-
+		
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);
-
+		
 		Belief<AID> myMcMaintAgent = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.maintAgent);
-
+		
 		Belief<AID> mygsAgent = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.globalSchAgent);
 
 		Belief<StatsTracker> dtrack = new TransientBelief<StatsTracker>(
 				ID.LocalScheduler.BeliefBaseConst.dataTracker);
 
+		Belief<Double> processingCost= 
+				new TransientBelief<Double>(ID.LocalScheduler.BeliefBaseConst.ProcessingCost);
+		
+		Belief<String[]> supportedOperations = 
+				new TransientBelief<String[]>(ID.LocalScheduler.BeliefBaseConst.supportedOperations);
+		
 		StatsTracker stats = new StatsTracker();
 		dtrack.setValue(stats);
 

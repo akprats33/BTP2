@@ -2,13 +2,16 @@ package mas.customer.plan;
 
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 import bdi4jade.core.BeliefBase;
+import bdi4jade.message.MessageGoal;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
@@ -20,6 +23,7 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 	private job jobToDispatch;
 	private AID bba;
 	private Logger log;
+	private String replyWith;
 
 	@Override
 	public EndState getEndState() {
@@ -40,6 +44,8 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 		this.bba = (AID) bfBase
 				.getBelief(ID.Customer.BeliefBaseConst.blackboardAgent)
 				.getValue();
+		
+		replyWith=Integer.toString(jobToDispatch.getJobNo());
 	}
 
 	/**
@@ -50,9 +56,12 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 
 		log.info(jobToDispatch.getJobDuedate());
 		
-		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
+		ZoneDataUpdate jobOrderZoneDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.newWorkOrderFromCustomer)
+			.value(jobToDispatch).setReplyWith(replyWith).Build();
+		
+/*		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
 				ID.Customer.ZoneData.newWorkOrderFromCustomer,
-				jobToDispatch);
+				jobToDispatch);*/
 		
 //		log.info("Job dispatching custoemr " + jobToDispatch );
 

@@ -52,9 +52,12 @@ public class HandlePreventiveMaintenanceBehavior extends Behaviour{
 						get(Simulator.simulatorStoreName);
 			}
 
-			ZoneDataUpdate maintenanceStartUpdate = new ZoneDataUpdate(
+			ZoneDataUpdate maintenanceStartUpdate = new ZoneDataUpdate.Builder(ID.Machine.ZoneData.maintenanceStart)
+				.value(comingJob).Build();
+			
+			/*ZoneDataUpdate maintenanceStartUpdate = new ZoneDataUpdate(
 					ID.Machine.ZoneData.maintenanceStart,
-					comingJob);
+					comingJob);*/
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					maintenanceStartUpdate, myAgent);
