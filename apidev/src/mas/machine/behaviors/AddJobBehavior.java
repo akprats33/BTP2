@@ -18,7 +18,7 @@ public class AddJobBehavior extends Behaviour {
 	private String maintJobID = "0";
 	private Logger log;
 	private int step = 0;
-	private double processingTime;
+	private long processingTime;
 	private Simulator machineSimulator = null;
 	private ScheduledThreadPoolExecutor executor;
 
@@ -55,7 +55,7 @@ public class AddJobBehavior extends Behaviour {
 
 				comingJob.setCurrentOperationProcessingTime((long)newProcessingTime) ;
 
-				processingTime = comingJob.getCurrentOperationProcessTime();
+				processingTime = (long)(comingJob.getCurrentOperationProcessTime()*1000);
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 						"processing time : " + comingJob.getCurrentOperationProcessTime());
@@ -124,9 +124,10 @@ public class AddJobBehavior extends Behaviour {
 			 * Executor will just keep scheduling this task
 			 * 
 			 */
+//			log.info("remProcessingTime="+processingTime);
 			if( processingTime > 0 &&
-					machineSimulator.getStatus() != MachineStatus.FAILED ) {
-
+				machineSimulator.getStatus() != MachineStatus.FAILED ) {
+				
 				processingTime = processingTime - Simulator.TIME_STEP; 
 				machineSimulator.AgeComponents(Simulator.TIME_STEP);
 			} else if( processingTime <= 0 &&

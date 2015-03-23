@@ -189,6 +189,7 @@ public class job implements Serializable{
 	}
 	
 	public void setCurrentOperationProcessingTime(long processingTime) {
+		//processing time of job in seconds
 		operations.get(currentOperationNumber).setProcessingTime(processingTime);
 	}
 	
