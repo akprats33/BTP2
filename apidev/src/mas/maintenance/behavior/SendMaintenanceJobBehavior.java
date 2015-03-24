@@ -7,6 +7,13 @@ import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.ZoneDataUpdate;
 
+/**
+ * @author Anand Prajapati
+ * 
+ * Behavior to send the generated preventive maintenance job to blackboard
+ *
+ */
+
 public class SendMaintenanceJobBehavior extends Behaviour{
 
 	private int step = 0;
@@ -25,10 +32,6 @@ public class SendMaintenanceJobBehavior extends Behaviour{
 		ZoneDataUpdate maintenanceJob = new ZoneDataUpdate.Builder(ID.Maintenance.ZoneData.preventiveMaintJob)
 			.value(this.maintJob).Build();
 		
-	/*	ZoneDataUpdate maintenanceJob = new ZoneDataUpdate(
-				ID.Maintenance.ZoneData.preventiveMaintJob,
-				this.maintJob);*/
-
 		AgentUtil.sendZoneDataUpdate(this.bbAgent ,maintenanceJob, myAgent);
 		step = 1;
 	}

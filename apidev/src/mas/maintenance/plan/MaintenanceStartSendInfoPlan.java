@@ -50,7 +50,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 		solver = new RepairKit();
 		
 		this.bba = (AID) bfBase.
-				getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgent).
+				getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgentAID).
 				getValue();
 	}
 
@@ -78,9 +78,6 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 			
 			ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate.Builder(ID.Maintenance.ZoneData.prevMaintData)
 				.value(maintenanceData).Build();
-			/*ZoneDataUpdate maintenanceStartData = new ZoneDataUpdate(
-					ID.Maintenance.ZoneData.prevMaintData,
-					maintenanceData);*/
 
 			AgentUtil.sendZoneDataUpdate(this.bba ,maintenanceStartData, myAgent);
 			

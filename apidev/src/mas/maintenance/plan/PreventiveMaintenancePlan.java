@@ -3,8 +3,11 @@ package mas.maintenance.plan;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.MessageTemplate;
+
 import java.util.ArrayList;
+
 import mas.job.job;
+import mas.job.jobOperation;
 import mas.machine.IMachine;
 import mas.machine.MachineStatus;
 import mas.machine.component.IComponent;
@@ -19,7 +22,7 @@ import bdi4jade.plan.PlanInstance.EndState;
  * @author Anand Prajapati
  */
 
-public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody {
+public class PreventiveMaintenancePlan extends OneShotBehaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
 	private int step = 0;
@@ -27,16 +30,17 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 	private IMachine myMachine;
 	private job maintenanceJob;
 	private RepairKit solver;
-	private AID bAgent;
+	private AID bbAgent;
+
 	MessageTemplate mt = MessageTemplate.MatchConversationId("MJStart");
 
 	@Override
 	public void action() {
 
-//		if (/*global.be==*/0) {
+		//		if (/*global.be==*/0) {
 
 		if(true) { 
-			long t = (long) (System.currentTimeMillis() / 1000L);
+			long startTime = (long) (System.currentTimeMillis() / 1000L);
 
 			int componentRZoneCount = 0;
 			int componentYZoneCount = 0;
@@ -45,9 +49,9 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 			if (mstatus != MachineStatus.UNDER_MAINTENANCE &&
 					mstatus != MachineStatus.FAILED) {
 
-				double[] temprLife = solver.residualLife(t);
-				double[] yellowZoneComponents = solver.yellowZone(t);
-				double[] redZoneComponents = solver.redZone(t);	
+				double[] temprLife = solver.residualLife(startTime);
+				double[] yellowZoneComponents = solver.yellowZone(startTime);
+				double[] redZoneComponents = solver.redZone(startTime);	
 
 				ArrayList<IComponent> components = myMachine.getComponents();
 				for (int i = 0; i < components.size(); i++) {
@@ -61,20 +65,26 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 
 
 				if((componentYZoneCount >= 4 || componentRZoneCount > 0) &&
-						//						global.m[m_id].flag==false &&
 						mstatus != MachineStatus.FAILED &&
 						mstatus != MachineStatus.UNDER_MAINTENANCE) {					 
 
-					//					global.m[m_id].flag = true;
+					long processingTime = (long) solver.totalMaintenanceTime(startTime);
+					long duedate = (long) solver.maintenanceJobDueDate(startTime);
 
-					long processingTime = (long) solver.totalMaintenanceTime(t);
-					long duedate = (long) solver.maintenanceJobDueDate(t);
-					
 					this.maintenanceJob = new job.Builder("0").
 							jobGenTime(System.currentTimeMillis()).
 							jobPenalty(1).
+							jobCPN(1).
 							jobDueDateTime(duedate).
 							build();
+					
+					ArrayList<jobOperation> mainOp = new ArrayList<jobOperation>();
+					jobOperation op1 = new jobOperation();
+					op1.setProcessingTime(processingTime);
+					
+					mainOp.add(op1);
+					
+					this.maintenanceJob.setOperations(mainOp);
 
 					//					global.m[m_id].Ddate = solver.maintenanceJobDueDate(t);
 					//					global.m[m_id].maint_job.dDate = (double) (System.currentTimeMillis() / 1000L)+global.m[m_id].Ddate - customer.Time;
@@ -93,7 +103,10 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 					//					global.m[m_id].maint_job.genTime=global.m[m_id].t-customer.Time;
 
 					myAgent.addBehaviour(new SendMaintenanceJobBehavior
-								(this.maintenanceJob,this.bAgent));			
+							(this.maintenanceJob,this.bbAgent));		
+					
+					bfBase.updateBelief(ID.Maintenance.BeliefBaseConst.maintenanceJob,
+							maintenanceJob);
 				}
 			}
 		}
@@ -101,9 +114,9 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 
 	@Override
 	public EndState getEndState() {
-		return null;
+		return EndState.SUCCESSFUL;
 	}
-	
+
 	@Override
 	public void init(PlanInstance pInstance) {
 		this.bfBase = pInstance.getBeliefBase();
@@ -111,13 +124,9 @@ public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody 
 				getBelief(ID.Maintenance.BeliefBaseConst.machine).
 				getValue();
 
-		this.maintenanceJob = (job) bfBase.
-				getBelief(ID.Maintenance.BeliefBaseConst.maintenanceJob).
+		this.bbAgent = (AID) bfBase.
+				getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgentAID).
 				getValue();
-		
-		this.bAgent = (AID) bfBase.
-						getBelief(ID.Maintenance.BeliefBaseConst.blackboardAgent).
-						getValue();
 
 		this.solver = new RepairKit();
 	}
