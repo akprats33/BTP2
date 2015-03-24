@@ -4,6 +4,12 @@ import java.util.Collections;
 
 import mas.job.job;
 
+/*doesn't 
+ * include 
+ * multiple
+ *  operations*/
+
+
 public class BranchNboundSimple{
 	/** Minimizes penalty of a given sequence of jobs by using branch and bound algorithm 
 	 *  To use it, create a node with state equal to ArrayList of a sequence of jobs

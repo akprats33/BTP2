@@ -132,7 +132,6 @@ public class ZoneData implements ZoneDataIFace, Serializable{
 	}
 	
 	public Object getData(){
-//		log.info(data);
 		return data.pop();
 		
 	}

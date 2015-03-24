@@ -55,7 +55,7 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 
 	public void init(PlanInstance PI) {
 		log = LogManager.getLogger();
-		
+		log.info("triggered by "+((MessageGoal) PI.getGoal()).getMessage().getSender().getLocalName());
 		dueDateMethod=(String)PI.getBeliefBase().getBelief(ID.GlobalScheduler.BeliefBaseConst.DueDateCalcMethod).getValue();
 		
 		try {
@@ -76,9 +76,10 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 	@Override
 	public void action() {
 
+		
 		switch (step) {
 		case 0:
-
+			
 			this.MachineCount = (int) ((BDIAgent) myAgent).getRootCapability()
 					.getBeliefBase()
 					.getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines)
@@ -104,7 +105,6 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 
 			break;
 		case 1:
-			
 
 			try {
 
@@ -163,13 +163,18 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 			long slack_perOperation=(long)((double)slack)/(NoOfOps);
 
 			for(int i=0;i<NoOfOps;i++){
+				jobForBidWinner.getOperations().get(i).setStartTime(currTime);
 				currTime=currTime+jobForBidWinner.getOperations().get(i).getProcessingTime()+slack_perOperation;
 				jobForBidWinner.getOperations().get(i).setDueDate(currTime);
 			}
 		}
 		else if(dueDateMethod==ID.GlobalScheduler.OtherConst.GlobalDueDate){
 			for(int i=0;i<NoOfOps;i++){
+				jobForBidWinner.getOperations().get(i).setStartTime(currTime);
 				currTime=currTime+jobForBidWinner.getOperations().get(i).getProcessingTime();
+				if(i==NoOfOps-1){
+					currTime=currTime+slack;
+				}
 				jobForBidWinner.getOperations().get(i).setDueDate(currTime);
 			}
 		}

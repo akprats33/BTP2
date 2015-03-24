@@ -21,6 +21,7 @@ import mas.localScheduling.plan.EnqueueJobPlan;
 import mas.localScheduling.plan.SendJobToMachinePlan;
 import mas.localScheduling.plan.SendWaitingTimePlan;
 import mas.localScheduling.plan.StatsTracker;
+import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import bdi4jade.belief.Belief;

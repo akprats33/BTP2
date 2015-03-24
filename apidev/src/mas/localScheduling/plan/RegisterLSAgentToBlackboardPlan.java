@@ -23,7 +23,8 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 	private static final long serialVersionUID = 1L;
 	private int step;
 	private Logger log=LogManager.getLogger();
-
+	private AID bb_aid = null;
+	private PlanInstance PI=null;
 	@Override
 	public EndState getEndState() {
 		return EndState.SUCCESSFUL;
@@ -32,12 +33,17 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 	@Override
 	public void init(PlanInstance planInstance) {
 		step = 0;
+		PI=planInstance;
+		
+		
 	}
 
 	@Override
 	public void action() {
 
-		AID bb_aid = AgentUtil.findBlackboardAgent(myAgent);
+		
+		bb_aid = AgentUtil.findBlackboardAgent(myAgent);
+		PI.getBeliefBase().updateBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent, bb_aid);
 
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.bidForJob).
@@ -63,8 +69,13 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 				appendValue(false).
 				build();
 
+		NamedZoneData ZoneDataName5 = 
+				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.finishedJob)
+		.MsgID(MessageIds.msgLSAfinishedJobs).appendValue(false)
+		.build();
+		
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
-				ZoneDataName2, ZoneDataName3, ZoneDataName4 };
+				ZoneDataName2, ZoneDataName3, ZoneDataName4, ZoneDataName5 };
 
 		AgentUtil.makeZoneBB(myAgent,ZoneDataNames);
 

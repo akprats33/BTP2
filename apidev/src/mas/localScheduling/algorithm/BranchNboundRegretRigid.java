@@ -3,6 +3,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import mas.job.job;
+/*doesn't 
+ * include 
+ * multiple
+ *  operations*/
+
 
 public class BranchNboundRegretRigid{
 	/** Minimizes penalty of a given sequence of jobs by using branch and bound algorithm 

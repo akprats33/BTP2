@@ -75,6 +75,8 @@ public class ID implements Serializable{
 
 			// update the job for machine here
 			public static final String jobForMachine = "LSA_jobForMachine";
+
+			public static final String finishedJob="LSA_finishedJob";
 		}
 	}
 

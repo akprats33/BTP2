@@ -62,7 +62,7 @@ public class AddJobBehavior extends Behaviour {
 
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
 
-				comingJob.setJobStartTimeByCust(System.currentTimeMillis());
+				comingJob.setCurrentOperationProcessingTime(System.currentTimeMillis());
 
 				if( processingTime > 0 ) {
 					executor = new ScheduledThreadPoolExecutor(1);
@@ -98,7 +98,7 @@ public class AddJobBehavior extends Behaviour {
 		case 2:
 			if( processingTime <= 0) {
 				IsJobComplete = true;
-				log.info("Job No:" + comingJob.getJobNo() + " completed");
+				log.info("Job No:" + comingJob.getJobNo() +" operation No."+ comingJob.getCurrentOperationNumber()+" completed");
 				ProcessJobBehavior process = new ProcessJobBehavior(comingJob);
 				process.setDataStore(getDataStore());
 				myAgent.addBehaviour(process);

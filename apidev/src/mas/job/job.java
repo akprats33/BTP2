@@ -44,6 +44,8 @@ public class job implements Serializable{
 	private double deliveryTime;
 	private double deliveryStatus;
 
+	private boolean IsComplete=false;
+
 	public static class Builder {
 		//Required parameters
 		private int jobNo;
@@ -201,6 +203,16 @@ public class job implements Serializable{
 		operations.get(currentOperationNumber).setProcessingTime(processingTime);
 	}
 	
+	public void IncrementOperationNumber(){
+		this.currentOperationNumber++;
+		if(this.currentOperationNumber>this.operations.size()-1){
+			IsComplete=true;
+		}
+	}
+	
+	public boolean isComplete(){
+		return this.IsComplete;
+	}
 	public long getTotalProcessingTime() {
 		long total = 0;
 		for(int i = 0 ; i < operations.size(); i++){

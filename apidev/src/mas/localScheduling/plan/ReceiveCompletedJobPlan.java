@@ -4,8 +4,12 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import mas.job.job;
+import mas.util.AgentUtil;
 import mas.util.ID;
+import mas.util.ZoneDataUpdate;
+import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.UnreadableException;
 import bdi4jade.core.BeliefBase;
@@ -27,21 +31,15 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 	private BeliefBase bfBase;
 	private StatsTracker sTracker;
 	private Logger log;
+	private AID blackboard_AID;
 	
-	@Override
-	public void action() {
-		
-		sTracker.addSize(jobQueue.size());
-		sTracker.storeJob(j,j.currentOperationNumber);
-				
-		log.info("updating belief for stats tracker :" + sTracker);
-		bfBase.updateBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker, sTracker);
-	}
 
 	@Override
 	public void init(PlanInstance pInstance) {
 		
 		log = LogManager.getLogger();
+		blackboard_AID=(AID)pInstance.getBeliefBase().
+				getBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent).getValue();
 		bfBase = pInstance.getBeliefBase();
 		
 		try {
@@ -51,16 +49,19 @@ public class ReceiveCompletedJobPlan extends OneShotBehaviour implements PlanBod
 			e.printStackTrace();
 		}
 		
-		jobQueue = (ArrayList<job>) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
-				getValue();
-		
-		sTracker = (StatsTracker) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBaseConst.dataTracker).
-				getValue();
-		
+
 	}
 
+
+	@Override
+	public void action() {
+		
+		ZoneDataUpdate CompletedJobUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.finishedJob)
+		.value(j).setReplyWith(Integer.toString(j.getJobNo())).Build();
+	
+		AgentUtil.sendZoneDataUpdate(blackboard_AID, CompletedJobUpdate, myAgent);
+	}
+	
 	@Override
 	public EndState getEndState() {
 		return EndState.SUCCESSFUL;

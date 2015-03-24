@@ -133,7 +133,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		for (int i = 0; i < l; i++) {
 			
 			finishTime = cumulativeProcessingTime+ sequence.get(i).getCurrentOperationProcessTime()*1000 +
-					sequence.get(i).getStartTimeByCust().getTime();
+					sequence.get(i).getCurrentOperationStartTime();
 			//getProcessingTime gives in time in seconds
 
 //			log.info("difference="+(finishTime-sequence.get(i).getStartTime().getTime()));
@@ -169,7 +169,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private ArrayList<job> setStartTimes(ArrayList<job> sequence) {
 		long CumulativeWaitingTime=0;
 		for(int i=0;i<sequence.size();i++){
-			sequence.get(i).setJobStartTimeByCust(CumulativeWaitingTime+System.currentTimeMillis());
+			sequence.get(i).setCurrentOperationStartTime(CumulativeWaitingTime+System.currentTimeMillis());
 			CumulativeWaitingTime=CumulativeWaitingTime+(long)sequence.get(i).getCurrentOperationProcessTime()*1000;
 		}
 		return sequence;
