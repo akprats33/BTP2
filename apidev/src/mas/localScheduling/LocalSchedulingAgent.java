@@ -12,9 +12,8 @@ import bdi4jade.core.Capability;
 
 public class LocalSchedulingAgent extends AbstractlocalSchedulingAgent{
 
-	/**
-	 * 
-	 */
+	public static long schedulingPeriod = 5000;
+	
 	private static final long serialVersionUID = 1L;
 	private Logger log;
 
