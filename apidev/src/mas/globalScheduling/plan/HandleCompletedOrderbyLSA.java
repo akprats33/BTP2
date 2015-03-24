@@ -64,6 +64,11 @@ public class HandleCompletedOrderbyLSA extends Behaviour implements PlanBody{
 
 	@Override
 	public void action() {
+		
+		if(order.isComplete()){
+			step=3;
+		}
+		
 		switch (step) {
 		case 0:
 			
@@ -133,6 +138,11 @@ public class HandleCompletedOrderbyLSA extends Behaviour implements PlanBody{
 
 			step = 3;
 			break;
+			
+		case 3:
+			step=4;
+			log.info("all operations of "+order.getJobNo()+" completed");
+			break;
 
 		}
 		
@@ -141,7 +151,7 @@ public class HandleCompletedOrderbyLSA extends Behaviour implements PlanBody{
 	@Override
 	public boolean done() {
 		// TODO Auto-generated method stub
-		return false;
+		return step>=3;
 	}
 
 	

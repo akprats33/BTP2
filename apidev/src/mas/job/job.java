@@ -205,7 +205,6 @@ public class job implements Serializable{
 	
 	public void IncrementOperationNumber(){
 		this.currentOperationNumber++;
-		System.out.println("$$$$this.currentOperationNumber "+this.currentOperationNumber);
 		if(this.currentOperationNumber>this.operations.size()-1){
 			IsComplete=true;
 		}
