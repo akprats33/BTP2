@@ -9,10 +9,8 @@ public class jobOperation implements operationInterface,Serializable {
 	private long processingTime;
 	private long startTime;
 	private long CompletionTime;
-
 	private String machineOperated;
 	private long dueDate;
-
 	private OperationType jobOperationType;
 	private ArrayList<jobDimension> jDims;
 	private ArrayList<jobAttribute> jAttributes;
@@ -84,7 +82,6 @@ public class jobOperation implements operationInterface,Serializable {
 	public void addjDim(jobDimension jdim) {
 		if(this.jDims == null) 
 			this.jDims = new ArrayList<jobDimension>();
-
 			this.jDims.add(jdim);
 	}
 

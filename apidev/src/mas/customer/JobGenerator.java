@@ -33,7 +33,7 @@ public class JobGenerator extends JobGeneratorIFace {
 
 	private String jobFilePath;
 	private ArrayList<String> jobIdList;
-	private ArrayList<jobOperation> jobOperations;
+	private ArrayList<ArrayList<jobOperation>> jobOperations;
 	private ArrayList<Double> jobCPNs;
 	private ArrayList<Long> jobDueDates;  //due date specified by customer to complete job. 
 	//Its GSA's job to calculate local / global due dates
@@ -45,7 +45,7 @@ public class JobGenerator extends JobGeneratorIFace {
 
 	public JobGenerator() {
 		this.jobIdList = new ArrayList<String>();
-		this.jobOperations = new ArrayList<jobOperation>();
+		this.jobOperations = new ArrayList<ArrayList<jobOperation>>();
 		this.jobQuantity = new ArrayList<Integer>();
 		this.jobCPNs = new ArrayList<Double>();
 		this.jobDueDates = new ArrayList<Long>();
@@ -116,9 +116,12 @@ public class JobGenerator extends JobGeneratorIFace {
 		// Now read operations for the job
 		// Skip the header row for operations
 		row = (XSSFRow) rows.next();
-
+		
+		ArrayList<jobOperation> currJobOperations=new ArrayList<jobOperation>();
+		
 		while( rows.hasNext() ) {
-
+			
+			
 			row = (XSSFRow) rows.next();
 			cells = row.cellIterator();
 
@@ -172,8 +175,9 @@ public class JobGenerator extends JobGeneratorIFace {
 				}
 				count++;
 			}
-			this.jobOperations.add(currOperation);
+			currJobOperations.add(currOperation);
 		}
+		this.jobOperations.add(currJobOperations);
 	}
 
 	private void randomGenInit() {
@@ -212,13 +216,14 @@ public class JobGenerator extends JobGeneratorIFace {
 		.jobStartTimeByCust(generationTime)
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
-		.jobOperation(this.jobOperations)
+		.jobOperation(this.jobOperations.get(index))
 		.jobPenalty(this.jobPenalties.get(index))
 		.build() ;
 
 		j.setJobNo(countJob++);
 
 //		log.info(j.getPenaltyRate());
+		
 		return j;
 	}
 

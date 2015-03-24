@@ -39,9 +39,7 @@ public class AcceptJobBehavior extends CyclicBehaviour {
 					this.jobToProcess = (job) msg.getContentObject();
 
 					log.info(" Job No : '" + jobToProcess.getJobNo() +
-							"'accepted with starting time : " +
-							jobToProcess.getStartTimeByCust()+" due date: "+jobToProcess.getJobDuedatebyCust());
-
+							"ID: "+jobToProcess.getJobID());
 					AddJobBehavior addjob = new AddJobBehavior(this.jobToProcess);
 					addjob.setDataStore(getDataStore());
 					myAgent.addBehaviour(addjob);

@@ -42,8 +42,6 @@ public class AddJobBehavior extends Behaviour {
 				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 				//						"processing time : " + comingJob.getProcessingTime());
 
-				comingJob.setCurrentOperationNumber(
-						comingJob.getCurrentOperationNumber() + 1);
 				
 				double newProcessingTime =
 						Methods.normalRandom(comingJob.getCurrentOperationProcessTime(),
@@ -61,8 +59,6 @@ public class AddJobBehavior extends Behaviour {
 						"processing time : " + comingJob.getCurrentOperationProcessTime());
 
 				machineSimulator.setStatus(MachineStatus.PROCESSING);
-
-				comingJob.setCurrentOperationProcessingTime(System.currentTimeMillis());
 
 				if( processingTime > 0 ) {
 					executor = new ScheduledThreadPoolExecutor(1);
@@ -98,7 +94,7 @@ public class AddJobBehavior extends Behaviour {
 		case 2:
 			if( processingTime <= 0) {
 				IsJobComplete = true;
-				log.info("Job No:" + comingJob.getJobNo() +" operation No."+ comingJob.getCurrentOperationNumber()+" completed");
+				log.info("Job No:" + comingJob.getJobNo() +" operation "+(comingJob.getCurrentOperationNumber()+1)+"/"+comingJob.getOperations().size()+" completed");
 				ProcessJobBehavior process = new ProcessJobBehavior(comingJob);
 				process.setDataStore(getDataStore());
 				myAgent.addBehaviour(process);
