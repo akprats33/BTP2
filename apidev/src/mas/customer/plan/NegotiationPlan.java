@@ -67,31 +67,25 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 		 *  if it is acceptable, then job is simply being sent back to blackboard.
 		 */
 
-		long newDueDate = (long) (j.getJobDuedatebyCust().getTime()); //1.1 time of absolute time is wrong 
+		long myDate = (long) (j.getJobDuedatebyCust().getTime()); //1.1 time of absolute time is wrong 
 		double newprofit = 0.9 * j.getProfit();
-
-		if(newDueDate < j.getJobDuedatebyCust().getTime() ){
+		
+		long newDate = j.getWaitingTime();
+		
+		if(myDate >=  newDate ) {
 			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerConfirmedJobs)
 				.value(negotiationJob).setReplyWith(replyWith).Build();
 			
-			/*ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
-					ID.Customer.ZoneData.customerConfirmedJobs,
-					negotiationJob);*/
-
 			AgentUtil.sendZoneDataUpdate(this.bba,negotiationJobDataUpdate, myAgent);
 
 			return;
 		}else {
-			j.setJobDuedatebyCust(newDueDate);
+			j.setJobDuedatebyCust( (myDate + newDate)/2);
 			j.setProfit(newprofit);
-			log.info("************"+negotiationJob.getJobDuedatebyCust());
+			log.info("************" + negotiationJob.getJobDuedatebyCust());
 			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerJobsUnderNegotiation)
 				.value(negotiationJob).setReplyWith(replyWith).Build();
 			
-/*			ZoneDataUpdate negotiationJobDataUpdate = new ZoneDataUpdate(
-					ID.Customer.ZoneData.customerJobsUnderNegotiation,
-					negotiationJob);*/
-
 			AgentUtil.sendZoneDataUpdate(this.bba,negotiationJobDataUpdate, myAgent);
 		}
 	}
