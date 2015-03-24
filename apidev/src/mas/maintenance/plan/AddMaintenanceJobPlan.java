@@ -3,9 +3,7 @@ package mas.maintenance.plan;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.MessageTemplate;
-
 import java.util.ArrayList;
-
 import mas.job.job;
 import mas.machine.IMachine;
 import mas.machine.MachineStatus;
@@ -18,9 +16,7 @@ import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
 /**
- * 
  * @author Anand Prajapati
- *
  */
 
 public class AddMaintenanceJobPlan extends OneShotBehaviour implements PlanBody {

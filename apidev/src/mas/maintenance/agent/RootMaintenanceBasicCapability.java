@@ -5,6 +5,7 @@ import jade.core.AID;
 import java.util.HashSet;
 import java.util.Set;
 
+import mas.machine.SimulatorInternals;
 import mas.maintenance.goal.CorrectiveMachineComponentsRepairGoal;
 import mas.maintenance.goal.MaintenanceStartSendInfoGoal;
 import mas.maintenance.goal.RegisterMaintenanceAgentServiceGoal;
@@ -38,11 +39,11 @@ public class RootMaintenanceBasicCapability extends Capability{
 		Belief<AID> bboard = new TransientBelief<AID>(
 				ID.Maintenance.BeliefBaseConst.blackboardAgent);
 		
-		Belief<AID> myMachine = new TransientBelief<AID>(
+		Belief<SimulatorInternals> myMachine = new TransientBelief<SimulatorInternals>(
 				ID.Maintenance.BeliefBaseConst.machine);
 		
 		Belief<AID> mygsAgent = new TransientBelief<AID>(
-				ID.Maintenance.BeliefBaseConst.globalSchAgent);
+				ID.Maintenance.BeliefBaseConst.globalSchAgentAID);
 		
 		Belief<AID> maintJob  = new TransientBelief<AID>(
 				ID.Maintenance.BeliefBaseConst.maintenanceJob);

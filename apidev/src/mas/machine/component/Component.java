@@ -1,5 +1,6 @@
 package mas.machine.component;
 
+import java.io.Serializable;
 import java.util.Random;
 import mas.machine.MachineStatus;
 import mas.machine.Simulator;
@@ -21,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  *
  */
 
-public class Component implements IComponent {
+public class Component implements IComponent,Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String ComponentID;

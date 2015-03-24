@@ -139,7 +139,7 @@ public class ID implements Serializable{
 		public class BeliefBaseConst {
 			public static final String blackboardAgent = "Maintenance_blackboard-agent";
 			public static final String machine = "Maintenance_machine";
-			public static final String globalSchAgent = "Maintenance_gsAgent";
+			public static final String globalSchAgentAID = "Maintenance_gsAgent";
 			public static final String dataTracker = "Maintenance_data-tracker";
 			public static final String maintenanceJob = "Maintenance_machine-maintenance-tracker";
 		}

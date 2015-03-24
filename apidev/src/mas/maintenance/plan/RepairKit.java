@@ -1,13 +1,15 @@
 package mas.maintenance.plan;
 
 import java.util.Random;
+
 import mas.MAS;
 import mas.machine.IMachine;
+import mas.machine.SimulatorInternals;
 import mas.machine.component.IComponent;
 
 public class RepairKit {
 
-	private	IMachine myMachine; 
+	private	SimulatorInternals myMachine; 
 	private static int NUM_ITERATIONS = 10000;
 	private static int MICRO_ITERATIONS = 100;
 
@@ -159,8 +161,8 @@ public class RepairKit {
 		StringBuilder data = new StringBuilder();
 		data.append(mtime);
 
-		double[] rzone = redZone(myMachine.getStartTime());
-		double[] yzone = yellowZone(myMachine.getStartTime());
+		double[] rzone = redZone(myMachine.getEpochTime());
+		double[] yzone = yellowZone(myMachine.getEpochTime());
 		int numComponents = myMachine.getComponents().size();
 
 		for (int i=0; i < numComponents;i++) {
@@ -414,8 +416,8 @@ public class RepairKit {
 		double mtime = totalMaintenanceTime(0);
 		StringBuilder data = new StringBuilder();
 		data.append(mtime);
-		double[] timeToRedZone = redZone(myMachine.getStartTime());
-		double[] timeToYellowZone = yellowZone(myMachine.getStartTime());
+		double[] timeToRedZone = redZone(myMachine.getEpochTime());
+		double[] timeToYellowZone = yellowZone(myMachine.getEpochTime());
 		int numComponents = myMachine.getComponents().size();
 
 		for (int i=0; i < numComponents ;i++) {
@@ -427,11 +429,11 @@ public class RepairKit {
 		return data.toString();
 	}
 
-	public IMachine getMachine() {
+	public SimulatorInternals getMachine() {
 		return myMachine;
 	}
 
-	public void setMachine(IMachine machine) {
+	public void setMachine(SimulatorInternals machine) {
 		this.myMachine = machine;
 	}
 }

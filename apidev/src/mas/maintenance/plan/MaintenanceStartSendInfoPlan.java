@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
+import mas.machine.SimulatorInternals;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
@@ -25,10 +26,6 @@ import bdi4jade.plan.PlanInstance.EndState;
  */
 public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 
-	/**
-	 * 
-	 */
-	
 	private static final long serialVersionUID = 1L;
 	private Logger log;
 	private BeliefBase bfBase;
@@ -36,7 +33,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 	private int step = 0;
 	private ACLMessage msg;
 	private ACLMessage reply;
-	private IMachine machine;
+	private SimulatorInternals machine;
 	private RepairKit solver;
 	private AID bba;
 
@@ -64,7 +61,7 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 			msg = myAgent.receive(msgTemplate);
 			if(msg != null) {
 				try {
-					machine = (IMachine) msg.getContentObject();
+					machine = (SimulatorInternals) msg.getContentObject();
 					solver.setMachine(machine);
 					step++;
 				} catch (UnreadableException e) {

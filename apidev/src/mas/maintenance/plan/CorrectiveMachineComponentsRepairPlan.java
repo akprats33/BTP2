@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 import mas.machine.IMachine;
+import mas.machine.SimulatorInternals;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
@@ -34,7 +35,7 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 	private static final long serialVersionUID = 1L;
 	private AID blackboard;
 	private ACLMessage msg;
-	private IMachine failedMachine;
+	private SimulatorInternals failedMachine;
 	private BeliefBase bfBase;
 	private String failedComponents;
 	private Logger log;
@@ -57,7 +58,7 @@ public class CorrectiveMachineComponentsRepairPlan extends Behaviour implements 
 				if(msg != null) {
 					try {
 						log.info("recieved machine's failure msg");
-						failedMachine = (IMachine) msg.getContentObject();
+						failedMachine = (SimulatorInternals) msg.getContentObject();
 					} catch (UnreadableException e) {
 						e.printStackTrace();
 					}
