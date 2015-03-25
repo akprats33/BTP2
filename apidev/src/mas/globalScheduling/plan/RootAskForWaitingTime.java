@@ -111,12 +111,23 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				 
 								
 				ACLMessage max=ChooseWaitingTimeToSend(WaitingTime);
+				
+				long WaitingTime=((job)(max.getContentObject())).
+						getWaitingTime();
+				
 				job JobToSend=(job)(max.getContentObject());
-//				log.info(JobToSend.getJobDuedatebyCust());
-//				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
-				ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation)
-					.value(JobToSend).setReplyWith(msgReplyID).Build();
-				AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate, myAgent);
+				
+				if(WaitingTime==(long)(-1)){
+					log.info("cannot process job no "+JobToSend.getJobNo()+"no reply will be sent to cust");
+				}
+				else{
+//					log.info(JobToSend.getJobDuedatebyCust());
+//					ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation, JobToSend);
+					ZoneDataUpdate NegotiationUpdate=new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.GSAjobsUnderNegaotiation)
+						.value(JobToSend).setReplyWith(msgReplyID).Build();
+					AgentUtil.sendZoneDataUpdate(blackboard, NegotiationUpdate, myAgent);
+				}
+
 
 			} catch (UnreadableException e) {
 

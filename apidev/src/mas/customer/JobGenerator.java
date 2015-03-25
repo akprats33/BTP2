@@ -25,7 +25,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class JobGenerator extends JobGeneratorIFace {
 
 	// processing time is input as seconds. Convert it into milliseconds
-	private int timeUnitConversion = 1; //keep this 1 as it helps in debugging ~Nikhil
+	private int timeUnitConversion = 1; //to convert into milliseconds
 
 	private EnumeratedIntegerDistribution distribution;
 	private int NumJobs;
@@ -63,7 +63,7 @@ public class JobGenerator extends JobGeneratorIFace {
 					"\\jobdata.xlsx");	
 			wb = new XSSFWorkbook(file);
 			this.NumJobs = wb.getNumberOfSheets();
-
+			
 			XSSFSheet localSheet;
 			for(int i = 0 ; i < NumJobs ; i++) {
 				localSheet = wb.getSheetAt(i);
@@ -141,7 +141,7 @@ public class JobGenerator extends JobGeneratorIFace {
 				case 1:
 					// Processing time for this operation
 					currOperation.
-					setProcessingTime((long) cell.getNumericCellValue()*timeUnitConversion);
+					setProcessingTime((long) cell.getNumericCellValue()*1000); //converting to milliseconds
 					break;
 
 				case 2:
@@ -219,7 +219,7 @@ public class JobGenerator extends JobGeneratorIFace {
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
 		.jobOperation(this.jobOperations.get(index))
-
+		.jobPenalty(jobPenaltyRate.get(index))
 		.build() ;
 
 		j.setJobNo(countJob++);

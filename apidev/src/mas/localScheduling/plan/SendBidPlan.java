@@ -43,6 +43,9 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private double bidNo;
 	private Random r;
 	private String replyWith;
+	private double processingCost;
+	private String[] supportedOps;
+	private boolean isOpSupported=false; //IS current operation is supported by this LSA
 
 	@Override
 	public EndState getEndState() {
@@ -53,7 +56,9 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	public void init(PlanInstance pInstance) {
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
-		
+		//processing cost in Rs. per second
+		processingCost=(double)bfBase.getBelief(ID.LocalScheduler.BeliefBaseConst.ProcessingCost).getValue();
+		supportedOps=(String[])bfBase.getBelief(ID.LocalScheduler.BeliefBaseConst.supportedOperations).getValue();
 //		r=new Random();
 		
 		this.blackboard = (AID) bfBase.
@@ -73,14 +78,19 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	@Override
 	public void action() {
 		try{
-			setBid(jobToBidFor);
+			
+			for(int i=0;i<supportedOps.length;i++){
+				
+				if(supportedOps[i].equalsIgnoreCase(jobToBidFor.getCurrentOperation().
+						getJobOperationType().toString())){
+					isOpSupported=true;
+				}
+			}
+			
+			jobToBidFor=setBid(jobToBidFor);
 
 			ZoneDataUpdate bidForJobUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.bidForJob)
 				.value(jobToBidFor).setReplyWith(replyWith).Build();
-			/*ZoneDataUpdate bidForJobUpdate = new ZoneDataUpdate(
-					ID.LocalScheduler.ZoneData.bidForJob,
-					jobToBidFor);
-*/
 
 			AgentUtil.sendZoneDataUpdate(blackboard ,bidForJobUpdate, myAgent);
 
@@ -90,34 +100,41 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		}
 	}
 
-	private void setBid(job j){
-		//		Random r = new Random();	
-		//		j.setBidByLSA(r.nextDouble());
+	private job setBid(job j){
+		if(isOpSupported){
+			jobQueue = (ArrayList<job>) bfBase.
+					getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
+					getValue();
 
-		jobQueue = (ArrayList<job>) bfBase.
-				getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).
-				getValue();
+			ArrayList<job> tempQueue = new  ArrayList<job>();
+			tempQueue.addAll(jobQueue);
+			tempQueue.add(j);
 
-		ArrayList<job> tempQueue = new  ArrayList<job>();
-		tempQueue.addAll(jobQueue);
-		tempQueue.add(j);
+			ScheduleSequence sch = new ScheduleSequence(tempQueue);
+			ArrayList<job> tempqSolution = sch.getSolution();
 
-		ScheduleSequence sch = new ScheduleSequence(tempQueue);
-		ArrayList<job> tempqSolution = sch.getSolution();
+			
 
-		
+			double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
+//			log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
+			double PenaltyBefore=getPenaltyLocalDD(jobQueue);
+			log.info(myAgent.getLocalName()+" job Q size="+jobQueue.size());
+//			log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
+			double incremental_penalty=PenaltyAfter - PenaltyBefore;
+			log.info(myAgent.getLocalName()+" incremental penalty="+incremental_penalty);
+			
+			bidNo=/*r.nextInt(10)+*/PenaltyAfter-PenaltyBefore;
+		}
+		else{
+			bidNo=Double.MAX_VALUE;
+			log.info("Operation " +jobToBidFor.getCurrentOperation().
+					getJobOperationType().toString() +"not supported");
+		}
 
-		double PenaltyAfter=getPenaltyLocalDD(tempqSolution);
-//		log.info("PenaltyAfter="+getPenaltyLocalDD(tempqSolution));
-		double PenaltyBefore=getPenaltyLocalDD(jobQueue);
-		log.info(myAgent.getLocalName()+" job Q size="+jobQueue.size());
-//		log.info("PenaltyBefore="+getPenaltyLocalDD(jobQueue));
-		double incremental_penalty=PenaltyAfter - PenaltyBefore;
-		log.info(myAgent.getLocalName()+" incremental penalty="+incremental_penalty);
-		
-		bidNo=/*r.nextInt(10)+*/PenaltyAfter-PenaltyBefore;
 		j.setBidByLSA(bidNo);
 		j.setLSABidder(myAgent.getAID());
+		
+		return j;
 	}
 
 	public double getPenaltyLocalDD(ArrayList<job> sequence) {
@@ -132,12 +149,11 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 
 		for (int i = 0; i < l; i++) {
 			
-			finishTime = cumulativeProcessingTime+ sequence.get(i).getCurrentOperationProcessTime()*1000 +
+			finishTime = cumulativeProcessingTime+ sequence.get(i).getCurrentOperationProcessTime() +
 					sequence.get(i).getCurrentOperationStartTime();
-			//getProcessingTime gives in time in seconds
+			//getProcessingTime gives in time in milliseconds
 
-//			log.info("difference="+(finishTime-sequence.get(i).getStartTime().getTime()));
-			cumulativeProcessingTime=cumulativeProcessingTime+(long)sequence.get(i).getCurrentOperationProcessTime()*1000;
+			cumulativeProcessingTime=cumulativeProcessingTime+(long)sequence.get(i).getCurrentOperationProcessTime();
 
 			double tardiness = 0.0;
 			
@@ -148,12 +164,13 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 //				log.info(myAgent.getLocalName()+ " tardiness="+tardiness+" L="+l+"ft="+new Date(finishTime)+" dd="+sequence.get(i).getDuedate()+" st="+sequence.get(i).getStartTime());
 			}
 			else{
-			/*	log.info("slack: "+new Date(finishTime-sequence.get(i).getDuedate().getTime())+
-						" DueDate: "+sequence.get(i).getDuedate()+
-						" cumulativeProcessingTime="+cumulativeProcessingTime+
-						" start date: "+sequence.get(i).getStartTime().getTime());*/
+
 				tardiness = 0.0;
 			}
+			/*log.info("slack: "+(finishTime-sequence.get(i).getCurrentOperationDueDate())+
+					" DueDate: "+new Date(sequence.get(i).getCurrentOperationDueDate())+
+					" cumulativeProcessingTime="+cumulativeProcessingTime+
+					" start date: "+new Date(sequence.get(i).getCurrentOperationStartTime()));*/
 
 //			log.info("tardiness="+tardiness+" penalty rate="+sequence.get(i).getPenaltyRate());
 			cost += tardiness * sequence.get(i).getPenaltyRate() ;/*+ sequence.get(i).getCost();*/
@@ -170,7 +187,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		long CumulativeWaitingTime=0;
 		for(int i=0;i<sequence.size();i++){
 			sequence.get(i).setCurrentOperationStartTime(CumulativeWaitingTime+System.currentTimeMillis());
-			CumulativeWaitingTime=CumulativeWaitingTime+(long)sequence.get(i).getCurrentOperationProcessTime()*1000;
+			CumulativeWaitingTime=CumulativeWaitingTime+(long)sequence.get(i).getCurrentOperationProcessTime();
 		}
 		return sequence;
 		

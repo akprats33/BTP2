@@ -157,7 +157,9 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 		long slack=totalAvailableTime-totalProcessingTime;
 		int NoOfOps=jobForBidWinner.getOperations().size();
 		long currTime=jobForBidWinner.getStartTimeByCust().getTime();
-		
+
+//		log.info("due date "+new Date(jobForBidWinner.getJobDuedatebyCust().getTime())+
+//				" start time "+new Date(jobForBidWinner.getStartTimeByCust().getTime()));
 		if(dueDateMethod==ID.GlobalScheduler.OtherConst.LocalDueDate){
 			long slack_perOperation=(long)((double)slack)/(NoOfOps);
 
@@ -166,6 +168,8 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 				currTime=currTime+jobForBidWinner.getOperations().get(i).getProcessingTime()+slack_perOperation;
 				jobForBidWinner.getOperations().get(i).setDueDate(currTime);
 			}
+			
+			
 		}
 		else if(dueDateMethod==ID.GlobalScheduler.OtherConst.GlobalDueDate){
 			for(int i=0;i<NoOfOps;i++){
@@ -178,10 +182,12 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 			}
 		}
 		
-		log.info("Job No "+jobForBidWinner.getJobNo()+" processing times:");
-		for(int i=0;i<NoOfOps;i++){
-			log.info("operation no. "+(i+1)+" processing time :"+new Date(jobForBidWinner.getOperations().get(i).getDueDate()));
-		}
+//		log.info("Job No "+jobForBidWinner.getJobNo()+" processing times:");
+//		for(int i=0;i<NoOfOps;i++){
+//			log.info("operation no. "+(i+1)+" gets time :"+(jobForBidWinner.getOperations().get(i).getDueDate()-
+//					jobForBidWinner.getOperations().get(i).getStartTime())+ "processing time "+
+//					jobForBidWinner.getOperations().get(i).getProcessingTime());
+//		}
 		return jobForBidWinner;
 		
 	}

@@ -33,7 +33,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private static final long serialVersionUID = 1L;
 	private ACLMessage msg;
 	private ArrayList<job> jobQueue;
-	private job j;
+	private job job;
 	private BeliefBase bfBase;
 	private StatsTracker sTracker;
 	private double averageProcessingTime;
@@ -42,6 +42,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private Logger log;
 	private String replyWith;
 	private String[] SupportedOps;
+	private boolean CurrentOpSupport=false;
 
 	@Override
 	public EndState getEndState() {
@@ -56,7 +57,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 		log = LogManager.getLogger();
 		try {
 			msg = ((MessageGoal)pInstance.getGoal()).getMessage();
-			j = (job)(msg.getContentObject());
+			job = (job)(msg.getContentObject());
 		} catch (UnreadableException e) {
 			e.printStackTrace();
 		}
@@ -80,35 +81,31 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	public void action() {		
 		sTracker.addSize( jobQueue.size() );
 		
-		log.info("op->"+j.getCurrentOperation().getJobOperationType());
-		
-		// get average queue size and waiting time in the queue
-		/*averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
-		averageProcessingTime = sTracker.getAvgProcessingTime();
-
-		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
-*///		log.info("waiting time is : " + avgWaitingTime);
-		
-		
+		for(int i=0;i<SupportedOps.length;i++){
+			if(SupportedOps[i].equalsIgnoreCase(job.getCurrentOperation().getJobOperationType().toString())){
+				CurrentOpSupport=true;
+			}
+		}
+		log.info("op->"+job.getCurrentOperation().getJobOperationType().toString());
 		
 		long WaitingTime=0;
-		
-		for(int i=0;i<jobQueue.size();i++){
-			WaitingTime=WaitingTime+jobQueue.get(i).getCurrentOperationProcessTime()*1000;
+		if(CurrentOpSupport){
+			
+			
+			for(int i=0;i<jobQueue.size();i++){
+				WaitingTime=WaitingTime+jobQueue.get(i).getCurrentOperationProcessTime()*1000;
+			}
 		}
-		
-		j.setWaitingTime(/*avgWaitingTime +*/WaitingTime+ j.getCurrentOperationProcessTime());
-//		j.setStartTime(/*avgWaitingTime +*/ WaitingTime+System.currentTimeMillis()); //why do we need this???
-
-//		log.info("waiting time is : " + j.getWaitingTime()+ "due date is "+ j.getDuedate());
-		ZoneDataUpdate waitingTimeUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.WaitingTime)
-			.value(this.j).setReplyWith(replyWith).Build();
-		
-//		log.info("replyWith = "+replyWith);
-		/*ZoneDataUpdate waitingTimeUpdate = new ZoneDataUpdate(
-				ID.LocalScheduler.ZoneData.WaitingTime,
-				this.j );*/
-
-		AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
+		else{
+			log.info(myAgent.getLocalName()+" doesn't support "+job.getCurrentOperation().getJobOperationType().toString());
+			
+			WaitingTime=(long)(-1);
+		}
+			
+			
+			job.setWaitingTime(WaitingTime+ job.getCurrentOperationProcessTime());
+			ZoneDataUpdate waitingTimeUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.WaitingTime)
+				.value(this.job).setReplyWith(replyWith).Build();
+			AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);
 	}
 }
