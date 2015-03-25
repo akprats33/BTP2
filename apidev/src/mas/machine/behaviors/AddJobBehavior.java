@@ -39,21 +39,31 @@ public class AddJobBehavior extends Behaviour {
 					this.machineSimulator = (Simulator) getDataStore().
 							get(Simulator.simulatorStoreName);
 				}
-				//				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
-				//						"processing time : " + comingJob.getProcessingTime());
+				double ProcessingTimeInSeconds = comingJob.getCurrentOperationProcessTime()/1000.0;
+						
+			/*	log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
+						"processing time before loading/unloading: " + comingJob.getCurrentOperationProcessTime());*/
 
 				
 				double newProcessingTime =
-						Methods.normalRandom(comingJob.getCurrentOperationProcessTime(),
-								comingJob.getCurrentOperationProcessTime()*machineSimulator.getPercentProcessingTimeVariation())+
+						Methods.normalRandom(ProcessingTimeInSeconds,/*
+						getCurrentOperationProcessTime gives time in milliseconds*/
+								ProcessingTimeInSeconds*machineSimulator.getPercentProcessingTimeVariation())+
 								Methods.getLoadingTime(machineSimulator.getMeanLoadingTime(),
 										machineSimulator.getSdLoadingTime()) +
 										Methods.getunloadingTime(machineSimulator.getMeanUnloadingTime(),
 												machineSimulator.getSdUnloadingTime());
 
-				comingJob.setCurrentOperationProcessingTime((long)newProcessingTime) ;
+				comingJob.setCurrentOperationProcessingTime((long)(1000*newProcessingTime)) ; //this will introduce error
+				//ex. 0.1 with be converted into 0
 
-				processingTime = (long)(comingJob.getCurrentOperationProcessTime()*1000);
+				processingTime = comingJob.getCurrentOperationProcessTime();
+				
+				if(processingTime<=0){
+					processingTime=1;// 1 milliseconds
+					log.info("ATTENTION : -ve processing time");
+				} //if processingTime=0, this behviour goes into infinite loop
+				
 
 				log.info("Job No : '" + comingJob.getJobNo() + "' loading with" +
 						"processing time : " + comingJob.getCurrentOperationProcessTime());

@@ -44,6 +44,10 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		
 		bb_aid = AgentUtil.findBlackboardAgent(myAgent);
 		PI.getBeliefBase().updateBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent, bb_aid);
+		
+		String machineLocalname=ID.Machine.LocalName+"#"+myAgent.getLocalName().split("#")[1];
+		AID machineAID=new AID(machineLocalname,false);
+		PI.getBeliefBase().updateBelief(ID.LocalScheduler.BeliefBaseConst.machine, machineAID);
 
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.bidForJob).
@@ -74,6 +78,13 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		.MsgID(MessageIds.msgLSAfinishedJobs).appendValue(false)
 		.build();
 		
+		NamedZoneData ZoneDataName6 =
+				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.QueryResponse).
+				MsgID(MessageIds.msgLSQueryResponse)
+				.appendValue(false).
+				build();
+		
+		
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
 				ZoneDataName2, ZoneDataName3, ZoneDataName4, ZoneDataName5 };
 
@@ -91,7 +102,7 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		SubscriptionForm gSchedulingSubform = new SubscriptionForm();
 		String[] gSchedulingParams = { ID.GlobalScheduler.ZoneData.askBidForJobFromLSA,
 				ID.GlobalScheduler.ZoneData.GetWaitingTime , ID.GlobalScheduler.ZoneData.jobForLSA,
-				ID.GlobalScheduler.ZoneData.GSAConfirmedOrder };
+				ID.GlobalScheduler.ZoneData.GSAConfirmedOrder, ID.GlobalScheduler.ZoneData.QueryRequest };
 		gSchedulingSubform.AddSubscriptionReq(gSchedulingTarget, gSchedulingParams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, gSchedulingSubform);
