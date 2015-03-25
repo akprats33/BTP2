@@ -39,7 +39,7 @@ public class JobGenerator extends JobGeneratorIFace {
 	//Its GSA's job to calculate local / global due dates
 	//its in SECONDS
 	private ArrayList<Integer> jobQuantity;
-	private ArrayList<Double> jobPenalties;
+	private ArrayList<Double> jobPenaltyRate;
 	int countJob = 1;
 	private Logger log=LogManager.getLogger();
 
@@ -49,7 +49,7 @@ public class JobGenerator extends JobGeneratorIFace {
 		this.jobQuantity = new ArrayList<Integer>();
 		this.jobCPNs = new ArrayList<Double>();
 		this.jobDueDates = new ArrayList<Long>();
-		this.jobPenalties = new ArrayList<Double>();
+		this.jobPenaltyRate = new ArrayList<Double>();
 
 		this.sheets = new ArrayList<XSSFSheet>();
 		this.jobFilePath = System.getProperty("user.dir");
@@ -104,24 +104,22 @@ public class JobGenerator extends JobGeneratorIFace {
 				break;
 			case 3:
 				jobDueDates.add((long) (cell.getNumericCellValue()*timeUnitConversion));
-//				log.info((long) (cell.getNumericCellValue()*timeUnitConversion));
+				//				log.info((long) (cell.getNumericCellValue()*timeUnitConversion));
 				break;
 			case 4:
-				jobPenalties.add(cell.getNumericCellValue());
+				jobPenaltyRate.add(cell.getNumericCellValue());
 				break;
 			}
 			count ++;
 		}
 
+		ArrayList<jobOperation> opList = new ArrayList<jobOperation>();
 		// Now read operations for the job
 		// Skip the header row for operations
 		row = (XSSFRow) rows.next();
-		
-		ArrayList<jobOperation> currJobOperations=new ArrayList<jobOperation>();
-		
+
 		while( rows.hasNext() ) {
-			
-			
+
 			row = (XSSFRow) rows.next();
 			cells = row.cellIterator();
 
@@ -133,19 +131,22 @@ public class JobGenerator extends JobGeneratorIFace {
 				switch(count) {
 				case 0:
 					// Operation type for the job
-					currOperation.setJobOperationType(OperationType.Operation_1);
-					
+					String op = cell.getStringCellValue();
+					//					System.out.println(op + " *|||---- : "+ op.length());
+					if(op != null && op.length() > 0 ) {
+						currOperation.setJobOperationType(OperationType.valueOf(op));
+					}
 					break;
 
 				case 1:
 					// Processing time for this operation
 					currOperation.
-					setProcessingTime((long) (1000*cell.getNumericCellValue()*timeUnitConversion));
+					setProcessingTime((long) cell.getNumericCellValue()*timeUnitConversion);
 					break;
 
 				case 2:
 					// Dimensions for this operation
-//					log.info(cell.getCellType());
+					//					log.info(cell.getCellType());
 					cell.setCellType(1);
 					String s = cell.getStringCellValue();
 					String temp[] = s.split(",");
@@ -158,7 +159,7 @@ public class JobGenerator extends JobGeneratorIFace {
 					}
 					currOperation.setjDims(tempDimList);
 					break;
-					
+
 				case 3:
 					// Attributes for this operation
 					String Attr=cell.getStringCellValue();
@@ -171,14 +172,14 @@ public class JobGenerator extends JobGeneratorIFace {
 						tempAttrList.add(tempAttribute );
 					}
 					currOperation.setjAttributes(tempAttrList);
-					
+
 					break;
 				}
 				count++;
 			}
-			currJobOperations.add(currOperation);
+			opList.add(currOperation);
+			this.jobOperations.add(opList);
 		}
-		this.jobOperations.add(currJobOperations);
 	}
 
 	private void randomGenInit() {
@@ -207,9 +208,9 @@ public class JobGenerator extends JobGeneratorIFace {
 	@Override
 	public Object getNextJob() {
 		int index = runif();
-//		log.info(jobDueDates.get(index));
+		//		log.info(jobDueDates.get(index));
 		long due = (long) (jobDueDates.get(index)*1000) + System.currentTimeMillis();
-//		log.info(new Date(due));
+		//		log.info(new Date(due));
 		long generationTime = System.currentTimeMillis();
 
 		job j = new job.Builder(jobIdList.get(index))
@@ -218,7 +219,7 @@ public class JobGenerator extends JobGeneratorIFace {
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
 		.jobOperation(this.jobOperations.get(index))
-		
+
 		.build() ;
 
 		j.setJobNo(countJob++);
