@@ -1,20 +1,18 @@
 package mas.machine.behaviors;
 
+import jade.core.behaviours.Behaviour;
+import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 import mas.machine.Simulator;
+import mas.machine.SimulatorInternals;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import jade.core.behaviours.Behaviour;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 public class HandleSimulatorFailedBehavior extends Behaviour{
 
@@ -25,14 +23,21 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 	private ACLMessage correctiveDataMsg;
 	private StringTokenizer token;
 	private long repairTime;
+
 	private ArrayList<Integer> componentsToRepair;
+	private SimulatorInternals machineInternals;
 	private Simulator machineSimulator;
+
 	private long remaintingTimeMillis;
 
-	public HandleSimulatorFailedBehavior() {
+	public HandleSimulatorFailedBehavior(Simulator sim,
+			SimulatorInternals internals) {
+
 		log = LogManager.getLogger();
-		this.machineSimulator = (Simulator) getParent().
-				getDataStore().get(Simulator.simulatorStoreName);
+		this.machineInternals = internals;
+		this.machineSimulator = sim;
+
+		log.info("********************machine after failure : "  + machineInternals);
 		correctiveDataMsgTemplate = MessageTemplate.MatchConversationId(
 				MessageIds.msgcorrectiveMaintdata);
 	}
@@ -45,12 +50,12 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 			/**
 			 * update zone data for machine's failure
 			 */
-			
-			ZoneDataUpdate machineFailureUpdate  = new ZoneDataUpdate.Builder(ID.Machine.ZoneData.myHealth)
-				.value(machineSimulator).Build();
-		/*	ZoneDataUpdate machineFailureUpdate = new ZoneDataUpdate(
-					ID.Machine.ZoneData.myHealth,
-					machineSimulator);*/
+
+			log.info("********************maintenance  : "  + machineInternals);
+			ZoneDataUpdate machineFailureUpdate  = new ZoneDataUpdate.
+					Builder(ID.Machine.ZoneData.machineFailures).
+					value(machineInternals).
+					Build();
 
 			AgentUtil.sendZoneDataUpdate(Simulator.blackboardAgent ,
 					machineFailureUpdate, myAgent);
@@ -64,10 +69,11 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 			correctiveDataMsg = myAgent.receive(correctiveDataMsgTemplate);
 			if(correctiveDataMsg != null) {
 
+				log.info("Maintenance arrived ~~~~~~~~~~~~~~~~~~~~~~");
 				token = new StringTokenizer(correctiveDataMsg.getContent());
 				repairTime = Long.parseLong(token.nextToken());
 				remaintingTimeMillis = repairTime;
-//				block(repairTime);
+				//				block(repairTime);
 				componentsToRepair = new ArrayList<Integer>();
 
 				while(token.hasMoreTokens()) {
@@ -85,10 +91,10 @@ public class HandleSimulatorFailedBehavior extends Behaviour{
 			 * keep the machine blocked for the required repairing time
 			 */
 			if(remaintingTimeMillis >= 0){
-				
+
 				remaintingTimeMillis = remaintingTimeMillis - Simulator.TIME_STEP;
 				block(Simulator.TIME_STEP);
-				
+
 			} else if( remaintingTimeMillis <= 0) {
 				step = 3;
 			}
