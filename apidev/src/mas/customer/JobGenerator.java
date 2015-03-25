@@ -134,6 +134,7 @@ public class JobGenerator extends JobGeneratorIFace {
 				case 0:
 					// Operation type for the job
 					currOperation.setJobOperationType(OperationType.Operation_1);
+					
 					break;
 
 				case 1:
@@ -217,13 +218,11 @@ public class JobGenerator extends JobGeneratorIFace {
 		.jobDueDateTime(due)
 		.jobGenTime(generationTime)
 		.jobOperation(this.jobOperations.get(index))
-		.jobPenalty(this.jobPenalties.get(index))
+		
 		.build() ;
 
 		j.setJobNo(countJob++);
 
-//		log.info(j.getPenaltyRate());
-		
 		return j;
 	}
 

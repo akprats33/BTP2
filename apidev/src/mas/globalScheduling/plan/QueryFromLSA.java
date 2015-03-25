@@ -104,6 +104,9 @@ public class QueryFromLSA extends Behaviour implements PlanBody {
 				job j=(queryResponse).getCurrentJob();
 				if(j!=null){
 					log.info(j.getJobNo()+" is at "+queryResponse.getCurrentMachine().getLocalName());
+					if(queryResponse.isOnMachine()){
+						log.info(j.getJobNo()+" is currently under process at "+queryResponse.getCurrentMachine().getLocalName());
+					}
 				}
 			} catch (UnreadableException e) {
 				// TODO Auto-generated catch block

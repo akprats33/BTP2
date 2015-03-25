@@ -177,6 +177,11 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 				jobForBidWinner.getOperations().get(i).setDueDate(currTime);
 			}
 		}
+		
+		log.info("Job No "+jobForBidWinner.getJobNo()+" processing times:");
+		for(int i=0;i<NoOfOps;i++){
+			log.info("operation no. "+(i+1)+" processing time :"+new Date(jobForBidWinner.getOperations().get(i).getDueDate()));
+		}
 		return jobForBidWinner;
 		
 	}

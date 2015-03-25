@@ -56,12 +56,14 @@ public class RespondToGSAQuery extends OneShotBehaviour implements PlanBody {
 		for(int i=0;i<jobQ.size();i++){
 			if(JobNo==jobQ.get(i).getJobNo()){
 				response=new JobQueryObject.Builder().currentJob(jobQ.get(i))
+						.underProcess(false)
 						.currentMachine(machineAID).build();
 			}
 		}
 		
 		if(currentJob.getJobNo()==JobNo){
 			response=new JobQueryObject.Builder().currentJob(currentJob).currentMachine(machineAID)
+					.underProcess(true)
 					.build();
 		}
 		
