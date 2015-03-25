@@ -41,6 +41,7 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	private AID blackboard;
 	private Logger log;
 	private String replyWith;
+	private String[] SupportedOps;
 
 	@Override
 	public EndState getEndState() {
@@ -50,6 +51,8 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	@Override
 	public void init(PlanInstance pInstance) {
 		bfBase = pInstance.getBeliefBase();
+		SupportedOps=(String[])bfBase.getBelief(ID.LocalScheduler.BeliefBaseConst.supportedOperations).getValue();
+		
 		log = LogManager.getLogger();
 		try {
 			msg = ((MessageGoal)pInstance.getGoal()).getMessage();
@@ -76,13 +79,17 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 	@Override
 	public void action() {		
 		sTracker.addSize( jobQueue.size() );
-
+		
+		log.info("op->"+j.getCurrentOperation().getJobOperationType());
+		
 		// get average queue size and waiting time in the queue
 		/*averageQueueSize = sTracker.getAverageQueueSize().doubleValue();
 		averageProcessingTime = sTracker.getAvgProcessingTime();
 
 		long avgWaitingTime = (long) (averageProcessingTime*averageQueueSize);
 *///		log.info("waiting time is : " + avgWaitingTime);
+		
+		
 		
 		long WaitingTime=0;
 		

@@ -11,8 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import mas.job.job;
+import mas.localScheduling.goal.ReadParams;
 import mas.localScheduling.goal.RegisterLSAgentServiceGoal;
 import mas.localScheduling.goal.RegisterLSAgentToBlackboardGoal;
+import mas.localScheduling.plan.ReadFile;
 import mas.localScheduling.plan.ReceiveCompletedJobPlan;
 import mas.localScheduling.plan.RegisterLSAgentServicePlan;
 import mas.localScheduling.plan.RegisterLSAgentToBlackboardPlan;
@@ -93,6 +95,8 @@ public class AbstractbasicCapability extends Capability {
 		beliefs.add(myMcMaintAgent);
 		beliefs.add(mygsAgent);
 		beliefs.add(dtrack);
+		beliefs.add(supportedOperations);
+		beliefs.add(processingCost);
 
 		return beliefs;
 	}
@@ -123,8 +127,9 @@ public class AbstractbasicCapability extends Capability {
 
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgGSAQuery),
 				RespondToGSAQuery.class));
-
 		
+		plans.add(new SimplePlan(ReadParams.class, ReadFile.class));		
+
 		return plans;
 	}	
 
@@ -132,6 +137,7 @@ public class AbstractbasicCapability extends Capability {
 	protected void setup() {
 		myAgent.addGoal(new RegisterLSAgentServiceGoal());
 		myAgent.addGoal(new RegisterLSAgentToBlackboardGoal());
+		myAgent.addGoal(new ReadParams());
 
 		log.info("plans are : " +  getPlans() );
 		/*	myAgent.addGoal(new SendBidGoal());
