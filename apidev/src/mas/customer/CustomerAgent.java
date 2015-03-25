@@ -25,4 +25,6 @@ public class CustomerAgent extends AbstractCustomerAgent {
 				ID.Customer.BeliefBaseConst.blackboardAgent, bba);
 		
 	}
+	
+	
 }
