@@ -139,7 +139,7 @@ public class JobGenerator extends JobGeneratorIFace {
 				case 1:
 					// Processing time for this operation
 					currOperation.
-					setProcessingTime((long) cell.getNumericCellValue()*timeUnitConversion);
+					setProcessingTime((long) (1000*cell.getNumericCellValue()*timeUnitConversion));
 					break;
 
 				case 2:

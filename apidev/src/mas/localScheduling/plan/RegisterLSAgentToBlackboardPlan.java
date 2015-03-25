@@ -91,7 +91,7 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		SubscriptionForm gSchedulingSubform = new SubscriptionForm();
 		String[] gSchedulingParams = { ID.GlobalScheduler.ZoneData.askBidForJobFromLSA,
 				ID.GlobalScheduler.ZoneData.GetWaitingTime , ID.GlobalScheduler.ZoneData.jobForLSA,
-				ID.GlobalScheduler.ZoneData.GSAConfirmedOrder };
+				ID.GlobalScheduler.ZoneData.GSAConfirmedOrder, ID.GlobalScheduler.ZoneData.QueryRequest };
 		gSchedulingSubform.AddSubscriptionReq(gSchedulingTarget, gSchedulingParams);
 
 		AgentUtil.subscribeToParam(myAgent, bb_aid, gSchedulingSubform);

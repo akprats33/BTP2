@@ -62,6 +62,7 @@ public class ID implements Serializable{
 			public static final String ProcessingCost = "ProcessingCost";
 			public static final String supportedOperations = "supportedOperations";
 			public static final String regretThreshold = "regret_threshold";
+			public static final String currentJobOnMachine="jobCurrentlyProcessingOnMachine";
 		}
 
 		public class ZoneData {
@@ -101,6 +102,8 @@ public class ID implements Serializable{
 
 			// advertise job for getting waiting time from LSA's
 			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";
+			//query job information from LSA
+			public static final String QueryRequest = "QueryRequestAbtLSAfromGSA"; 
 		}
 
 		public class BeliefBaseConst {

@@ -16,6 +16,7 @@ import mas.localScheduling.goal.RegisterLSAgentToBlackboardGoal;
 import mas.localScheduling.plan.ReceiveCompletedJobPlan;
 import mas.localScheduling.plan.RegisterLSAgentServicePlan;
 import mas.localScheduling.plan.RegisterLSAgentToBlackboardPlan;
+import mas.localScheduling.plan.RespondToGSAQuery;
 import mas.localScheduling.plan.SendBidPlan;
 import mas.localScheduling.plan.EnqueueJobPlan;
 import mas.localScheduling.plan.SendJobToMachinePlan;
@@ -79,6 +80,9 @@ public class AbstractbasicCapability extends Capability {
 
 		Belief<ArrayList<job> > jobSet = new TransientBelief<ArrayList<job> >(
 				ID.LocalScheduler.BeliefBaseConst.jobQueue);
+		
+		Belief<job> currentJobOnMachine=new TransientBelief<job>(
+				ID.LocalScheduler.BeliefBaseConst.currentJobOnMachine);
 
 		ArrayList<job> jobList = new ArrayList<job>();
 		jobSet.setValue(jobList);
@@ -117,6 +121,10 @@ public class AbstractbasicCapability extends Capability {
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskJobFromLSA),
 				SendJobToMachinePlan.class));
 
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.GSAQuery),
+				RespondToGSAQuery.class));
+
+		
 		return plans;
 	}	
 

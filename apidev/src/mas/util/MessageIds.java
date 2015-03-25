@@ -106,6 +106,8 @@ public class MessageIds {
 	public static final String UpdateParameter = "UpdateParam";
 	public static final String SubscribeParameter = "subscribe-parameter";
 
+	public static final String GSAQuery = "GSAqueriesToLSA";
+
 	//operation n is finished. now send job to GSA for n+1th operation
 	public static String msgLSAfinishedJobs="finished_job_fromLSA";
 	
