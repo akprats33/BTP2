@@ -90,6 +90,6 @@ public class RootMaintenanceBasicCapability extends Capability{
 		myAgent.addGoal(new machineHealthCheckGoal());
 		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal() );
 		myAgent.addGoal(new MaintenanceStartSendInfoGoal() );
-		myAgent.addGoal(new PreventiveMaintenanceGoal() );
+//		myAgent.addGoal(new PreventiveMaintenanceGoal() );
 	}
 }

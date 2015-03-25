@@ -66,7 +66,7 @@ public class RepairKit {
 		}
 	}
 
-	double[] residualLife(double t) {
+	public double[] residualLife(double t) {
 
 		CalculateMTTF temp = new CalculateMTTF();
 		int numComponents = myMachine.getComponents().size();
@@ -82,7 +82,7 @@ public class RepairKit {
 		return remainingLife;
 	}
 
-	double[] yellowZone(double t) {
+	public double[] yellowZone(double t) {
 		double[] remainingLife = residualLife(t);
 		int numComponents = myMachine.getComponents().size();
 		double[] yZone = new double[numComponents];
@@ -96,7 +96,7 @@ public class RepairKit {
 		return yZone;
 	}
 
-	double[] redZone(double t) {
+	public double[] redZone(double t) {
 		double[] rtemp = residualLife(t);
 		int n = myMachine.getComponents().size();
 		double[] rZone = new double[n];

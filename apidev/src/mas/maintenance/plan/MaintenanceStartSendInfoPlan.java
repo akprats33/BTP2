@@ -5,15 +5,12 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
-import mas.machine.IMachine;
 import mas.machine.SimulatorInternals;
 import mas.util.AgentUtil;
 import mas.util.ID;
 import mas.util.MessageIds;
 import mas.util.ZoneDataUpdate;
-
 import org.apache.logging.log4j.Logger;
-
 import bdi4jade.core.BeliefBase;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
@@ -32,7 +29,6 @@ public class MaintenanceStartSendInfoPlan extends Behaviour implements PlanBody{
 	private MessageTemplate msgTemplate;
 	private int step = 0;
 	private ACLMessage msg;
-	private ACLMessage reply;
 	private SimulatorInternals machine;
 	private RepairKit solver;
 	private AID bba;

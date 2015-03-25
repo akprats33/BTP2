@@ -3,21 +3,18 @@ package mas.maintenance.plan;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.MessageTemplate;
 import mas.maintenance.agent.LocalMaintenanceAgent;
-import mas.maintenance.behavior.AutoMaintenanceTickerBehavior;
+import mas.maintenance.behavior.PeriodicMaintenanceTickerBehavior;
 import bdi4jade.core.BeliefBase;
 import bdi4jade.plan.PlanBody;
 import bdi4jade.plan.PlanInstance;
 import bdi4jade.plan.PlanInstance.EndState;
 
-/**
- * @author Anand Prajapati
- */
-
-public class PreventiveMaintenancePlan extends Behaviour implements PlanBody {
+public class PeriodicPreventiveMaintenancePlan extends Behaviour implements PlanBody {
 
 	private static final long serialVersionUID = 1L;
 	private BeliefBase bfBase;
-	private AutoMaintenanceTickerBehavior autoMaintenance;
+
+	private PeriodicMaintenanceTickerBehavior maintenance;
 
 	MessageTemplate mt = MessageTemplate.MatchConversationId("MJStart");
 
@@ -28,17 +25,16 @@ public class PreventiveMaintenancePlan extends Behaviour implements PlanBody {
 
 	@Override
 	public void init(PlanInstance pInstance) {
-		
+
 		this.bfBase = pInstance.getBeliefBase();
 	}
 
 	@Override
 	public void action() {
-		autoMaintenance = new AutoMaintenanceTickerBehavior(myAgent,
-				LocalMaintenanceAgent.prevMaintPeriod, this.bfBase);
-		
-		myAgent.addBehaviour(autoMaintenance);
-		
+		maintenance = new PeriodicMaintenanceTickerBehavior(myAgent,
+													LocalMaintenanceAgent.prevMaintPeriod,
+													bfBase);
+		myAgent.addBehaviour(maintenance);
 	}
 
 	@Override
