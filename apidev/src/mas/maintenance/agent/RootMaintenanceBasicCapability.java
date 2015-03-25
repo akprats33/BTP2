@@ -9,12 +9,14 @@ import mas.job.job;
 import mas.machine.SimulatorInternals;
 import mas.maintenance.goal.CorrectiveMachineComponentsRepairGoal;
 import mas.maintenance.goal.MaintenanceStartSendInfoGoal;
+import mas.maintenance.goal.PeriodicPreventiveMaintenanceGoal;
 import mas.maintenance.goal.PreventiveMaintenanceGoal;
 import mas.maintenance.goal.RegisterMaintenanceAgentServiceGoal;
 import mas.maintenance.goal.RegisterMaintenanceAgentToBlackboardGoal;
 import mas.maintenance.goal.machineHealthCheckGoal;
 import mas.maintenance.plan.CorrectiveMachineComponentsRepairPlan;
 import mas.maintenance.plan.MaintenanceStartSendInfoPlan;
+import mas.maintenance.plan.PeriodicPreventiveMaintenancePlan;
 import mas.maintenance.plan.PreventiveMaintenancePlan;
 import mas.maintenance.plan.RegisterMaintenanceAgentServicePlan;
 import mas.maintenance.plan.RegisterMaintenanceAgentToBlackboardPlan;
@@ -80,6 +82,9 @@ public class RootMaintenanceBasicCapability extends Capability{
 		plans.add(new SimplePlan(PreventiveMaintenanceGoal.class,
 				PreventiveMaintenancePlan.class));
 
+		plans.add(new SimplePlan(PeriodicPreventiveMaintenanceGoal.class,
+				PeriodicPreventiveMaintenancePlan.class));
+		
 		return plans;
 	}	
 
@@ -90,6 +95,7 @@ public class RootMaintenanceBasicCapability extends Capability{
 		myAgent.addGoal(new machineHealthCheckGoal());
 		myAgent.addGoal(new CorrectiveMachineComponentsRepairGoal() );
 		myAgent.addGoal(new MaintenanceStartSendInfoGoal() );
-//		myAgent.addGoal(new PreventiveMaintenanceGoal() );
+		
+		myAgent.addGoal(new PeriodicPreventiveMaintenanceGoal() );
 	}
 }
