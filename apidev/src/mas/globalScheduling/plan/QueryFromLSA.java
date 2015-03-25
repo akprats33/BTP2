@@ -29,7 +29,7 @@ public class QueryFromLSA extends OneShotBehaviour implements PlanBody {
 	public void action() {
 		job j=new job.Builder("doesn'tmatter").build();
 		j.setJobNo(1);
-		JobQueryObject queryForm=new JobQueryObject(j);
+		JobQueryObject queryForm=new JobQueryObject.Builder().currentJob(j).build();
 		ZoneDataUpdate QueryRequest= new ZoneDataUpdate.Builder(ID.GlobalScheduler.ZoneData.QueryRequest)
 		.value(queryForm).Build();
 		AgentUtil.sendZoneDataUpdate(blackboard_AID, QueryRequest, myAgent);

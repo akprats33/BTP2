@@ -44,6 +44,10 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 		
 		bb_aid = AgentUtil.findBlackboardAgent(myAgent);
 		PI.getBeliefBase().updateBelief(ID.LocalScheduler.BeliefBaseConst.blackboardAgent, bb_aid);
+		
+		String machineLocalname=ID.Machine.LocalName+"#"+myAgent.getLocalName().split("#")[1];
+		AID machineAID=new AID(machineLocalname,false);
+		PI.getBeliefBase().updateBelief(ID.LocalScheduler.BeliefBaseConst.machine, machineAID);
 
 		NamedZoneData ZoneDataName1 = 
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.bidForJob).
@@ -73,6 +77,13 @@ public class RegisterLSAgentToBlackboardPlan extends OneShotBehaviour implements
 				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.finishedJob)
 		.MsgID(MessageIds.msgLSAfinishedJobs).appendValue(false)
 		.build();
+		
+		NamedZoneData ZoneDataName6 =
+				new NamedZoneData.Builder(ID.LocalScheduler.ZoneData.QueryResponse).
+				MsgID(MessageIds.msgLSQueryResponse)
+				.appendValue(false).
+				build();
+		
 		
 		NamedZoneData[] ZoneDataNames =  { ZoneDataName1,
 				ZoneDataName2, ZoneDataName3, ZoneDataName4, ZoneDataName5 };

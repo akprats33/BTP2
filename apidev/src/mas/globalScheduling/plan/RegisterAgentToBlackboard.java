@@ -64,7 +64,7 @@ public class RegisterAgentToBlackboard extends OneShotBehaviour implements PlanB
 		
 		NamedZoneData ZoneDataName6 = new NamedZoneData.Builder(
 				ID.GlobalScheduler.ZoneData.QueryRequest).
-				MsgID(MessageIds.GSAQuery).build();
+				MsgID(MessageIds.msgGSAQuery).build();
 		
 
 		NamedZoneData[] ZoneDataNames={ZoneDataName1, ZoneDataName2,

@@ -56,7 +56,7 @@ public class AbstractbasicCapability extends Capability {
 		
 		Belief<AID> bboard = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.blackboardAgent);
-		
+
 		Belief<AID> myMachine = new TransientBelief<AID>(
 				ID.LocalScheduler.BeliefBaseConst.machine);
 		
@@ -121,7 +121,7 @@ public class AbstractbasicCapability extends Capability {
 		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgaskJobFromLSA),
 				SendJobToMachinePlan.class));
 
-		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.GSAQuery),
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgGSAQuery),
 				RespondToGSAQuery.class));
 
 		
