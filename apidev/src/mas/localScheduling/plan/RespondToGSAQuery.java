@@ -1,7 +1,6 @@
 package mas.localScheduling.plan;
 
 import java.util.ArrayList;
-
 import mas.job.job;
 import mas.util.AgentUtil;
 import mas.util.ID;
@@ -48,7 +47,9 @@ public class RespondToGSAQuery extends OneShotBehaviour implements PlanBody {
 
 	@Override
 	public void action() {
-		JobQueryObject response=null;
+		JobQueryObject response=new JobQueryObject.Builder().currentJob(null)
+				.currentMachine(null).build();
+		
 		ArrayList<job> jobQ=(ArrayList<job>)beleifBase.getBelief(ID.LocalScheduler.BeliefBaseConst.jobQueue).getValue();
 		job currentJob=(job)beleifBase.getBelief(ID.LocalScheduler.BeliefBaseConst.currentJobOnMachine).getValue();
 		

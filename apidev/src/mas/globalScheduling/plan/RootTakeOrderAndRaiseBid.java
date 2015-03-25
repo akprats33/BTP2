@@ -76,13 +76,12 @@ public class RootTakeOrderAndRaiseBid extends Behaviour implements PlanBody {
 	@Override
 	public void action() {
 
-		
 		switch (step) {
 		case 0:
 			
 			this.MachineCount = (int) ((BDIAgent) myAgent).getRootCapability()
 					.getBeliefBase()
-					.getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines)
+					.getBelief(ID.GlobalScheduler.BeliefBaseConst.NoOfMachines)
 					.getValue();
 			// log.info(MachineCount);
 

@@ -64,7 +64,8 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 		switch (step) {
 		case 0:
 			
-			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().getBeliefBase().getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines).getValue();
+			this.MachineCount=(int)((BDIAgent)myAgent).getRootCapability().
+			getBeliefBase().getBelief(ID.GlobalScheduler.BeliefBaseConst.NoOfMachines).getValue();
 //			log.info(MachineCount);
 			
 			if(MachineCount!=0){

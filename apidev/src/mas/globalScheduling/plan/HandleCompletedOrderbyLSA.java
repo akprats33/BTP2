@@ -74,7 +74,7 @@ public class HandleCompletedOrderbyLSA extends Behaviour implements PlanBody{
 			
 			this.MachineCount = (int) ((BDIAgent) myAgent).getRootCapability()
 					.getBeliefBase()
-					.getBelief(ID.Blackboard.BeliefBaseConst.NoOfMachines)
+					.getBelief(ID.GlobalScheduler.BeliefBaseConst.NoOfMachines)
 					.getValue();
 			// log.info(MachineCount);
 
