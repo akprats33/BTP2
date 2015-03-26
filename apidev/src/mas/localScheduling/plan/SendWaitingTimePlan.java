@@ -86,24 +86,24 @@ public class SendWaitingTimePlan extends OneShotBehaviour implements PlanBody{
 				CurrentOpSupport=true;
 			}
 		}
-		log.info("op->"+job.getCurrentOperation().getJobOperationType().toString());
+		
 		
 		long WaitingTime=0;
 		if(CurrentOpSupport){
 			
 			
 			for(int i=0;i<jobQueue.size();i++){
-				WaitingTime=WaitingTime+jobQueue.get(i).getCurrentOperationProcessTime()*1000;
+				WaitingTime=WaitingTime+jobQueue.get(i).getCurrentOperationProcessTime();
 			}
 		}
 		else{
 			log.info(myAgent.getLocalName()+" doesn't support "+job.getCurrentOperation().getJobOperationType().toString());
 			
-			WaitingTime=(long)(-1);
+			WaitingTime=Long.MIN_VALUE;
 		}
 			
-			
-			job.setWaitingTime(WaitingTime+ job.getCurrentOperationProcessTime());
+			WaitingTime=WaitingTime+job.getCurrentOperationProcessTime();
+			job.setWaitingTime(WaitingTime);
 			ZoneDataUpdate waitingTimeUpdate=new ZoneDataUpdate.Builder(ID.LocalScheduler.ZoneData.WaitingTime)
 				.value(this.job).setReplyWith(replyWith).Build();
 			AgentUtil.sendZoneDataUpdate(blackboard ,waitingTimeUpdate, myAgent);

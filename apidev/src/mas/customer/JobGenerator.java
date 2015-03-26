@@ -63,6 +63,7 @@ public class JobGenerator extends JobGeneratorIFace {
 					"\\jobdata.xlsx");	
 			wb = new XSSFWorkbook(file);
 			this.NumJobs = wb.getNumberOfSheets();
+//			this.NumJobs=1;
 			
 			XSSFSheet localSheet;
 			for(int i = 0 ; i < NumJobs ; i++) {

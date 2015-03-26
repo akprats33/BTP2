@@ -139,7 +139,7 @@ public class AbstractbasicCapability extends Capability {
 		myAgent.addGoal(new RegisterLSAgentToBlackboardGoal());
 		myAgent.addGoal(new ReadParams());
 
-		log.info("plans are : " +  getPlans() );
+//		log.info("plans are : " +  getPlans() );
 		/*	myAgent.addGoal(new SendBidGoal());
 		myAgent.addGoal(new SendJobGoal());
 		myAgent.addGoal(new SendWaitingTimeGoal());

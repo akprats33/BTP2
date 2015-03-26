@@ -43,7 +43,7 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 	private double bidNo;
 	private Random r;
 	private String replyWith;
-	private double processingCost;
+	private double processingCost;//Rs. per second
 	private String[] supportedOps;
 	private boolean isOpSupported=false; //IS current operation is supported by this LSA
 
@@ -123,7 +123,8 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 			double incremental_penalty=PenaltyAfter - PenaltyBefore;
 			log.info(myAgent.getLocalName()+" incremental penalty="+incremental_penalty);
 			
-			bidNo=/*r.nextInt(10)+*/PenaltyAfter-PenaltyBefore;
+			bidNo=processingCost*(jobToBidFor.getCurrentOperationProcessTime()/1000.0)+
+					PenaltyAfter-PenaltyBefore;
 		}
 		else{
 			bidNo=Double.MAX_VALUE;
