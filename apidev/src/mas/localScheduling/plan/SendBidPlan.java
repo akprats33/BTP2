@@ -128,8 +128,6 @@ public class SendBidPlan extends OneShotBehaviour implements PlanBody{
 		}
 		else{
 			bidNo=Double.MAX_VALUE;
-			log.info("Operation " +jobToBidFor.getCurrentOperation().
-					getJobOperationType().toString() +"not supported");
 		}
 
 		j.setBidByLSA(bidNo);

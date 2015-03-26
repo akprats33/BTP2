@@ -105,7 +105,9 @@ public class ID implements Serializable{
 			// advertise job for getting waiting time from LSA's
 			public static final String GetWaitingTime = "GSA_LocalSchedulingwaiting-time";
 			//query job information from LSA
-			public static final String QueryRequest = "QueryRequestAbtLSAfromGSA"; 
+			public static final String QueryRequest = "QueryRequestAbtLSAfromGSA";
+
+			public static final String CallBackJobs = "CallBackJobs"; 
 		}
 
 		public class BeliefBaseConst {

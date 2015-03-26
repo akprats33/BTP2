@@ -87,7 +87,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				if (reply != null) {
 					WaitingTime[repliesCnt]=reply;
 					repliesCnt++;
-					log.info("got waiting time from "+ reply.getSender().getLocalName());
+//					log.info("got waiting time from "+ reply.getSender().getLocalName());
 
 					if (repliesCnt == MachineCount) {				
 						step = 3; 
@@ -112,7 +112,7 @@ public class RootAskForWaitingTime extends Behaviour implements PlanBody {
 				JobToSend=(job)(max.getContentObject());
 				
 				dummyJob.IncrementOperationNumber();
-				log.info(dummyJob.getCurrentOperationNumber()+"/"+dummyJob.getOperations().size());
+//				log.info(dummyJob.getCurrentOperationNumber()+"/"+dummyJob.getOperations().size());
 
 				if(dummyJob.getCurrentOperationNumber()<dummyJob.getOperations().size()){
 					step=1;

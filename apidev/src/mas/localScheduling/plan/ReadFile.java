@@ -31,6 +31,7 @@ public class ReadFile extends OneShotBehaviour implements PlanBody {
 	private XSSFSheet localSheet;
 	private PlanInstance PI;
 	private Logger log=LogManager.getLogger();
+	private XSSFWorkbook wb;
 
 	@Override
 	public EndState getEndState() {
@@ -42,18 +43,6 @@ public class ReadFile extends OneShotBehaviour implements PlanBody {
 	public void init(PlanInstance arg0) {
 		this.jobFilePath = System.getProperty("user.dir");
 		
-		XSSFWorkbook wb;
-		try{
-			FileInputStream file=new FileInputStream(this.jobFilePath +
-					"\\LSAparams.xlsx");	
-			wb = new XSSFWorkbook(file);
-
-			localSheet = wb.getSheetAt(0);
-
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-		
 		PI=arg0;
 	}
 
@@ -61,9 +50,19 @@ public class ReadFile extends OneShotBehaviour implements PlanBody {
 
 	@Override
 	public void action() {
-		Iterator<Row> rows = localSheet.rowIterator();
 		
+		try{
+			FileInputStream file=new FileInputStream(this.jobFilePath +
+					"\\LSAparams"+myAgent.getLocalName().split("#")[1]+".xlsx");	
+			wb = new XSSFWorkbook(file);
 
+			localSheet = wb.getSheetAt(0);
+
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+
+		Iterator<Row> rows = localSheet.rowIterator();
 		
 		int rowCount=0;
 		while( rows.hasNext() ) {

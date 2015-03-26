@@ -97,8 +97,8 @@ public abstract class AbstractGSCapability  extends Capability {
 				(MessageTemplate.MatchConversationId(
 				MessageIds.msgcustomerJobsUnderNegotiation),Negotiate.class));
 		
-		
-//		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgWaitingTime, )))
+		plans.add(new SimplePlan(MessageTemplate.MatchConversationId(MessageIds.msgreqToChangeDueDate)
+				, CallBackChangeDueDate.class));
 	
 		return plans;
 	}	
