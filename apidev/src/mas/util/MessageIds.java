@@ -114,6 +114,8 @@ public class MessageIds {
 
 	public static final String msgCallBackReqByGSA = "GSAReqForCallBack";
 
+	public static final String msgJobCompletion = "sendNotificationOfCompletedJob";
+
 	//operation n is finished. now send job to GSA for n+1th operation
 	public static String msgLSAfinishedJobs="finished_job_fromLSA";
 	

@@ -140,6 +140,9 @@ public class HandleCompletedOrderbyLSA extends Behaviour implements PlanBody{
 			break;
 			
 		case 3:
+			ZoneDataUpdate jobCompletionNotification = new ZoneDataUpdate.Builder(
+					ID.GlobalScheduler.ZoneData.completedJobByGSA).setReplyWith(msgReplyID).
+					value(order).Build();
 			step=4;
 			log.info("all operations of "+order.getJobNo()+" completed");
 			break;

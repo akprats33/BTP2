@@ -82,7 +82,6 @@ public class NegotiationPlan extends Behaviour implements PlanBody {
 		}else {
 			j.setJobDuedatebyCust( (myDate + newDate)/2);
 			j.setProfit(newprofit);
-			log.info("************" + negotiationJob.getJobDuedatebyCust());
 			ZoneDataUpdate negotiationJobDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.customerJobsUnderNegotiation)
 				.value(negotiationJob).setReplyWith(replyWith).Build();
 			

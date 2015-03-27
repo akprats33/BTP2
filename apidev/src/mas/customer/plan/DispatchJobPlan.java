@@ -35,7 +35,6 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 		log = LogManager.getLogger();
 		bfBase = pInstance.getBeliefBase();
 
-		//		log.info(bfBase.getBelief(basicCapability.CURR_JOB));
 
 		jobToDispatch = (job) bfBase
 				.getBelief(ID.Customer.BeliefBaseConst.CURRENT_JOB)
@@ -58,17 +57,6 @@ public class DispatchJobPlan extends OneShotBehaviour implements PlanBody{
 		
 		ZoneDataUpdate jobOrderZoneDataUpdate=new ZoneDataUpdate.Builder(ID.Customer.ZoneData.newWorkOrderFromCustomer)
 			.value(jobToDispatch).setReplyWith(replyWith).Build();
-		
-		/*for(int i=0;i<jobToDispatch.getOperations().size();i++){
-			log.info(jobToDispatch.getOperations().get(i).getProcessingTime());
-		}*/
-		
-		
-/*		ZoneDataUpdate jobOrderZoneDataUpdate = new ZoneDataUpdate(
-				ID.Customer.ZoneData.newWorkOrderFromCustomer,
-				jobToDispatch);*/
-		
-//		log.info("Job dispatching custoemr " + jobToDispatch );
 
 		AgentUtil.sendZoneDataUpdate(this.bba,jobOrderZoneDataUpdate, myAgent);
 	}

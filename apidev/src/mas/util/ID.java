@@ -107,7 +107,9 @@ public class ID implements Serializable{
 			//query job information from LSA
 			public static final String QueryRequest = "QueryRequestAbtLSAfromGSA";
 
-			public static final String CallBackJobs = "CallBackJobs"; 
+			public static final String CallBackJobs = "CallBackJobs";
+
+			public static final String completedJobByGSA = "completedJobs"; 
 		}
 
 		public class BeliefBaseConst {
