@@ -36,7 +36,7 @@ public class LoadMachineComponentBehavior extends OneShotBehaviour{
 	 *  data being read is in hours/minutes/seconds
 	 *  convert that into milliseconds
 	 */
-	private int unitConversion = 3600;
+	private int unitConversion = 3600*1000;
 
 	public LoadMachineComponentBehavior() {
 	}
