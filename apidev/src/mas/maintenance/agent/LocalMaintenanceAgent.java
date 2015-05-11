@@ -11,7 +11,7 @@ public class LocalMaintenanceAgent extends AbstractLocalMaintenanceAgent {
 
 	private static final long serialVersionUID = 1L;
 	private Logger log;
-	public static int prevMaintPeriod = 5000;
+	public static int prevMaintPeriod = 50000;
 
 	@Override
 	protected void init() {
